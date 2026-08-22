@@ -104,7 +104,7 @@ export function ContactSection({ colors = defaultColors }: { colors?: ThemeColor
             <a href="/auth/register" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
               Book a Website Call
             </a>
-            <a href="mailto:hello@buildittoday.ai" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium border transition-colors" style={{ borderColor: c.border, color: c.dark }}>
+            <a href="mailto:contact@buildittoday.ai" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium border transition-colors" style={{ borderColor: c.border, color: c.dark }}>
               Email Us
             </a>
           </div>

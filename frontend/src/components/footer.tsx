@@ -32,13 +32,13 @@ export function Footer() {
             <h3 className="text-sm font-semibold mb-4">Contact</h3>
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li>
-                <a href="tel:+13055551234" className="hover:text-foreground transition-colors">
-                  (305) 555-1234
+                <a href="tel:+13055050153" className="hover:text-foreground transition-colors">
+                  (305) 505-0153
                 </a>
               </li>
               <li>
-                <a href="mailto:hello@buildittoday.ai" className="hover:text-foreground transition-colors">
-                  hello@buildittoday.ai
+                <a href="mailto:contact@buildittoday.ai" className="hover:text-foreground transition-colors">
+                  contact@buildittoday.ai
                 </a>
               </li>
               <li>Miami, FL</li>
