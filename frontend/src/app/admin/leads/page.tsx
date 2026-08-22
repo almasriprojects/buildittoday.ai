@@ -8,6 +8,7 @@ import { DataTable, type Column, type SortDir } from "@/components/admin/data-ta
 import { StatusBadge } from "@/components/admin/status-badge";
 import { ArrowRight, MapPin } from "lucide-react";
 import type { Lead } from "@/lib/types";
+import { ClassifyRunner } from "@/components/admin/classify-runner";
 
 interface LeadsResponse {
   leads: Lead[];
@@ -357,6 +358,8 @@ export default function LeadsPage() {
           {processMessage}
         </div>
       )}
+
+      <ClassifyRunner />
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Main content */}
