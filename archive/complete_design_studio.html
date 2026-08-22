@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Onboarding Design Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Dynamic Variables */
+      --bg-main: #F9F5F0;
+      --bg-card-light: #F3EEE6;
+      --bg-card-dark: #1C1917;
+      --accent: #E87053;
+      --text-main: #1B1918;
+      --text-muted: #5C554E;
+      --text-on-dark: #F3EEE6;
+      --border-subtle: #E8E2D8;
+
+      /* Step Selections Base */
+      --font-heading: 'Instrument Serif', serif;
+      --font-body: 'Inter', sans-serif;
+      --radius-ui: 16px;
+      --button-style: pill;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, border-radius 0.25s ease;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: #F8FAFC;
+      color: #0F172A;
+      line-height: 1.5;
+    }
+
+    /* Top Studio Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E2E8F0;
+      padding: 16px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .brand h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 26px;
+      font-weight: 400;
+      color: #0F172A;
+    }
+
+    .brand p {
+      font-size: 13px;
+      color: #64748B;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .toggle-btn {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-submit {
+      background: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Main Container Layout */
+    .app-layout {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      min-height: calc(100vh - 73px);
+    }
+
+    /* Left Sidebar: 10 Steps */
+    .sidebar-steps {
+      background: #FFFFFF;
+      border-right: 1px solid #E2E8F0;
+      padding: 32px 24px;
+      overflow-y: auto;
+      max-height: calc(100vh - 73px);
+    }
+
+    .step-block {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #F1F5F9;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .step-num {
+      background: #0F172A;
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-title {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #0F172A;
+    }
+
+    /* Step 1: 6 Theme Cards Grid */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .palette-card {
+      background: #F8FAFC;
+      border: 2px solid #E2E8F0;
+      border-radius: 12px;
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .palette-card.active {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .swatches {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .palette-card h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0F172A;
+    }
+
+    .palette-card p {
+      font-size: 11px;
+      color: #64748B;
+      line-height: 1.3;
+    }
+
+    /* Custom Input Control Grids */
+    .option-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill-opt {
+      background: #F1F5F9;
+      border: 1px solid #CBD5E1;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+
+    .pill-opt.active {
+      background: #0F172A;
+      color: #FFFFFF;
+      border-color: #0F172A;
+    }
+
+    /* Right Studio Canvas */
+    .main-canvas {
+      background: #F1F5F9;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    .canvas-preview-card {
+      background-color: var(--bg-main);
+      border-radius: var(--radius-ui);
+      padding: 50px 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      margin-bottom: 40px;
+    }
+
+    .preview-eyebrow {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .preview-headline {
+      font-family: var(--font-heading);
+      font-size: 52px;
+      line-height: 1.08;
+      color: var(--text-main);
+      max-width: 650px;
+      margin-bottom: 20px;
+    }
+
+    .preview-headline em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .preview-subtext {
+      font-size: 15px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin-bottom: 30px;
+    }
+
+    .preview-ctas {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .btn-p {
+      background: var(--accent);
+      color: #FFFFFF;
+      padding: 12px 26px;
+      border-radius: var(--btn-radius, 30px);
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-s {
+      background: var(--bg-card-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 12px 26px;
+      border-radius: var(--btn-radius, 30px);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .dark-card {
+      background: var(--bg-card-dark);
+      border-radius: var(--radius-ui);
+      padding: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dark-card h3 {
+      font-family: var(--font-heading);
+      font-size: 28px;
+      color: var(--text-on-dark);
+      margin-bottom: 6px;
+    }
+
+    .dark-card p {
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+    }
+
+    /* Industry Grid Showcase */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) );
+      gap: 16px;
+    }
+
+    .mini-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    .mini-head {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .d { width: 6px; height: 6px; border-radius: 50%; }
+
+    .mini-body {
+      background: var(--bg-main);
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .mini-title { font-size: 10px; font-weight: 700; color: var(--text-main); }
+    .mini-badge { background: var(--accent); color:#fff; font-size: 8px; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>Website Design Specification Studio</h1>
+      <p>Configure all 10 design steps live to build your site's complete brand blueprint</p>
+    </div>
+    <div class="header-actions">
+      <button class="toggle-btn" id="modeToggle">☀️ Day Mode</button>
+      <button class="btn-submit" onclick="alert('Design Specification Exported!')">Save 10-Step Spec</button>
+    </div>
+  </header>
+
+  <div class="app-layout">
+
+    <!-- Sidebar: 10 Design Steps -->
+    <div class="sidebar-steps">
+
+      <!-- STEP 1 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">1</span>
+          <span class="step-title">Choose Color Theme (6 Options)</span>
+        </div>
+        <div class="palette-grid">
+          <div class="palette-card active" onclick="setPalette('coral', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #E87053;"></div>
+              <div class="swatch" style="background: #1C1917;"></div>
+              <div class="swatch" style="background: #F9F5F0;"></div>
+            </div>
+            <h4>Warm Coral</h4>
+            <p>Friendly & High Contrast</p>
+          </div>
+
+          <div class="palette-card" onclick="setPalette('navy', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #D97706;"></div>
+              <div class="swatch" style="background: #1E293B;"></div>
+              <div class="swatch" style="background: #F8FAFC;"></div>
+            </div>
+            <h4>Trust Navy</h4>
+            <p>Corporate & High End</p>
+          </div>
+
+          <div class="palette-card" onclick="setPalette('teal', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #059669;"></div>
+              <div class="swatch" style="background: #064E3B;"></div>
+              <div class="swatch" style="background: #F0FDF4;"></div>
+            </div>
+            <h4>Modern Teal</h4>
+            <p>Fresh Tech & Health</p>
+          </div>
+
+          <div class="palette-card" onclick="setPalette('luxury', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #C5A880;"></div>
+              <div class="swatch" style="background: #0F0F0F;"></div>
+              <div class="swatch" style="background: #FAF7F2;"></div>
+            </div>
+            <h4>Luxury Gold</h4>
+            <p>Premium & Hospitality</p>
+          </div>
+
+          <div class="palette-card" onclick="setPalette('berry', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #9333EA;"></div>
+              <div class="swatch" style="background: #3B0764;"></div>
+              <div class="swatch" style="background: #FAF5FF;"></div>
+            </div>
+            <h4>Bold Berry</h4>
+            <p>Creative & Modern</p>
+          </div>
+
+          <div class="palette-card" onclick="setPalette('nordic', this)">
+            <div class="swatches">
+              <div class="swatch" style="background: #2563EB;"></div>
+              <div class="swatch" style="background: #0F172A;"></div>
+              <div class="swatch" style="background: #F1F5F9;"></div>
+            </div>
+            <h4>Nordic Slate</h4>
+            <p>Minimal & Clean</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">2</span>
+          <span class="step-title">Typography & Fonts</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setFont('serif', this)">Serif + Sans (Editorial)</div>
+          <div class="pill-opt" onclick="setFont('sans', this)">Pure Modern Sans</div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">3</span>
+          <span class="step-title">Corner & Border Radius</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setRadius('24px', '30px', this)">Soft Curved (24px)</div>
+          <div class="pill-opt" onclick="setRadius('8px', '8px', this)">Modern Sharp (8px)</div>
+          <div class="pill-opt" onclick="setRadius('0px', '0px', this)">Strict Square (0px)</div>
+        </div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">4</span>
+          <span class="step-title">Hero Layout Style</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setHeroLayout('left', this)">Left Aligned</div>
+          <div class="pill-opt" onclick="setHeroLayout('center', this)">Centered Minimal</div>
+        </div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">5</span>
+          <span class="step-title">Primary Call-to-Action (CTA)</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setCTA('Get a Free Quote', this)">"Get a Free Quote"</div>
+          <div class="pill-opt" onclick="setCTA('Book Appointment', this)">"Book Appointment"</div>
+          <div class="pill-opt" onclick="setCTA('Start Free Trial', this)">"Start Free Trial"</div>
+        </div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">6</span>
+          <span class="step-title">Value Proposition Headline</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setHeadline('Websites that work as hard as you do.', this)">High Performance</div>
+          <div class="pill-opt" onclick="setHeadline('Scale your business on autopilot.', this)">Growth Focus</div>
+        </div>
+      </div>
+
+      <!-- STEP 7 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">7</span>
+          <span class="step-title">Card Elevation & Contrast</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="setContrast('dark', this)">Dark Anchor Card</div>
+          <div class="pill-opt" onclick="setContrast('light', this)">Soft Tinted Card</div>
+        </div>
+      </div>
+
+      <!-- STEP 8 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">8</span>
+          <span class="step-title">Target Industry Focus</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active">Local Services</div>
+          <div class="pill-opt">Healthcare</div>
+          <div class="pill-opt">SaaS / Tech</div>
+        </div>
+      </div>
+
+      <!-- STEP 9 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">9</span>
+          <span class="step-title">Social Trust Badges</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active" onclick="toggleEyebrow(true, this)">Show Award Badge</div>
+          <div class="pill-opt" onclick="toggleEyebrow(false, this)">Hide Badge</div>
+        </div>
+      </div>
+
+      <!-- STEP 10 -->
+      <div class="step-block">
+        <div class="step-header">
+          <span class="step-num">10</span>
+          <span class="step-title">Footer & Lead Capture</span>
+        </div>
+        <div class="option-pills">
+          <div class="pill-opt active">Inline Quick Form</div>
+          <div class="pill-opt">Direct Call Banner</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Live Preview Canvas -->
+    <div class="main-canvas">
+      <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">Live Site Preview Canvas</div>
+      
+      <div class="canvas-preview-card" id="heroCanvas">
+        <div class="preview-eyebrow" id="eyebrowText">★ Award-Winning Web Studio</div>
+        <h1 class="preview-headline" id="headlineText">Websites that <em>work as hard</em> as you do.</h1>
+        <p class="preview-subtext">We design high-converting custom websites built specifically for your industry standards.</p>
+        
+        <div class="preview-ctas">
+          <button class="btn-p" id="primaryCta">Get a Free Quote</button>
+          <button class="btn-s">View Portfolio</button>
+        </div>
+
+        <div class="dark-card" id="darkCardCallout">
+          <div>
+            <h3>Stop losing leads you earned</h3>
+            <p>Turn visitors into scheduled appointments instantly.</p>
+          </div>
+          <button class="btn-p">Get Speed-to-Lead</button>
+        </div>
+      </div>
+
+      <!-- Industry Mockups Showcase -->
+      <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">Multi-Industry Application</div>
+      <div class="showcase-grid">
+        <div class="mini-card">
+          <div class="mini-head">
+            <span class="d" style="background:#FF5F56"></span>
+            <span class="d" style="background:#FFBD2E"></span>
+            <span class="d" style="background:#27C93F"></span>
+          </div>
+          <div class="mini-body">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+              <span class="mini-title">Beauty Salon</span>
+              <span class="mini-badge">Book</span>
+            </div>
+            <div style="height:30px; background:var(--bg-card-light); border-radius:4px;"></div>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-head">
+            <span class="d" style="background:#FF5F56"></span>
+            <span class="d" style="background:#FFBD2E"></span>
+            <span class="d" style="background:#27C93F"></span>
+          </div>
+          <div class="mini-body">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+              <span class="mini-title">Plumbing Services</span>
+              <span class="mini-badge">Quote</span>
+            </div>
+            <div style="height:30px; background:var(--bg-card-light); border-radius:4px;"></div>
+          </div>
+        </div>
+
+        <div class="mini-card">
+          <div class="mini-head">
+            <span class="d" style="background:#FF5F56"></span>
+            <span class="d" style="background:#FFBD2E"></span>
+            <span class="d" style="background:#27C93F"></span>
+          </div>
+          <div class="mini-body">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+              <span class="mini-title">Dental Clinic</span>
+              <span class="mini-badge">Schedule</span>
+            </div>
+            <div style="height:30px; background:var(--bg-card-light); border-radius:4px;"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const palettes = {
+      coral: { bgMain: '#F9F5F0', bgLight: '#F3EEE6', bgDark: '#1C1917', accent: '#E87053', text: '#1B1918', muted: '#5C554E' },
+      navy: { bgMain: '#F8FAFC', bgLight: '#F1F5F9', bgDark: '#1E293B', accent: '#D97706', text: '#0F172A', muted: '#475569' },
+      teal: { bgMain: '#F0FDF4', bgLight: '#DCFCE7', bgDark: '#064E3B', accent: '#059669', text: '#022C22', muted: '#047857' },
+      luxury: { bgMain: '#FAF7F2', bgLight: '#F3ECE1', bgDark: '#0F0F0F', accent: '#C5A880', text: '#1A1A1A', muted: '#6B6055' },
+      berry: { bgMain: '#FAF5FF', bgLight: '#F3E8FF', bgDark: '#3B0764', accent: '#9333EA', text: '#2E1065', muted: '#6B21A8' },
+      nordic: { bgMain: '#F1F5F9', bgLight: '#E2E8F0', bgDark: '#0F172A', accent: '#2563EB', text: '#0284C7', muted: '#475569' }
+    };
+
+    let currentP = 'coral';
+    let isNight = false;
+
+    function setPalette(name, cardEl) {
+      currentP = name;
+      document.querySelectorAll('.palette-card').forEach(c => c.classList.remove('active'));
+      cardEl.classList.add('active');
+      applyStyles();
+    }
+
+    function applyStyles() {
+      const p = palettes[currentP];
+      const root = document.documentElement;
+      
+      if(isNight) {
+        root.style.setProperty('--bg-main', '#0F172A');
+        root.style.setProperty('--bg-card-light', '#1E293B');
+        root.style.setProperty('--bg-card-dark', '#020617');
+        root.style.setProperty('--accent', p.accent);
+        root.style.setProperty('--text-main', '#F8FAFC');
+        root.style.setProperty('--text-muted', '#94A3B8');
+      } else {
+        root.style.setProperty('--bg-main', p.bgMain);
+        root.style.setProperty('--bg-card-light', p.bgLight);
+        root.style.setProperty('--bg-card-dark', p.bgDark);
+        root.style.setProperty('--accent', p.accent);
+        root.style.setProperty('--text-main', p.text);
+        root.style.setProperty('--text-muted', p.muted);
+      }
+    }
+
+    function setFont(type, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const root = document.documentElement;
+      if(type === 'serif') {
+        root.style.setProperty('--font-heading', "'Instrument Serif', serif");
+      } else {
+        root.style.setProperty('--font-heading', "'Inter', sans-serif");
+      }
+    }
+
+    function setRadius(cardRad, btnRad, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.documentElement.style.setProperty('--radius-ui', cardRad);
+      document.documentElement.style.setProperty('--btn-radius', btnRad);
+    }
+
+    function setHeroLayout(align, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const card = document.getElementById('heroCanvas');
+      card.style.textAlign = align === 'center' ? 'center' : 'left';
+      if(align === 'center') {
+        document.querySelector('.preview-ctas').style.justifyContent = 'center';
+      } else {
+        document.querySelector('.preview-ctas').style.justifyContent = 'flex-start';
+      }
+    }
+
+    function setCTA(text, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('primaryCta').textContent = text;
+    }
+
+    function setHeadline(text, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('headlineText').innerHTML = text;
+    }
+
+    function setContrast(mode, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const card = document.getElementById('darkCardCallout');
+      if(mode === 'light') {
+        card.style.background = 'var(--bg-card-light)';
+        card.querySelector('h3').style.color = 'var(--text-main)';
+        card.querySelector('p').style.color = 'var(--text-muted)';
+      } else {
+        card.style.background = 'var(--bg-card-dark)';
+        card.querySelector('h3').style.color = 'var(--text-on-dark)';
+        card.querySelector('p').style.color = 'rgba(255,255,255,0.7)';
+      }
+    }
+
+    function toggleEyebrow(show, btn) {
+      btn.parentElement.querySelectorAll('.pill-opt').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('eyebrowText').style.display = show ? 'block' : 'none';
+    }
+
+    document.getElementById('modeToggle').addEventListener('click', () => {
+      isNight = !isNight;
+      document.getElementById('modeToggle').textContent = isNight ? '🌙 Night Mode' : '☀️ Day Mode';
+      applyStyles();
+    });
+  </script>
+</body>
+</html>

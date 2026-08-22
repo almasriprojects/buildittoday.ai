@@ -1,0 +1,82 @@
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+// POST - Create Stripe checkout session
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { businessName, email, demoSlug } = body;
+
+    if (!businessName || !email) {
+      return NextResponse.json(
+        { error: "Business name and email are required" },
+        { status: 400 }
+      );
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      mode: "payment",
+      customer_email: email,
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: `Website Setup — ${businessName}`,
+              description:
+                "One-time setup. Site built, launched on your domain. $50/month hosting starts after launch.",
+            },
+            unit_amount: 150000,
+          },
+          quantity: 1,
+        },
+      ],
+      success_url: `${process.env.NEXT_PUBLIC_URL}/claim/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: demoSlug
+        ? `${process.env.NEXT_PUBLIC_URL}/claim?slug=${encodeURIComponent(demoSlug)}&checkout=cancelled`
+        : `${process.env.NEXT_PUBLIC_URL}/claim?checkout=cancelled`,
+      // demoSlug is what lets the webhook tie a payment back to the lead.
+      // Without it a successful payment is an orphan.
+      metadata: { businessName, demoSlug: demoSlug ?? "", email },
+    });
+
+    return NextResponse.json({ url: session.url, sessionId: session.id });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
+
+// GET - Get payment status
+export async function GET(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const sessionId = searchParams.get("sessionId");
+
+    if (!sessionId) {
+      return NextResponse.json(
+        { error: "Session ID is required" },
+        { status: 400 }
+      );
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    return NextResponse.json({
+      sessionId: session.id,
+      status: session.payment_status,
+      amountPaid: session.amount_total ? session.amount_total / 100 : null,
+      currency: session.currency,
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
+}

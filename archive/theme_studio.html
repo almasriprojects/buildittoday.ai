@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Studio — Color Palette Selector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Dynamic theme variables updated by JS */
+      --bg-main: #F9F5F0;
+      --bg-card-light: #F3EEE6;
+      --bg-card-dark: #1C1917;
+      --accent: #E87053;
+      --accent-hover: #d35f43;
+      --text-main: #1B1918;
+      --text-muted: #5C554E;
+      --text-on-dark: #F3EEE6;
+      --border-subtle: #E8E2D8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #FAFAFA;
+      color: #1A1A1A;
+      line-height: 1.5;
+    }
+
+    /* Top Studio Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid #E5E7EB;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand h1 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-weight: 400;
+      color: #111827;
+    }
+
+    .brand p {
+      font-size: 13px;
+      color: #6B7280;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .toggle-btn {
+      background: #F3F4F6;
+      border: 1px solid #D1D5DB;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toggle-btn:hover {
+      background: #E5E7EB;
+    }
+
+    .btn-select {
+      background: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      padding: 9px 20px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #6B7280;
+      margin-bottom: 16px;
+    }
+
+    /* Palette Selection Grid */
+    .palette-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+      margin-bottom: 50px;
+    }
+
+    .palette-card {
+      background: #FFFFFF;
+      border: 2px solid #E5E7EB;
+      border-radius: 16px;
+      padding: 20px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .palette-card.active {
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+
+    .palette-card .check-icon {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #FFF;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .palette-card.active .check-icon {
+      display: flex;
+    }
+
+    .swatches {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .swatch {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .mini-preview {
+      background: #1C1917;
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .mini-line {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255,255,255,0.8);
+      margin-bottom: 10px;
+      width: 70%;
+    }
+
+    .mini-btn {
+      height: 20px;
+      width: 50px;
+      border-radius: 10px;
+      background: #E87053;
+    }
+
+    .palette-card h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .palette-card p {
+      font-size: 12px;
+      color: #6B7280;
+      line-height: 1.4;
+    }
+
+    /* Live Preview Canvas */
+    .preview-canvas {
+      background-color: var(--bg-main);
+      border-radius: 24px;
+      padding: 60px 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      margin-bottom: 60px;
+    }
+
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--text-muted);
+    }
+
+    .hero-headline {
+      font-family: 'Instrument Serif', serif;
+      font-size: 64px;
+      line-height: 1.05;
+      color: var(--text-main);
+      max-width: 650px;
+      margin-bottom: 24px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-subtext {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-bottom: 32px;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 50px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #FFFFFF;
+      padding: 14px 28px;
+      border-radius: 30px;
+      border: none;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .btn-secondary {
+      background: var(--bg-card-light);
+      color: var(--text-main);
+      border: 1px solid var(--border-subtle);
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Dark Callout Section inside Canvas */
+    .dark-card-callout {
+      background: var(--bg-card-dark);
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dark-card-callout h2 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 32px;
+      color: var(--text-on-dark);
+      margin-bottom: 8px;
+    }
+
+    .dark-card-callout p {
+      color: rgba(255,255,255,0.7);
+      font-size: 14px;
+      max-width: 450px;
+    }
+
+    /* Showcase Grid (Different Types of Sites) */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .mini-site-card {
+      background: #FFFFFF;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      border: 1px solid #E5E7EB;
+    }
+
+    .browser-header {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-red { background: #FF5F56; }
+    .dot-yellow { background: #FFBD2E; }
+    .dot-green { background: #27C93F; }
+
+    .browser-url {
+      background: #F3F4F6;
+      border-radius: 10px;
+      font-size: 10px;
+      color: #9CA3AF;
+      padding: 3px 10px;
+      flex-grow: 1;
+      text-align: center;
+      margin-left: 6px;
+    }
+
+    .site-body {
+      background: var(--bg-main);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .site-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .site-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .site-badge {
+      background: var(--accent);
+      color: #FFF;
+      font-size: 9px;
+      padding: 2px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .site-block-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .site-block {
+      background: var(--bg-card-light);
+      height: 35px;
+      border-radius: 6px;
+    }
+
+    .mini-site-info {
+      text-align: center;
+      margin-top: 12px;
+    }
+
+    .mini-site-info h4 {
+      font-size: 13px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .mini-site-info p {
+      font-size: 11px;
+      color: #6B7280;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Studio Navigation -->
+  <header>
+    <div class="brand">
+      <h1>Theme Studio</h1>
+      <p>Pick your palette — view it live across different industry site layouts</p>
+    </div>
+    <div class="header-actions">
+      <button class="toggle-btn" id="modeToggle">
+        <span id="modeIcon">☀️</span> <span id="modeText">Day Mode</span>
+      </button>
+      <button class="btn-select">Select this theme</button>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <!-- 1. Palette Chooser -->
+    <div class="section-title">1. Choose Your Palette</div>
+    <div class="palette-grid">
+
+      <!-- Warm Coral -->
+      <div class="palette-card active" onclick="setPalette('coral')">
+        <div class="check-icon">✓</div>
+        <div class="swatches">
+          <div class="swatch" style="background: #E87053;"></div>
+          <div class="swatch" style="background: #1C1917;"></div>
+          <div class="swatch" style="background: #F9F5F0;"></div>
+        </div>
+        <div class="mini-preview" style="background: #1C1917;">
+          <div class="mini-line"></div>
+          <div class="mini-btn" style="background: #E87053;"></div>
+        </div>
+        <h3>Warm Coral</h3>
+        <p>Warm, friendly, high-contrast — great for local service businesses and creative agencies.</p>
+      </div>
+
+      <!-- Trust Navy -->
+      <div class="palette-card" onclick="setPalette('navy')">
+        <div class="check-icon">✓</div>
+        <div class="swatches">
+          <div class="swatch" style="background: #D97706;"></div>
+          <div class="swatch" style="background: #1E293B;"></div>
+          <div class="swatch" style="background: #F8FAFC;"></div>
+        </div>
+        <div class="mini-preview" style="background: #1E293B;">
+          <div class="mini-line"></div>
+          <div class="mini-btn" style="background: #D97706;"></div>
+        </div>
+        <h3>Trust Navy</h3>
+        <p>Established, trustworthy, high-end — built for finance, legal, and healthcare sites.</p>
+      </div>
+
+      <!-- Modern Teal -->
+      <div class="palette-card" onclick="setPalette('teal')">
+        <div class="check-icon">✓</div>
+        <div class="swatches">
+          <div class="swatch" style="background: #059669;"></div>
+          <div class="swatch" style="background: #064E3B;"></div>
+          <div class="swatch" style="background: #F0FDF4;"></div>
+        </div>
+        <div class="mini-preview" style="background: #064E3B;">
+          <div class="mini-line"></div>
+          <div class="mini-btn" style="background: #059669;"></div>
+        </div>
+        <h3>Modern Teal</h3>
+        <p>Energetic, modern, stands out from typical blue sites — ideal for tech, SaaS, & outdoor brands.</p>
+      </div>
+
+    </div>
+
+    <!-- 2. Live Interactive Preview Canvas -->
+    <div class="section-title">2. Live Interactive Preview — Homepage Hero & Callout</div>
+    <div class="preview-canvas">
+      <div class="hero-eyebrow">Award-Winning Web Design Studio</div>
+      <h1 class="hero-headline">Websites that <em>work as hard</em> as you do.</h1>
+      <p class="hero-subtext">We design and build beautiful, high-performing websites for small businesses. Custom design. Delivered in 5 days.</p>
+      <div class="hero-ctas">
+        <button class="btn-primary">View Our Work</button>
+        <button class="btn-secondary">Get a Free Quote</button>
+      </div>
+
+      <div class="dark-card-callout">
+        <div>
+          <h2>Stop losing leads you earned</h2>
+          <p>Every form submit becomes a live conversation while the lead is still warm.</p>
+        </div>
+        <button class="btn-primary">Get Speed-to-Lead</button>
+      </div>
+    </div>
+
+    <!-- 3. Real Business Sites Grid Showcase -->
+    <div class="section-title">3. Multi-Industry Preview — See how it applies across business types</div>
+    <div class="showcase-grid">
+
+      <!-- Site 1 -->
+      <div class="mini-site-card">
+        <div class="browser-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="browser-url">sunnyshairsalon.com</span>
+        </div>
+        <div class="site-body">
+          <div class="site-header-nav">
+            <span class="site-title">Sunny's Salon</span>
+            <span class="site-badge">Book</span>
+          </div>
+          <div class="site-block-grid">
+            <div class="site-block"></div>
+            <div class="site-block"></div>
+          </div>
+        </div>
+        <div class="mini-site-info">
+          <h4>Sunny's Hair Salon</h4>
+          <p>Beauty & Style</p>
+        </div>
+      </div>
+
+      <!-- Site 2 -->
+      <div class="mini-site-card">
+        <div class="browser-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="browser-url">quickfixplumbing.com</span>
+        </div>
+        <div class="site-body">
+          <div class="site-header-nav">
+            <span class="site-title">QuickFix Plumbing</span>
+            <span class="site-badge">Quote</span>
+          </div>
+          <div class="site-block-grid">
+            <div class="site-block"></div>
+            <div class="site-block"></div>
+          </div>
+        </div>
+        <div class="mini-site-info">
+          <h4>QuickFix Plumbing</h4>
+          <p>Trade Services</p>
+        </div>
+      </div>
+
+      <!-- Site 3 -->
+      <div class="mini-site-card">
+        <div class="browser-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="browser-url">drsmithdental.com</span>
+        </div>
+        <div class="site-body">
+          <div class="site-header-nav">
+            <span class="site-title">Dr. Smith Dental</span>
+            <span class="site-badge">Appointment</span>
+          </div>
+          <div class="site-block-grid">
+            <div class="site-block"></div>
+            <div class="site-block"></div>
+          </div>
+        </div>
+        <div class="mini-site-info">
+          <h4>Dr. Smith Dental</h4>
+          <p>Healthcare</p>
+        </div>
+      </div>
+
+      <!-- Site 4 -->
+      <div class="mini-site-card">
+        <div class="browser-header">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+          <span class="browser-url">sunshinelandscaping.com</span>
+        </div>
+        <div class="site-body">
+          <div class="site-header-nav">
+            <span class="site-title">Sunshine Landscaping</span>
+            <span class="site-badge">Gallery</span>
+          </div>
+          <div class="site-block-grid">
+            <div class="site-block"></div>
+            <div class="site-block"></div>
+          </div>
+        </div>
+        <div class="mini-site-info">
+          <h4>Sunshine Landscaping</h4>
+          <p>Outdoor Services</p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const palettes = {
+      coral: {
+        bgMain: '#F9F5F0',
+        bgCardLight: '#F3EEE6',
+        bgCardDark: '#1C1917',
+        accent: '#E87053',
+        textMain: '#1B1918',
+        textMuted: '#5C554E',
+        textOnDark: '#F3EEE6',
+        borderSubtle: '#E8E2D8'
+      },
+      navy: {
+        bgMain: '#F8FAFC',
+        bgCardLight: '#F1F5F9',
+        bgCardDark: '#1E293B',
+        accent: '#D97706',
+        textMain: '#0F172A',
+        textMuted: '#475569',
+        textOnDark: '#F8FAFC',
+        borderSubtle: '#E2E8F0'
+      },
+      teal: {
+        bgMain: '#F0FDF4',
+        bgCardLight: '#DCFCE7',
+        bgCardDark: '#064E3B',
+        accent: '#059669',
+        textMain: '#022C22',
+        textMuted: '#047857',
+        textOnDark: '#ECFDF5',
+        borderSubtle: '#A7F3D0'
+      }
+    };
+
+    let currentPalette = 'coral';
+    let isNightMode = false;
+
+    function setPalette(name) {
+      currentPalette = name;
+      document.querySelectorAll('.palette-card').forEach(card => card.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+      applyTheme();
+    }
+
+    function applyTheme() {
+      const p = palettes[currentPalette];
+      const root = document.documentElement;
+
+      if (isNightMode) {
+        root.style.setProperty('--bg-main', '#111827');
+        root.style.setProperty('--bg-card-light', '#1F2937');
+        root.style.setProperty('--bg-card-dark', '#030712');
+        root.style.setProperty('--accent', p.accent);
+        root.style.setProperty('--text-main', '#F9FAFB');
+        root.style.setProperty('--text-muted', '#9CA3AF');
+        root.style.setProperty('--text-on-dark', '#FFFFFF');
+        root.style.setProperty('--border-subtle', '#374151');
+      } else {
+        root.style.setProperty('--bg-main', p.bgMain);
+        root.style.setProperty('--bg-card-light', p.bgCardLight);
+        root.style.setProperty('--bg-card-dark', p.bgCardDark);
+        root.style.setProperty('--accent', p.accent);
+        root.style.setProperty('--text-main', p.textMain);
+        root.style.setProperty('--text-muted', p.textMuted);
+        root.style.setProperty('--text-on-dark', p.textOnDark);
+        root.style.setProperty('--border-subtle', p.borderSubtle);
+      }
+    }
+
+    document.getElementById('modeToggle').addEventListener('click', () => {
+      isNightMode = !isNightMode;
+      document.getElementById('modeIcon').textContent = isNightMode ? '🌙' : '☀️';
+      document.getElementById('modeText').textContent = isNightMode ? 'Night Mode' : 'Day Mode';
+      applyTheme();
+    });
+  </script>
+</body>
+</html>

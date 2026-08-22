@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shadcn UI Theme Generator & Page Builder</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* Shadcn Design Tokens */
+      --background: 30 33% 96%;
+      --foreground: 20 10% 10%;
+      --card: 30 25% 93%;
+      --card-foreground: 20 10% 10%;
+      --primary: 12 76% 62%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 30 20% 88%;
+      --secondary-foreground: 20 10% 10%;
+      --muted: 30 15% 85%;
+      --muted-foreground: 20 10% 40%;
+      --accent: 12 76% 62%;
+      --border: 30 15% 85%;
+      --radius: 0.75rem;
+
+      /* Font tokens */
+      --font-heading: 'Instrument Serif', serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+    body { font-family: var(--font-body); background: #F1F5F9; color: #0F172A; min-height: 100vh; }
+
+    /* Layout */
+    header {
+      background: #FFFFFF; border-bottom: 1px solid #E2E8F0; padding: 16px 32px;
+      display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100;
+    }
+    .brand h1 { font-size: 20px; font-weight: 700; color: #0F172A; }
+    .brand p { font-size: 12px; color: #64748B; }
+
+    .app-container { display: grid; grid-template-columns: 420px 1fr; min-height: calc(100vh - 65px); }
+
+    /* Left Sidebar Wizard Steps */
+    .wizard-sidebar { background: #FFFFFF; border-right: 1px solid #E2E8F0; padding: 24px; overflow-y: auto; max-height: calc(100vh - 65px); }
+    
+    .wizard-step { margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #F1F5F9; }
+    .step-badge { background: #0F172A; color: #FFF; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 12px; margin-bottom: 8px; display: inline-block; }
+    .step-title { font-size: 15px; font-weight: 700; color: #0F172A; margin-bottom: 12px; }
+
+    /* Palette Selection Grid (6 Themes) */
+    .palette-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .palette-btn {
+      border: 2px solid #E2E8F0; border-radius: 8px; padding: 10px; cursor: pointer; background: #FAFAFA; text-align: left;
+    }
+    .palette-btn.active { border-color: hsl(var(--primary)); background: #FFFFFF; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    .swatch-group { display: flex; gap: 4px; margin-bottom: 6px; }
+    .swatch-dot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,0.1); }
+
+    /* Option Pill Buttons */
+    .option-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt-btn {
+      background: #F1F5F9; border: 1px solid #CBD5E1; padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer;
+    }
+    .opt-btn.active { background: #0F172A; color: #FFFFFF; border-color: #0F172A; }
+
+    /* Component Variant Picker Grid */
+    .variant-picker { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+    .variant-card { border: 1px solid #E2E8F0; border-radius: 6px; padding: 8px; text-align: center; font-size: 11px; cursor: pointer; background: #F8FAFC; }
+    .variant-card.active { border-color: hsl(var(--primary)); font-weight: 700; background: #FFF; }
+
+    /* Right Preview Canvas */
+    .canvas-area { padding: 32px; overflow-y: auto; background: #F8FAFC; }
+    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #64748B; margin-bottom: 12px; letter-spacing: 0.5px; }
+
+    /* Shadcn Component Showcase Card */
+    .shadcn-component-box {
+      background: hsl(var(--background)); color: hsl(var(--foreground)); border-radius: var(--radius); border: 1px solid hsl(var(--border)); padding: 24px; margin-bottom: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+    }
+
+    /* Simulated Shadcn Components */
+    .s-btn-primary {
+      background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); padding: 10px 20px; border-radius: var(--radius); border: none; font-weight: 600; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .s-btn-secondary {
+      background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); padding: 10px 20px; border-radius: var(--radius); border: 1px solid hsl(var(--border)); font-weight: 600; font-size: 13px; cursor: pointer;
+    }
+    .s-badge {
+      background: hsl(var(--muted)); color: hsl(var(--muted-foreground)); padding: 4px 10px; border-radius: 9999px; font-size: 11px; font-weight: 600; display: inline-block;
+    }
+    .s-card {
+      background: hsl(var(--card)); color: hsl(var(--card-foreground)); border-radius: var(--radius); border: 1px solid hsl(var(--border)); padding: 20px;
+    }
+    .s-input {
+      background: hsl(var(--background)); border: 1px solid hsl(var(--border)); border-radius: var(--radius); padding: 8px 12px; font-size: 13px; color: hsl(var(--foreground)); width: 100%;
+    }
+
+    /* Page Sections Canvas */
+    .page-builder-canvas { display: flex; flex-direction: column; gap: 24px; }
+    .page-block { background: hsl(var(--background)); border-radius: var(--radius); border: 1px solid hsl(var(--border)); padding: 40px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>Shadcn Theme Studio & Page Builder</h1>
+      <p>Configure base components (Step 1) then assemble website page blocks (Step 2)</p>
+    </div>
+    <button class="s-btn-primary" onclick="alert('CSS Theme Tokens & Layout Config Exported!')">Export Config</button>
+  </header>
+
+  <div class="app-container">
+
+    <!-- Sidebar Controls -->
+    <div class="wizard-sidebar">
+
+      <!-- STEP 1: Component Token Setup -->
+      <div class="step-badge">STEP 1</div>
+      <div class="step-title">Configure Shadcn Design Tokens</div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">1. Palette Preset (6 Options)</label>
+        <div class="palette-options">
+          <div class="palette-btn active" onclick="setPalette('coral', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#E87053"></div>
+              <div class="swatch-dot" style="background:#1C1917"></div>
+              <div class="swatch-dot" style="background:#F9F5F0"></div>
+            </div>
+            <strong style="font-size: 11px;">Warm Coral</strong>
+          </div>
+
+          <div class="palette-btn" onclick="setPalette('navy', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#D97706"></div>
+              <div class="swatch-dot" style="background:#1E293B"></div>
+              <div class="swatch-dot" style="background:#F8FAFC"></div>
+            </div>
+            <strong style="font-size: 11px;">Trust Navy</strong>
+          </div>
+
+          <div class="palette-btn" onclick="setPalette('teal', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#059669"></div>
+              <div class="swatch-dot" style="background:#064E3B"></div>
+              <div class="swatch-dot" style="background:#F0FDF4"></div>
+            </div>
+            <strong style="font-size: 11px;">Modern Teal</strong>
+          </div>
+
+          <div class="palette-btn" onclick="setPalette('luxury', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#C5A880"></div>
+              <div class="swatch-dot" style="background:#0F0F0F"></div>
+              <div class="swatch-dot" style="background:#FAF7F2"></div>
+            </div>
+            <strong style="font-size: 11px;">Luxury Gold</strong>
+          </div>
+
+          <div class="palette-btn" onclick="setPalette('berry', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#9333EA"></div>
+              <div class="swatch-dot" style="background:#3B0764"></div>
+              <div class="swatch-dot" style="background:#FAF5FF"></div>
+            </div>
+            <strong style="font-size: 11px;">Bold Berry</strong>
+          </div>
+
+          <div class="palette-btn" onclick="setPalette('nordic', this)">
+            <div class="swatch-group">
+              <div class="swatch-dot" style="background:#2563EB"></div>
+              <div class="swatch-dot" style="background:#0F172A"></div>
+              <div class="swatch-dot" style="background:#F1F5F9"></div>
+            </div>
+            <strong style="font-size: 11px;">Nordic Slate</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">2. Component Border Radius (--radius)</label>
+        <div class="option-grid">
+          <div class="opt-btn" onclick="setRadius('0rem', this)">0px (Square)</div>
+          <div class="opt-btn" onclick="setRadius('0.3rem', this)">6px (Subtle)</div>
+          <div class="opt-btn active" onclick="setRadius('0.75rem', this)">12px (Curved)</div>
+          <div class="opt-btn" onclick="setRadius('1.5rem', this)">24px (Pill)</div>
+        </div>
+      </div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">3. Typography Pairings</label>
+        <div class="option-grid">
+          <div class="opt-btn active" onclick="setFont('serif', this)">Serif Heading + Sans Body</div>
+          <div class="opt-btn" onclick="setFont('sans', this)">Pure Modern Sans</div>
+        </div>
+      </div>
+
+      <!-- STEP 2: Page Section Block Picker -->
+      <div class="step-badge" style="background:#2563EB;">STEP 2</div>
+      <div class="step-title">Page Layout & Section Blocks</div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">4. Hero Section Variant (6 Options)</label>
+        <div class="variant-picker">
+          <div class="variant-card active" onclick="setHero('left', this)">Left Text + Form</div>
+          <div class="variant-card" onclick="setHero('center', this)">Centered Headline</div>
+          <div class="variant-card" onclick="setHero('split', this)">Split Image Hero</div>
+          <div class="variant-card" onclick="setHero('badge', this)">Top Badge Centered</div>
+          <div class="variant-card" onclick="setHero('video', this)">Background Video</div>
+          <div class="variant-card" onclick="setHero('minimal', this)">Minimal Typographic</div>
+        </div>
+      </div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">5. Features Section Grid</label>
+        <div class="option-grid">
+          <div class="opt-btn active" onclick="setFeatures('3col', this)">3 Column Cards</div>
+          <div class="opt-btn" onclick="setFeatures('4col', this)">4 Column Icons</div>
+        </div>
+      </div>
+
+      <div class="wizard-step">
+        <label style="font-size: 12px; font-weight: 600; margin-bottom: 8px; display: block;">6. Call-to-Action (CTA) Block</label>
+        <div class="option-grid">
+          <div class="opt-btn active" onclick="setCtaBlock('dark', this)">Dark Solid Box</div>
+          <div class="opt-btn" onclick="setCtaBlock('light', this)">Light Subdued Box</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Live Interactive Canvas -->
+    <div class="canvas-area">
+
+      <!-- STEP 1 SHOWCASE: Base Shadcn Components Preview -->
+      <div class="section-label">Step 1 Preview: Live Shadcn Component Palette & Tokens</div>
+      <div class="shadcn-component-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <span class="s-badge">ui/components</span>
+          <span style="font-size: 11px; color: hsl(var(--muted-foreground));">Base UI Tokens Applied</span>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; margin-bottom: 20px;">
+          <button class="s-btn-primary">Primary Button</button>
+          <button class="s-btn-secondary">Secondary Button</button>
+          <span class="s-badge">Status Badge</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div class="s-card">
+            <h4 style="font-size: 14px; margin-bottom: 6px;">Card Component</h4>
+            <p style="font-size: 12px; color: hsl(var(--muted-foreground));">Uses --card and --border variables.</p>
+          </div>
+          <div>
+            <label style="font-size: 11px; font-weight: 600; margin-bottom: 4px; display: block;">Input Field</label>
+            <input type="text" class="s-input" value="user@domain.com" readonly>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 SHOWCASE: Page Section Assembly -->
+      <div class="section-label">Step 2 Preview: Page Layout Assembly</div>
+      <div class="page-builder-canvas">
+
+        <!-- Hero Section Block -->
+        <div class="page-block" id="heroBlock">
+          <span class="s-badge" style="margin-bottom: 12px;">Hero Section</span>
+          <h1 style="font-family: var(--font-heading); font-size: 48px; line-height: 1.1; margin-bottom: 16px; color: hsl(var(--foreground));">
+            Websites that <em style="color: hsl(var(--primary));">work as hard</em> as you do.
+          </h1>
+          <p style="color: hsl(var(--muted-foreground)); max-width: 500px; margin-bottom: 24px;">
+            We design high-converting websites built directly onto modern component systems.
+          </p>
+          <div style="display: flex; gap: 12px;">
+            <button class="s-btn-primary">Get Started</button>
+            <button class="s-btn-secondary">View Work</button>
+          </div>
+        </div>
+
+        <!-- Callout CTA Block -->
+        <div class="s-card" id="ctaBlock" style="background: hsl(var(--card-foreground)); color: hsl(var(--card)); display: flex; justify-content: space-between; align-items: center; padding: 32px;">
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 26px; margin-bottom: 6px;">Stop losing high-value leads</h3>
+            <p style="font-size: 13px; opacity: 0.8;">Turn form submits into scheduled calls instantly.</p>
+          </div>
+          <button class="s-btn-primary">Claim Free Audit</button>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const palettes = {
+      coral: { bg: '30 33% 96%', fg: '20 10% 10%', primary: '12 76% 62%', primaryFg: '0 0% 100%', card: '30 25% 93%', border: '30 15% 85%' },
+      navy: { bg: '210 40% 98%', fg: '222 47% 11%', primary: '38 92% 50%', primaryFg: '0 0% 100%', card: '214 32% 91%', border: '214 32% 85%' },
+      teal: { bg: '140 40% 98%', fg: '160 50% 10%', primary: '160 84% 39%', primaryFg: '0 0% 100%', card: '140 30% 92%', border: '140 25% 85%' },
+      luxury: { bg: '36 33% 97%', fg: '0 0% 6%', primary: '36 39% 63%', primaryFg: '0 0% 100%', card: '36 20% 92%', border: '36 15% 85%' },
+      berry: { bg: '270 50% 98%', fg: '270 50% 10%', primary: '271 81% 56%', primaryFg: '0 0% 100%', card: '270 30% 93%', border: '270 20% 86%' },
+      nordic: { bg: '210 40% 96%', fg: '222 47% 11%', primary: '217 91% 60%', primaryFg: '0 0% 100%', card: '210 30% 90%', border: '210 20% 82%' }
+    };
+
+    function setPalette(name, el) {
+      document.querySelectorAll('.palette-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      const p = palettes[name];
+      const root = document.documentElement;
+      root.style.setProperty('--background', p.bg);
+      root.style.setProperty('--foreground', p.fg);
+      root.style.setProperty('--primary', p.primary);
+      root.style.setProperty('--primary-foreground', p.primaryFg);
+      root.style.setProperty('--card', p.card);
+      root.style.setProperty('--border', p.border);
+    }
+
+    function setRadius(val, el) {
+      el.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.documentElement.style.setProperty('--radius', val);
+    }
+
+    function setFont(type, el) {
+      el.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      document.documentElement.style.setProperty('--font-heading', type === 'serif' ? "'Instrument Serif', serif" : "'Inter', sans-serif");
+    }
+
+    function setHero(variant, el) {
+      document.querySelectorAll('.variant-card').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      const hero = document.getElementById('heroBlock');
+      hero.style.textAlign = variant === 'center' ? 'center' : 'left';
+    }
+
+    function setCtaBlock(mode, el) {
+      el.parentElement.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      const cta = document.getElementById('ctaBlock');
+      if(mode === 'light') {
+        cta.style.background = 'hsl(var(--card))';
+        cta.style.color = 'hsl(var(--card-foreground))';
+      } else {
+        cta.style.background = 'hsl(var(--foreground))';
+        cta.style.color = 'hsl(var(--background))';
+      }
+    }
+  </script>
+</body>
+</html>

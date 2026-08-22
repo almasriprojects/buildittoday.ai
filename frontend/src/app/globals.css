@@ -1,0 +1,105 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #F9F5F0;
+    color: #1B1918;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    color: #1B1918;
+  }
+
+  a {
+    color: #1B1918;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: #E87053;
+  }
+}
+
+@layer utilities {
+  .container-max {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+
+  @media (min-width: 768px) {
+    .section-padding {
+      padding-top: 8rem;
+      padding-bottom: 8rem;
+    }
+  }
+
+  /* Surface Colors */
+  .bg-page { background-color: #F9F5F0; }
+  .bg-card-light { background-color: #F3EEE6; }
+  .bg-card-dark { background-color: #1C1917; }
+  .bg-white { background-color: #FFFFFF; }
+
+  /* Accent */
+  .bg-accent { background-color: #E87053; }
+  .bg-accent-hover { background-color: #D4604A; }
+  .bg-accent-light { background-color: #F0A892; }
+
+  /* Text Colors */
+  .text-primary { color: #1B1918; }
+  .text-secondary { color: #5C554E; }
+  .text-muted { color: #8A8480; }
+  .text-light { color: #A8A29E; }
+  .text-on-dark { color: #F3EEE6; }
+  .text-on-dark-white { color: #FFFFFF; }
+  .text-accent { color: #E87053; }
+
+  /* Borders */
+  .border-subtle { border-color: #E8E2D8; }
+  .border-light { border-color: #D6D3D1; }
+  .border-medium { border-color: #C8C4BE; }
+  .border-dark { border-color: #57534E; }
+  .border-on-dark { border-color: #44403C; }
+
+  /* Shadows */
+  .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+  .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+  .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+}
+
+/* Indeterminate progress bar animation (used on the geocode loading banner) */
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-indeterminate {
+  width: 40%;
+  animation: progress-indeterminate 1.2s ease-in-out infinite;
+}

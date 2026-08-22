@@ -1,0 +1,44 @@
+# --- secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# --- dependencies / build output ---
+node_modules/
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+
+# --- local tooling ---
+.vercel
+.turbo
+coverage/
+
+# --- os / editor ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# --- generated media / scratch work ---
+# Demo images and video montages live in Supabase Storage, not the repo.
+brain_v2_out/
+category_photos/
+*.mp4
+*.png
+*.jpg
+*.jpeg
+!public/**/*.png
+!public/**/*.jpg
+!public/**/*.svg
