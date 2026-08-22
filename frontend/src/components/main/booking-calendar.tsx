@@ -21,6 +21,38 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
   const [viewMonth, setViewMonth] = useState(today.getMonth());
   const [selectedDay, setSelectedDay] = useState<number | null>(today.getDate());
   const [selectedSlot, setSelectedSlot] = useState<string | null>(null);
+  // The calendar previously discarded the chosen slot and sent people to
+  // /auth/register — a booking nobody would ever receive. These drive a real
+  // request that lands in booking_requests.
+  const [showForm, setShowForm] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function submitBooking(e: React.FormEvent) {
+    e.preventDefault();
+    if (!selectedDay || !selectedSlot) return;
+    setSaving(true);
+    setError(null);
+    const iso = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, date: iso, slot: selectedSlot }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || "Could not save your request.");
+      setConfirmed(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   const firstDay = new Date(viewYear, viewMonth, 1).getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -149,17 +181,56 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
             </motion.div>
           </AnimatePresence>
 
-          <div className="mt-6">
-            <a
-              href="/auth/register"
-              className={`w-full inline-flex items-center justify-center h-12 rounded-full text-base font-medium text-white transition-opacity ${
-                selectedSlot ? "hover:opacity-90" : "opacity-40 pointer-events-none"
-              }`}
-              style={{ backgroundColor: c.primary }}
-            >
-              {selectedSlot ? `Confirm ${selectedSlot}` : "Select a time"}
-            </a>
-          </div>
+          {confirmed ? (
+            <div className="mt-6 rounded-xl border p-4 text-center" style={{ borderColor: c.primary }}>
+              <p className="text-sm font-medium" style={{ color: c.dark }}>
+                Request sent — {selectedSlot}
+              </p>
+              <p className="mt-1 text-xs" style={{ color: c.textMuted }}>
+                We&apos;ll confirm by email. If that time stops working, just reply.
+              </p>
+            </div>
+          ) : showForm && selectedSlot ? (
+            <form onSubmit={submitBooking} className="mt-6 space-y-2.5">
+              <input
+                required value={name} onChange={(e) => setName(e.target.value)}
+                placeholder="Your name"
+                className="h-10 w-full rounded-xl border px-3 text-sm outline-none"
+                style={{ borderColor: c.border, backgroundColor: c.lightAlt, color: c.textOnLight }}
+              />
+              <input
+                required type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                className="h-10 w-full rounded-xl border px-3 text-sm outline-none"
+                style={{ borderColor: c.border, backgroundColor: c.lightAlt, color: c.textOnLight }}
+              />
+              <input
+                type="tel" value={phone} onChange={(e) => setPhone(e.target.value)}
+                placeholder="Phone (optional)"
+                className="h-10 w-full rounded-xl border px-3 text-sm outline-none"
+                style={{ borderColor: c.border, backgroundColor: c.lightAlt, color: c.textOnLight }}
+              />
+              {error && <p role="alert" className="text-xs text-red-600">{error}</p>}
+              <button
+                type="submit" disabled={saving}
+                className="h-12 w-full rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                style={{ backgroundColor: c.primary }}
+              >
+                {saving ? "Sending…" : `Request ${selectedSlot}`}
+              </button>
+            </form>
+          ) : (
+            <div className="mt-6">
+              <button
+                onClick={() => setShowForm(true)}
+                disabled={!selectedSlot}
+                className="h-12 w-full rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+                style={{ backgroundColor: c.primary }}
+              >
+                {selectedSlot ? `Confirm ${selectedSlot}` : "Select a time"}
+              </button>
+            </div>
+          )}
 
           <p className="mt-4 text-center text-xs" style={{ color: c.textMuted }}>
             Complimentary call. No charge to you.
