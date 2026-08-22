@@ -42,3 +42,6 @@ category_photos/
 !public/**/*.png
 !public/**/*.jpg
 !public/**/*.svg
+
+# supabase CLI local state
+**/supabase/.temp/
