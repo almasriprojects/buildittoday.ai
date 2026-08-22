@@ -1,82 +1,92 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DataTable, type Column } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/status-badge";
+import { useEffect, useState } from "react";
 import { StatCard } from "@/components/admin/stat-card";
-import { mockCustomers, mockInvoices } from "@/lib/mock-data";
-import type { Invoice, Customer } from "@/lib/types";
-import Link from "next/link";
+import { EmptyPanel } from "@/components/admin/empty-panel";
+
+type Overview = {
+  customers: {
+    total: number;
+    active: number;
+    recent: {
+      id: string;
+      business_name: string;
+      subscription_status: string | null;
+      hosting_status: string | null;
+      created_at: string;
+    }[];
+  };
+  revenue: { setupCollected: number; monthlyRecurring: number; monthlyFee: number };
+};
+
+const money = (n: number) =>
+  n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
 export default function BillingPage() {
-  const totalMonthly = mockCustomers
-    .filter((c) => c.subscription_status === "active")
-    .reduce((sum, c) => sum + c.monthly_payment, 0);
+  const [d, setD] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const overdue = mockInvoices.filter((i) => i.status === "overdue");
-  const pending = mockInvoices.filter((i) => i.status === "pending");
-  const totalCollected = mockInvoices
-    .filter((i) => i.status === "paid")
-    .reduce((sum, i) => sum + i.amount, 0);
+  useEffect(() => {
+    fetch("/api/admin/overview").then((r) => r.json()).then(setD).finally(() => setLoading(false));
+  }, []);
 
-  const invoiceColumns: Column<Invoice>[] = [
-    { key: "customer_name", label: "Customer", render: (i) => <span className="font-medium">{i.customer_name}</span> },
-    { key: "amount", label: "Amount", render: (i) => <span>${i.amount.toFixed(2)}</span> },
-    { key: "due_date", label: "Due Date", render: (i) => <span className="text-muted-foreground">{new Date(i.due_date).toLocaleDateString()}</span> },
-    { key: "paid_date", label: "Paid Date", render: (i) => <span className="text-muted-foreground">{i.paid_date ? new Date(i.paid_date).toLocaleDateString() : "—"}</span> },
-    { key: "status", label: "Status", render: (i) => <StatusBadge status={i.status} /> },
-  ];
-
-  const subscriptionColumns: Column<Customer>[] = [
-    { key: "business_name", label: "Customer", render: (c) => <span className="font-medium">{c.business_name}</span> },
-    { key: "monthly_payment", label: "Monthly", render: (c) => <span>${c.monthly_payment}/mo</span> },
-    { key: "subscription_status", label: "Status", render: (c) => <StatusBadge status={c.subscription_status} /> },
-    { key: "hosting_status", label: "Hosting", render: (c) => <StatusBadge status={c.hosting_status} /> },
-  ];
+  if (loading) return <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>;
+  if (!d) return null;
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">Billing</h2>
-        <p className="text-sm text-muted-foreground">Financial tracking and invoices.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Billing</h1>
+        <p className="mt-1 text-muted-foreground">Subscriptions and collected revenue.</p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Monthly Recurring" value={`$${totalMonthly}/mo`} />
-        <StatCard label="Overdue Payments" value={overdue.length} hint={`$${overdue.reduce((s, i) => s + i.amount, 0).toFixed(2)} total`} />
-        <StatCard label="Pending Invoices" value={pending.length} hint={`$${pending.reduce((s, i) => s + i.amount, 0).toFixed(2)} total`} />
-        <StatCard label="Total Collected" value={`$${totalCollected.toFixed(2)}`} />
+      <div className="grid gap-4 sm:grid-cols-3">
+        <StatCard label="Setup Collected" value={money(d.revenue.setupCollected)} hint="one-time fees" />
+        <StatCard
+          label="Monthly Recurring"
+          value={money(d.revenue.monthlyRecurring)}
+          hint={`${money(d.revenue.monthlyFee)} × ${d.customers.active} active`}
+        />
+        <StatCard label="Active Subscriptions" value={d.customers.active} />
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Invoices</CardTitle></CardHeader>
-        <CardContent>
-          <DataTable
-            columns={invoiceColumns}
-            rows={mockInvoices}
-            emptyTitle="No invoices yet"
-            emptyDescription="Invoices will appear here once customers are billed."
-            onView={(i) => {
-              const customer = mockCustomers.find((c) => c.id === i.customer_id);
-              if (customer) window.location.href = `/admin/customers/${customer.id}`;
-            }}
-          />
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle>Recurring Subscriptions</CardTitle></CardHeader>
-        <CardContent>
-          <DataTable
-            columns={subscriptionColumns}
-            rows={mockCustomers}
-            emptyTitle="No subscriptions yet"
-            emptyDescription="Customer subscriptions will appear here."
-            onView={(c) => { window.location.href = `/admin/customers/${c.id}`; }}
-          />
-        </CardContent>
-      </Card>
+      {d.customers.total === 0 ? (
+        <EmptyPanel
+          title="No billing activity yet"
+          body="Invoices and subscriptions appear here once a customer pays. Stripe is currently on test keys, so no live payment can complete."
+          hint="Switching to live keys and adding the webhook secret is the last step before real money can move."
+          action={{ href: "/admin/sites", label: "Review generated sites" }}
+        />
+      ) : (
+        <div className="overflow-x-auto rounded-xl border bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <th className="px-4 py-3 font-medium">Customer</th>
+                <th className="px-4 py-3 font-medium">Subscription</th>
+                <th className="px-4 py-3 font-medium">Hosting</th>
+                <th className="px-4 py-3 text-right font-medium">Monthly</th>
+                <th className="px-4 py-3 font-medium">Since</th>
+              </tr>
+            </thead>
+            <tbody>
+              {d.customers.recent.map((c) => (
+                <tr key={c.id} className="border-b last:border-0 hover:bg-muted/40">
+                  <td className="px-4 py-3 font-medium">{c.business_name}</td>
+                  <td className="px-4 py-3">{c.subscription_status ?? "—"}</td>
+                  <td className="px-4 py-3">{c.hosting_status ?? "—"}</td>
+                  <td className="px-4 py-3 text-right font-mono tabular-nums">
+                    {c.subscription_status === "active" ? money(d.revenue.monthlyFee) : "—"}
+                  </td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">
+                    {new Date(c.created_at).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

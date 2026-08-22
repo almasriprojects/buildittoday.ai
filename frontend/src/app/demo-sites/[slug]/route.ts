@@ -7,7 +7,7 @@ import { createServiceRoleClient } from "@/lib/supabase";
 // a full standalone document as-is. /demo/[businessId] redirects here when
 // a ready row exists in demo_sites.
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
@@ -39,10 +39,51 @@ export async function GET(
   }
 
   const html = await fileRes.text();
+
+  // This is the moment the lead actually looks at their site — the single most
+  // meaningful signal in the funnel. It was never recorded, so "they scanned"
+  // and "they looked" were indistinguishable. Logged after the HTML is in hand
+  // so a tracking failure can never cost the visitor their page.
+  recordView(slug, request).catch(() => {});
+
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
       "Cache-Control": "no-store",
     },
+  });
+}
+
+async function recordView(slug: string, request: NextRequest) {
+  // ?admin=1 is the in-admin preview iframe — reviewing a demo is not a lead
+  // viewing it, and counting it would inflate every number that follows.
+  const url = new URL(request.url);
+  if (url.searchParams.get("admin") === "1") return;
+
+  const src = url.searchParams.get("src"); // 'postcard' | 'email' | null
+  const supabase = createServiceRoleClient();
+
+  const { data: lead } = await supabase
+    .from("leads")
+    .select("id, demo_viewed_at, acquisition_channel")
+    .eq("demo_slug", slug)
+    .maybeSingle();
+  if (!lead) return;
+
+  const patch: Record<string, unknown> = {};
+  // First view only — otherwise a refresh rewrites the timestamp and you lose
+  // the time-to-first-view measurement.
+  if (!lead.demo_viewed_at) patch.demo_viewed_at = new Date().toISOString();
+  // First attributable channel wins; a later untracked visit must not erase it.
+  if (src && !lead.acquisition_channel) patch.acquisition_channel = src;
+
+  if (Object.keys(patch).length > 0) {
+    await supabase.from("leads").update(patch).eq("id", lead.id);
+  }
+
+  await supabase.from("outreach_events").insert({
+    lead_id: lead.id,
+    channel: src ?? "direct",
+    event_type: "viewed",
   });
 }

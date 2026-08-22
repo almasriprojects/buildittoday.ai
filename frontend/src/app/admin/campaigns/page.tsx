@@ -1,61 +1,64 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { DataTable, type Column } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/status-badge";
+import { useEffect, useState } from "react";
 import { StatCard } from "@/components/admin/stat-card";
-import { mockCampaigns } from "@/lib/mock-data";
-import type { Campaign } from "@/lib/types";
-import Link from "next/link";
+import { EmptyPanel } from "@/components/admin/empty-panel";
+
+type Overview = {
+  pipeline: { demosReady: number; demosApproved: number };
+  funnel: {
+    sent: number; opened: number; clicked: number;
+    scanned: number; viewed: number; paid: number;
+  };
+};
 
 export default function CampaignsPage() {
-  const totalSent = mockCampaigns.reduce((sum, c) => sum + c.postcards_sent, 0);
-  const totalScans = mockCampaigns.reduce((sum, c) => sum + c.qr_scans, 0);
-  const totalConversions = mockCampaigns.reduce((sum, c) => sum + c.conversions, 0);
-  const totalRevenue = mockCampaigns.reduce((sum, c) => sum + c.revenue, 0);
+  const [d, setD] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const columns: Column<Campaign>[] = [
-    { key: "name", label: "Campaign", render: (c) => <span className="font-medium">{c.name}</span> },
-    { key: "date_sent", label: "Date Sent", render: (c) => <span className="text-muted-foreground">{new Date(c.date_sent).toLocaleDateString()}</span> },
-    { key: "postcards_sent", label: "Postcards" },
-    { key: "qr_scans", label: "QR Scans" },
-    { key: "conversions", label: "Conversions" },
-    { key: "revenue", label: "Revenue", render: (c) => <span>${c.revenue.toLocaleString()}</span> },
-    { key: "status", label: "Status", render: (c) => <StatusBadge status={c.status} /> },
-  ];
+  useEffect(() => {
+    fetch("/api/admin/overview").then((r) => r.json()).then(setD).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>;
+  if (!d) return null;
+
+  const nothingSent = d.funnel.sent === 0 && d.funnel.scanned === 0;
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900">Campaigns</h2>
-          <p className="text-sm text-muted-foreground">Manage postcard campaigns.</p>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Campaigns</h1>
+        <p className="mt-1 text-muted-foreground">Email and postcard outreach to leads.</p>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <StatCard label="Approved to Send" value={d.pipeline.demosApproved} hint="cleared review" />
+        <StatCard label="Sent" value={d.funnel.sent} hint="emails + postcards" />
+        <StatCard label="Engaged" value={d.funnel.opened + d.funnel.scanned} hint="opened or scanned" />
+        <StatCard label="Converted" value={d.funnel.paid} hint="paid customers" />
+      </div>
+
+      {nothingSent ? (
+        <EmptyPanel
+          title="No campaigns sent yet"
+          body="Campaign performance appears here after the first send. Nothing has gone out, so there is nothing to report."
+          hint={
+            d.pipeline.demosApproved > 0
+              ? `${d.pipeline.demosApproved} demo${d.pipeline.demosApproved === 1 ? " is" : "s are"} approved and waiting. Sending requires an email provider to be connected.`
+              : `${d.pipeline.demosReady} demo sites are built but none approved yet. Review them before sending.`
+          }
+          action={{ href: "/admin/sites", label: "Review generated sites" }}
+        />
+      ) : (
+        <div className="rounded-xl border bg-card p-6">
+          <p className="text-sm text-muted-foreground">
+            Per-campaign breakdown is not built yet — outreach is currently tracked in aggregate
+            through <span className="font-mono text-xs">outreach_events</span>. See Analytics for
+            the full funnel.
+          </p>
         </div>
-        <Link href="/admin/campaigns/new">
-          <Button>+ New Campaign</Button>
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Total Postcards Sent" value={totalSent.toLocaleString()} />
-        <StatCard label="Total QR Scans" value={totalScans} />
-        <StatCard label="Total Conversions" value={totalConversions} />
-        <StatCard label="Total Revenue" value={`$${totalRevenue.toLocaleString()}`} />
-      </div>
-
-      <Card>
-        <CardHeader><CardTitle>All Campaigns</CardTitle></CardHeader>
-        <CardContent>
-          <DataTable
-            columns={columns}
-            rows={mockCampaigns}
-            emptyTitle="No campaigns yet"
-            emptyDescription="Create your first postcard campaign to get started."
-            onView={(c) => { window.location.href = `/admin/campaigns/${c.id}`; }}
-          />
-        </CardContent>
-      </Card>
+      )}
     </div>
   );
 }

@@ -1,68 +1,118 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { StatCard } from "@/components/admin/stat-card";
-import { mockAnalytics } from "@/lib/mock-data";
+import { EmptyPanel } from "@/components/admin/empty-panel";
+
+type Overview = {
+  customers: { total: number; active: number };
+  potential: { total: number; paid: number };
+  pipeline: { leads: number; qualified: number; demosReady: number; demosApproved: number };
+  funnel: {
+    sent: number; opened: number; clicked: number;
+    scanned: number; viewed: number; paid: number;
+  };
+  revenue: { setupCollected: number; monthlyRecurring: number };
+};
+
+const money = (n: number) =>
+  n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
 export default function AnalyticsPage() {
-  const a = mockAnalytics;
+  const [d, setD] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/admin/overview").then((r) => r.json()).then(setD).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>;
+  if (!d) return null;
+
+  const nothingSent = d.funnel.sent === 0 && d.funnel.scanned === 0 && d.funnel.viewed === 0;
+
+  // Rates are only meaningful once there is a denominator. Showing "0.0%" off
+  // zero sends reads as a real measurement of failure, which it is not.
+  const rate = (num: number, den: number) => (den > 0 ? `${((num / den) * 100).toFixed(1)}%` : "—");
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900">Analytics</h2>
-        <p className="text-sm text-muted-foreground">High-level business performance.</p>
+        <h1 className="text-3xl font-bold tracking-tight">Analytics</h1>
+        <p className="mt-1 text-muted-foreground">
+          Live numbers from the pipeline. Every figure here is a real count.
+        </p>
       </div>
 
-      <Card>
-        <CardHeader><CardTitle>Revenue</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard label="Total Revenue" value={`$${a.total_revenue.toLocaleString()}`} />
-            <StatCard label="Monthly Recurring" value={`$${a.monthly_recurring.toLocaleString()}/mo`} />
-            <StatCard label="Projected ARR" value={`$${a.projected_arr.toLocaleString()}`} />
-            <StatCard label="Churn Rate" value={`${(a.churn_rate * 100).toFixed(1)}%`} />
-          </div>
-        </CardContent>
-      </Card>
+      <section>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Revenue
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Setup Collected" value={money(d.revenue.setupCollected)} hint="$1,500 per customer" />
+          <StatCard label="Monthly Recurring" value={money(d.revenue.monthlyRecurring)} hint="$50 per active customer" />
+          <StatCard label="Customers" value={d.customers.total} hint="paid" />
+          <StatCard label="Signed Up" value={d.potential.total} hint="claimed a demo" />
+        </div>
+      </section>
 
-      <Card>
-        <CardHeader><CardTitle>Customer Lifecycle</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard label="New Customers" value={a.new_customers} />
-            <StatCard label="Active Customers" value={a.active_customers} />
-            <StatCard label="Churned" value={a.churned_customers} />
-            <StatCard label="Lifetime Value" value={`$${a.ltv.toLocaleString()}`} />
-          </div>
-        </CardContent>
-      </Card>
+      <section>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Lead pipeline
+        </h2>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Leads" value={d.pipeline.leads.toLocaleString()} hint="pulled from SunBiz" />
+          <StatCard label="Qualified" value={d.pipeline.qualified.toLocaleString()} hint="target fit = yes" />
+          <StatCard label="Demos Built" value={d.pipeline.demosReady} hint="ready to send" />
+          <StatCard label="Approved" value={d.pipeline.demosApproved} hint="cleared review" />
+        </div>
+      </section>
 
-      <Card>
-        <CardHeader><CardTitle>Campaign Performance</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <StatCard label="Postcards Sent" value={a.total_postcards_sent.toLocaleString()} />
-            <StatCard label="Response Rate" value={`${(a.avg_response_rate * 100).toFixed(1)}%`} />
-            <StatCard label="Conversion Rate" value={`${(a.avg_conversion_rate * 100).toFixed(1)}%`} />
-            <StatCard label="CAC" value={`$${a.cac.toFixed(2)}`} />
+      <section>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+          Outreach funnel
+        </h2>
+        {nothingSent ? (
+          <EmptyPanel
+            title="No outreach sent yet"
+            body="Open, click, scan and conversion rates appear here once the first campaign goes out. Nothing has been sent, so there is nothing to measure."
+            hint={`${d.pipeline.demosApproved} approved demo${
+              d.pipeline.demosApproved === 1 ? "" : "s"
+            } ready. Sending needs an email provider connected first.`}
+            action={{ href: "/admin/sites", label: "Review generated sites" }}
+          />
+        ) : (
+          <div className="overflow-x-auto rounded-xl border bg-card">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
+                  <th className="px-4 py-3 font-medium">Stage</th>
+                  <th className="px-4 py-3 text-right font-medium">Count</th>
+                  <th className="px-4 py-3 text-right font-medium">Of sent</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ["Sent", d.funnel.sent],
+                  ["Opened", d.funnel.opened],
+                  ["Clicked", d.funnel.clicked],
+                  ["QR scanned", d.funnel.scanned],
+                  ["Viewed demo", d.funnel.viewed],
+                  ["Paid", d.funnel.paid],
+                ].map(([label, n]) => (
+                  <tr key={label as string} className="border-b last:border-0">
+                    <td className="px-4 py-3">{label}</td>
+                    <td className="px-4 py-3 text-right font-mono tabular-nums">{n as number}</td>
+                    <td className="px-4 py-3 text-right font-mono tabular-nums text-muted-foreground">
+                      {label === "Sent" ? "—" : rate(n as number, d.funnel.sent)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div className="mt-4 rounded-md bg-slate-50 px-4 py-3 text-sm">
-            <p><span className="text-muted-foreground">ROI per postcard:</span> ${a.roi_per_postcard.toFixed(2)}</p>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader><CardTitle>Website Performance</CardTitle></CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <StatCard label="Avg Load Time" value={`${a.avg_load_time}s`} />
-            <StatCard label="Avg Monthly Visitors" value={a.avg_monthly_visitors.toLocaleString()} />
-            <StatCard label="Avg Form Submissions" value={a.avg_form_submissions} />
-          </div>
-        </CardContent>
-      </Card>
+        )}
+      </section>
     </div>
   );
 }

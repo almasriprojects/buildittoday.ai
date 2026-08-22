@@ -1,77 +1,93 @@
 "use client";
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DataTable, type Column } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/status-badge";
+import { useEffect, useState } from "react";
 import { StatCard } from "@/components/admin/stat-card";
-import { mockCustomers } from "@/lib/mock-data";
-import type { Customer } from "@/lib/types";
-import Link from "next/link";
+import { EmptyPanel } from "@/components/admin/empty-panel";
+
+type Overview = {
+  customers: {
+    total: number;
+    active: number;
+    pending: number;
+    recent: {
+      id: string;
+      business_name: string;
+      email: string | null;
+      subscription_status: string | null;
+      hosting_status: string | null;
+      created_at: string;
+    }[];
+  };
+  pipeline: { demosApproved: number };
+};
 
 export default function CustomersPage() {
-  const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("all");
+  const [data, setData] = useState<Overview | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = mockCustomers.filter((c) => {
-    const matchesSearch = c.business_name.toLowerCase().includes(search.toLowerCase());
-    const matchesStatus = status === "all" || c.subscription_status === status;
-    return matchesSearch && matchesStatus;
-  });
-
-  const columns: Column<Customer>[] = [
-    { key: "business_name", label: "Business Name", render: (c) => <span className="font-medium">{c.business_name}</span> },
-    { key: "industry", label: "Industry" },
-    { key: "created_at", label: "Signed Up", render: (c) => <span className="text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</span> },
-    { key: "subscription_status", label: "Subscription", render: (c) => <StatusBadge status={c.subscription_status} /> },
-    { key: "hosting_status", label: "Hosting", render: (c) => <StatusBadge status={c.hosting_status} /> },
-    { key: "monthly_payment", label: "Monthly", render: (c) => <span>${c.monthly_payment}/mo</span> },
-  ];
+  useEffect(() => {
+    fetch("/api/admin/overview")
+      .then((r) => r.json())
+      .then(setData)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold text-slate-900">Customers</h2>
-          <p className="text-sm text-muted-foreground">Manage all customer accounts.</p>
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
+        <p className="mt-1 text-muted-foreground">Businesses that have paid and are live.</p>
+      </div>
+
+      {data && (
+        <div className="grid gap-4 sm:grid-cols-3">
+          <StatCard label="Total Customers" value={data.customers.total} hint="paid and onboarded" />
+          <StatCard label="Active" value={data.customers.active} hint="subscription running" />
+          <StatCard label="Pending" value={data.customers.pending} hint="awaiting setup" />
         </div>
-        <Link href="/admin/customers/new">
-          <Button>+ New Customer</Button>
-        </Link>
-      </div>
+      )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <StatCard label="Total Customers" value={mockCustomers.length} />
-        <StatCard label="Active" value={mockCustomers.filter((c) => c.subscription_status === "active").length} />
-        <StatCard label="Pending" value={mockCustomers.filter((c) => c.subscription_status === "pending").length} />
-      </div>
+      {loading && <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>}
 
-      <Card>
-        <CardHeader>
-          <CardTitle>All Customers</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-3 mb-4">
-            <Input placeholder="Search by business name..." value={search} onChange={(e) => setSearch(e.target.value)} className="max-w-xs" />
-            <select value={status} onChange={(e) => setStatus(e.target.value)} className="rounded-md border border-input bg-background px-3 py-2 text-sm">
-              <option value="all">All statuses</option>
-              <option value="active">Active</option>
-              <option value="pending">Pending</option>
-              <option value="paused">Paused</option>
-              <option value="churned">Churned</option>
-            </select>
-          </div>
-          <DataTable
-            columns={columns}
-            rows={filtered}
-            emptyTitle="No customers found"
-            emptyDescription="Try adjusting your search or filters."
-            onView={(c) => { window.location.href = `/admin/customers/${c.id}`; }}
-          />
-        </CardContent>
-      </Card>
+      {!loading && data && data.customers.total === 0 && (
+        <EmptyPanel
+          title="No customers yet"
+          body="Nobody has paid yet. Customers appear here automatically the moment a Stripe payment completes and the webhook links it back to the originating lead."
+          hint={`${data.pipeline.demosApproved} demo site${
+            data.pipeline.demosApproved === 1 ? " is" : "s are"
+          } approved and ready to send. Outreach is the step between here and your first customer.`}
+          action={{ href: "/admin/sites", label: "Review generated sites" }}
+        />
+      )}
+
+      {!loading && data && data.customers.total > 0 && (
+        <div className="overflow-x-auto rounded-xl border bg-card">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground">
+                <th className="px-4 py-3 font-medium">Business</th>
+                <th className="px-4 py-3 font-medium">Email</th>
+                <th className="px-4 py-3 font-medium">Subscription</th>
+                <th className="px-4 py-3 font-medium">Hosting</th>
+                <th className="px-4 py-3 font-medium">Since</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.customers.recent.map((c) => (
+                <tr key={c.id} className="border-b last:border-0 hover:bg-muted/40">
+                  <td className="px-4 py-3 font-medium">{c.business_name}</td>
+                  <td className="px-4 py-3 text-muted-foreground">{c.email ?? "—"}</td>
+                  <td className="px-4 py-3">{c.subscription_status ?? "—"}</td>
+                  <td className="px-4 py-3">{c.hosting_status ?? "—"}</td>
+                  <td className="px-4 py-3 text-xs text-muted-foreground">
+                    {new Date(c.created_at).toLocaleDateString()}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
