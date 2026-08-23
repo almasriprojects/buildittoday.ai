@@ -5,6 +5,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { defaultColors, type ThemeColors } from "./craft-demos";
 
 const WEEKDAYS = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+// Spelled out for the confirmation line. The grid headers stay abbreviated.
+const WEEKDAYS_FULL = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+];
 const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 // 30-minute slots, 1:30 PM – 4:30 PM (America/New_York)
@@ -85,7 +89,7 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
   for (let d = 1; d <= daysInMonth; d++) cells.push(d);
 
   const selectedDate = selectedDay
-    ? `${WEEKDAYS[new Date(viewYear, viewMonth, selectedDay).getDay()]}, ${MONTHS[viewMonth]} ${selectedDay}`
+    ? `${WEEKDAYS_FULL[new Date(viewYear, viewMonth, selectedDay).getDay()]}, ${MONTHS[viewMonth]} ${selectedDay}`
     : null;
 
   return (
@@ -149,7 +153,10 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
         {/* Time slots */}
         <div className="p-6 md:p-8 border-t md:border-t-0 md:border-l" style={{ borderColor: c.border, backgroundColor: c.light }}>
           <div className="text-sm font-medium mb-1" style={{ color: c.dark }}>
-            {selectedDate ? `Friday, ${selectedDate}` : "Select a day"}
+            {/* The weekday was hardcoded to "Friday" and prepended to a string
+                that already carried one, so every date read "Friday, Su,
+                August 23" — on a Sunday. */}
+            {selectedDate ?? "Select a day"}
           </div>
           <div className="text-xs mb-5" style={{ color: c.textMuted }}>America/New_York</div>
 
