@@ -84,7 +84,7 @@ export const TIERS: Tier[] = [
       "Priority support",
     ],
     cta: "Book a call",
-    href: "#book",
+    href: "/#book",
   },
 ];
 

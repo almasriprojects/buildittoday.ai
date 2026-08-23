@@ -111,7 +111,7 @@ export function Process10Steps({ colors }: Process10StepsProps) {
         {/* Bottom CTA */}
         <motion.div {...fadeInUp} className="text-center mt-16">
           <a
-            href="#book"
+            href="/#book"
             className="inline-flex items-center justify-center px-8 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90"
             style={{ backgroundColor: c.primary }}
           >
