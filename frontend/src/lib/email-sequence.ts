@@ -14,6 +14,33 @@ import {
 /** Days to wait after sending step N before step N+1 becomes due. */
 const GAP_DAYS: Record<number, number | null> = { 1: 3, 2: 5, 3: 6, 4: null };
 
+/**
+ * The only values lead_email_state.status may hold. This mirrors a CHECK
+ * constraint in the database, and writing anything outside it makes the update
+ * fail — which, if the failure goes unnoticed, leaves a lead permanently due
+ * and re-sends the same email on every run. Keep the two in step.
+ */
+const STATUS = {
+  active: "active",
+  clicked: "clicked",
+  stopped: "stopped",
+  unsubscribed: "unsubscribed",
+  bounced: "bounced",
+} as const;
+type Status = (typeof STATUS)[keyof typeof STATUS];
+
+/**
+ * Reasons a lead drops out, mapped onto the statuses the database accepts.
+ * Anything unrecognised stops the lead rather than leaving it in the queue:
+ * the failure mode of stopping too eagerly is one missed email, and the
+ * failure mode of not stopping is mailing someone forever.
+ */
+function statusForReason(reason: string): Status {
+  if (reason === "unsubscribed") return STATUS.unsubscribed;
+  if (reason === "bounced" || reason === "complained") return STATUS.bounced;
+  return STATUS.stopped;
+}
+
 /** How long after the final email the demo is actually taken down. */
 export const EXPIRY_DAYS = 3;
 
@@ -213,6 +240,40 @@ async function sendOne(
     return { ok: false, error: "demo not approved", fatal: "demo not approved" };
   }
 
+  // Belt and braces against a repeat send.
+  //
+  // Whether a lead is due is decided by lead_email_state, so any failure to
+  // write that row leaves them due forever and the same email goes out on
+  // every run. That is exactly what happened once, silently, because a status
+  // value violated a CHECK constraint. The send log is independent of that
+  // row, so consulting it here means no lead can receive the same template
+  // twice even if the state machine breaks again.
+  const { count: already } = await supabase
+    .from("email_sends")
+    .select("*", { count: "exact", head: true })
+    .eq("lead_id", lead.id)
+    .eq("template_slug", slug)
+    .is("error", null);
+
+  if ((already ?? 0) > 0) {
+    // The log says this template already went out, so the state row is behind
+    // reality. Repair it to match what actually happened rather than stopping
+    // the lead: they should carry on from the step they are genuinely at, not
+    // be dropped because of bookkeeping.
+    const gapAfter = GAP_DAYS[step] ?? null;
+    const stamp = new Date().toISOString();
+    await supabase.from("lead_email_state").update({
+      sequence_step: step,
+      next_send_at: gapAfter
+        ? new Date(Date.now() + gapAfter * 864e5).toISOString()
+        : null,
+      status: gapAfter ? (clicked ? STATUS.clicked : STATUS.active) : STATUS.stopped,
+      updated_at: stamp,
+    }).eq("lead_id", lead.id);
+
+    return { ok: false, error: `${slug} already sent — state repaired to step ${step}` };
+  }
+
   const expiry = new Date(Date.now() + EXPIRY_DAYS * 864e5);
   const vars = buildVars(lead as LeadForEmail, settings, {
     expiryDate: expiry.toLocaleDateString("en-US", { month: "long", day: "numeric" }),
@@ -252,16 +313,30 @@ async function sendOne(
   await supabase.from("leads").update({ outreach_sent_at: now }).eq("id", lead.id);
 
   const gap = GAP_DAYS[step] ?? null;
-  await supabase.from("lead_email_state").update({
+  const { error: stateErr } = await supabase.from("lead_email_state").update({
     sequence_step: step,
     next_send_at: gap ? new Date(Date.now() + gap * 864e5).toISOString() : null,
     // A lead who has clicked keeps that status while the sequence runs, so
     // step 3 stays on the warm branch. Once there is nothing left to send,
-    // everyone lands on 'completed' regardless of how they got there.
-    status: gap ? (clicked ? "clicked" : "active") : "completed",
+    // everyone stops regardless of how they got here.
+    status: gap ? (clicked ? STATUS.clicked : STATUS.active) : STATUS.stopped,
     last_event_at: now,
     updated_at: now,
   }).eq("lead_id", lead.id);
+
+  // This write is what stops the lead being due again. If it fails and nobody
+  // looks, the same email goes out on every subsequent run — so a failure here
+  // is escalated, never swallowed.
+  if (stateErr) {
+    await supabase.from("lead_email_state").update({
+      status: STATUS.stopped, next_send_at: null, updated_at: now,
+    }).eq("lead_id", lead.id);
+    return {
+      ok: false,
+      error: `sent, but state update failed (${stateErr.message}) — lead stopped to prevent a repeat send`,
+      fatal: "state update failed",
+    };
+  }
 
   return { ok: true, business: lead.business_name };
 }
@@ -269,9 +344,19 @@ async function sendOne(
 async function stop(
   supabase: ReturnType<typeof createServiceRoleClient>,
   leadId: string,
-  status: string
+  reason: string
 ) {
-  await supabase.from("lead_email_state").update({
-    status, next_send_at: null, updated_at: new Date().toISOString(),
+  const { error } = await supabase.from("lead_email_state").update({
+    status: statusForReason(reason),
+    next_send_at: null,
+    updated_at: new Date().toISOString(),
   }).eq("lead_id", leadId);
+
+  // Clearing next_send_at alone is enough to take the lead out of the queue,
+  // so fall back to that if the status write is what was rejected.
+  if (error) {
+    await supabase.from("lead_email_state")
+      .update({ next_send_at: null, updated_at: new Date().toISOString() })
+      .eq("lead_id", leadId);
+  }
 }

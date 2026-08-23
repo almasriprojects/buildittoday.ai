@@ -139,8 +139,15 @@ export async function POST(request: NextRequest) {
             : { email_bounced_at: now }
         ).eq("id", leadId);
 
+        // lead_email_state.status is CHECK-constrained; 'complained' is not one
+        // of the permitted values, and writing it would fail the update and
+        // leave the lead due — still being mailed after a spam complaint, which
+        // is the worst possible outcome. A complaint is recorded as an opt-out.
         await supabase.from("lead_email_state").upsert({
-          lead_id: leadId, status: reason, next_send_at: null, updated_at: now,
+          lead_id: leadId,
+          status: complaint ? "unsubscribed" : "bounced",
+          next_send_at: null,
+          updated_at: now,
         });
 
         await supabase.from("outreach_events").insert({
