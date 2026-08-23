@@ -71,8 +71,17 @@ export async function POST(request: NextRequest) {
   if (!lead) return NextResponse.json({ error: "Lead not found" }, { status: 404 });
   if (!template) return NextResponse.json({ error: "Template not found" }, { status: 404 });
 
-  const to = test ? settings.reply_to : lead.contact_email;
+  // Always the lead's real address, even for a test: deliver() does the
+  // redirecting, and the subject prefix should say who this would have gone to
+  // rather than echoing back the inbox it landed in.
+  const to = lead.contact_email ?? settings.reply_to;
   if (!to) return NextResponse.json({ error: "This lead has no email address." }, { status: 400 });
+
+  const { data: siteRow } = await supabase
+    .from("demo_sites")
+    .select("public_slug")
+    .eq("demo_slug", lead.demo_slug ?? "")
+    .maybeSingle();
 
   if (!test) {
     const blocked = await isSuppressed(to, lead.id);
@@ -98,7 +107,7 @@ export async function POST(request: NextRequest) {
 
   const expiry = new Date();
   expiry.setDate(expiry.getDate() + 3);
-  const vars = buildVars(lead as LeadForEmail, settings, {
+  const vars = buildVars({ ...lead, public_slug: siteRow?.public_slug } as LeadForEmail, settings, {
     expiryDate: expiry.toLocaleDateString("en-US", { month: "long", day: "numeric" }),
   });
 

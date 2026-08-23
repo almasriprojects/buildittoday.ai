@@ -17,6 +17,8 @@ export type LeadForEmail = {
   contact_email: string | null;
   demo_slug: string | null;
   city: string | null;
+  /** The readable address of their built site, when one exists. */
+  public_slug?: string | null;
 };
 
 const SITE_URL = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
@@ -113,7 +115,15 @@ export function buildVars(
     // " Sarah," or "" — lets one template read naturally either way
     first_name_comma: first ? ` ${first},` : ",",
     city: lead.city ?? "",
-    demo_url: `${SITE_URL}/api/track/click?lead=${lead.id}&src=email`,
+    // The address a stranger has to be willing to click.
+    //
+    // This was a /api/track/click URL carrying a UUID, which is what a phishing
+    // link looks like and is the opposite of reassuring in a cold email. The
+    // readable address does its own tracking — /{slug} records the click and
+    // the view — so nothing is lost by showing the real one.
+    demo_url: lead.public_slug
+      ? `${SITE_URL}/${lead.public_slug}?src=email`
+      : `${SITE_URL}/api/track/click?lead=${lead.id}&src=email`,
     from_name: settings.from_name,
     reply_to: settings.reply_to,
     expiry_date: opts.expiryDate ?? "",

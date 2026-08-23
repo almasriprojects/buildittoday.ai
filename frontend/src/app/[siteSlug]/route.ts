@@ -81,21 +81,40 @@ async function recordView(demoSlug: string, request: NextRequest) {
 
   const { data: lead } = await supabase
     .from("leads")
-    .select("id, demo_viewed_at, acquisition_channel")
+    .select("id, demo_viewed_at, email_clicked_at, acquisition_channel")
     .eq("demo_slug", demoSlug)
     .maybeSingle();
   if (!lead) return;
 
+  const channel = src === "postcard" ? "postcard" : "email";
   const patch: Record<string, string> = {};
   if (!lead.demo_viewed_at) patch.demo_viewed_at = now;
   if (src && !lead.acquisition_channel) patch.acquisition_channel = src;
+
+  // This page is now the link in the email, so arriving here with ?src is the
+  // click — the separate /api/track/click hop no longer sits in front of it.
+  // First click only, so time-to-first-click stays measurable.
+  const isFromOutreach = Boolean(src);
+  if (isFromOutreach && !lead.email_clicked_at) patch.email_clicked_at = now;
+
   if (Object.keys(patch).length) {
     await supabase.from("leads").update(patch).eq("id", lead.id);
   }
 
-  await supabase.from("outreach_events").insert({
-    lead_id: lead.id,
-    channel: src === "postcard" ? "postcard" : "email",
-    event_type: "viewed",
-  });
+  await supabase.from("outreach_events").insert([
+    ...(isFromOutreach
+      ? [{ lead_id: lead.id, channel, event_type: "clicked" }]
+      : []),
+    { lead_id: lead.id, channel, event_type: "viewed" },
+  ]);
+
+  // Moves the lead onto the warm track, which is what makes touch 3 switch
+  // from handling the "what's the catch" objection to asking what stopped them.
+  if (isFromOutreach) {
+    await supabase
+      .from("lead_email_state")
+      .update({ status: "clicked", last_event_at: now, updated_at: now })
+      .eq("lead_id", lead.id)
+      .eq("status", "active");
+  }
 }

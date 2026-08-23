@@ -234,7 +234,7 @@ async function sendOne(
   if (sup) return { ok: false, error: sup.reason, fatal: sup.reason };
 
   const { data: site } = await supabase
-    .from("demo_sites").select("review_status")
+    .from("demo_sites").select("review_status, public_slug")
     .eq("demo_slug", lead.demo_slug ?? "").maybeSingle();
   if (site?.review_status !== "approved") {
     return { ok: false, error: "demo not approved", fatal: "demo not approved" };
@@ -275,7 +275,7 @@ async function sendOne(
   }
 
   const expiry = new Date(Date.now() + EXPIRY_DAYS * 864e5);
-  const vars = buildVars(lead as LeadForEmail, settings, {
+  const vars = buildVars({ ...lead, public_slug: site?.public_slug } as LeadForEmail, settings, {
     expiryDate: expiry.toLocaleDateString("en-US", { month: "long", day: "numeric" }),
   });
 
