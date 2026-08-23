@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { HEADLINE, money } from "@/lib/pricing";
 
 export function ClaimForm({
   businessName,
@@ -79,7 +80,7 @@ export function ClaimForm({
         disabled={loading}
         className="inline-flex h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-8 text-base font-medium text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        {loading ? "Starting checkout…" : "Claim this website — $1,500"}
+        {loading ? "Starting checkout…" : `Claim this website — ${money(HEADLINE.setup)}`}
       </button>
 
       <p className="text-sm text-neutral-500">

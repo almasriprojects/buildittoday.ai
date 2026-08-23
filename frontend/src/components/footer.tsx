@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ENTRY, money } from "@/lib/pricing";
 
 export function Footer() {
   return (
@@ -11,8 +12,8 @@ export function Footer() {
               BuildItToday<span className="text-foreground">.ai</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm text-muted-foreground leading-relaxed">
-              Professional websites for small businesses. Built in one week for $1,500. 
-              Mobile-friendly, SEO-optimized, and ready to get you customers.
+              Custom websites for Florida small businesses, live on your own domain
+              in one week. From {money(ENTRY.setup)} — no template, and you own the code.
             </p>
           </div>
 
@@ -46,8 +47,18 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
+        <div className="mt-12 pt-8 border-t flex flex-col items-center gap-3 text-sm text-muted-foreground sm:flex-row sm:justify-between">
           <p>&copy; {new Date().getFullYear()} BuildItToday.ai. All rights reserved.</p>
+          {/* Stripe requires both to be reachable from every page before it will
+              approve a live account, and commercial email effectively does too. */}
+          <nav className="flex items-center gap-5">
+            <Link href="/privacy" className="hover:text-foreground transition-colors">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-foreground transition-colors">
+              Terms
+            </Link>
+          </nav>
         </div>
       </div>
     </footer>

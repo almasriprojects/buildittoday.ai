@@ -1,3 +1,5 @@
+import { TIERS, money } from "./pricing";
+
 // Central data for the main page sections: 10 crafts, packages, traffic, automations.
 
 export interface Craft {
@@ -93,6 +95,10 @@ export const crafts: Craft[] = [
   },
 ];
 
+/**
+ * The build packages, derived from the single pricing source so the homepage,
+ * /pricing, the hero and the footer can never drift apart.
+ */
 export interface Package {
   name: string;
   price: string;
@@ -103,52 +109,15 @@ export interface Package {
   href?: string;
 }
 
-export const packages: Package[] = [
-  {
-    name: "Launch Site",
-    price: "$1,500",
-    tagline: "A complete one-page site designed around your business, live on your own domain in a week. Plus $50/month for hosting, updates, and support — cancel any time.",
-    features: [
-      "Custom design built for your business, not a template",
-      "Everything on one page: services, about, contact",
-      "Video hero and motion built in",
-      "Fast and mobile-first, not mobile-tolerant",
-      "Your own domain, SSL, and hosting configured",
-      "$50/month after launch — cancel any time",
-    ],
-    popular: true,
-    cta: "Claim your site",
-    href: "/claim",
-  },
-  {
-    name: "Custom Website",
-    price: "$5,000",
-    tagline: "Every craft demonstrated on this page, built into one site you own outright — and launched already working, not waiting on a second invoice.",
-    features: [
-      "Everything in the Launch Site",
-      "Multi-page site with the full design treatment",
-      "3D and premium assets when you want them",
-      "Conversion rate optimization built in",
-      "An SEO and AEO base layer at launch",
-      "Speed, hosting, and full code ownership",
-    ],
-    cta: "Book a call",
-  },
-  {
-    name: "Full Stack Web App",
-    price: "$20,000",
-    tagline: "Everything in the Custom Website, plus the software behind it — accounts, data, and the workflows your business actually runs on.",
-    features: [
-      "Everything in the Custom Website",
-      "Accounts and secure logins",
-      "A database that replaces the spreadsheets",
-      "Integrations with the tools you already pay for",
-      "Built to grow without a rebuild",
-      "Ongoing maintenance and an annual redesign",
-    ],
-    cta: "Book a call",
-  },
-];
+export const packages: Package[] = TIERS.map((t) => ({
+  name: t.name,
+  price: money(t.setup),
+  tagline: t.tagline,
+  features: t.features,
+  popular: t.popular,
+  cta: t.cta,
+  href: t.href,
+}));
 
 export interface TrafficLayer {
   title: string;

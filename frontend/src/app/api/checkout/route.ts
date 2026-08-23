@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { HEADLINE, money } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -26,10 +27,11 @@ export async function POST(request: NextRequest) {
             currency: "usd",
             product_data: {
               name: `Website Setup — ${businessName}`,
-              description:
-                "One-time setup. Site built, launched on your domain. $50/month hosting starts after launch.",
+              description: `One-time setup. Site built, launched on your domain. ${money(HEADLINE.monthly)}/month hosting starts after launch.`,
             },
-            unit_amount: 150000,
+            // Derived rather than typed, so the amount charged can never drift
+            // from the price advertised on the claim page. Stripe wants cents.
+            unit_amount: HEADLINE.setup * 100,
           },
           quantity: 1,
         },

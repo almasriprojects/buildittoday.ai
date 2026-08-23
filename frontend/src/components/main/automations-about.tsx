@@ -93,22 +93,31 @@ export function ContactSection({ colors = defaultColors }: { colors?: ThemeColor
   const c = colors;
   return (
     <section className="py-24 md:py-32" style={{ backgroundColor: c.light }}>
+      {/* This repeated the booking section's heading and copy word for word,
+          directly beneath it, with a button that scrolled back up to the
+          calendar. It is now the thing the page was actually missing: a way to
+          reach a person without booking anything. */}
       <div className="container-max text-center max-w-3xl mx-auto">
         <motion.div {...fadeUp}>
           <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: c.primary }}>Contact</span>
-          <h2 className="text-3xl md:text-5xl font-light mb-6" style={{ color: c.dark }}>Book a Website Call</h2>
-          <p className="text-lg leading-relaxed mb-8" style={{ color: c.textOnLight }}>
-            Thirty minutes. Already have a site? We&rsquo;ll review it and show you clear ways to turn more visitors into booked calls. Starting fresh? We&rsquo;ll map the site you need so you launch ready to earn them.
+          <h2 className="text-3xl md:text-5xl font-light mb-6" style={{ color: c.dark }}>
+            Rather just talk?
+          </h2>
+          <p className="text-lg leading-relaxed mb-10" style={{ color: c.textOnLight }}>
+            No form, no calendar. Call or email and you will reach the person who would
+            build your site.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="#book" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
-              Book a Website Call
+            <a href="tel:+13055050153" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
+              (305) 505-0153
             </a>
             <a href="mailto:contact@buildittoday.ai" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium border transition-colors" style={{ borderColor: c.border, color: c.dark }}>
-              Email Us
+              contact@buildittoday.ai
             </a>
           </div>
-          <p className="mt-6 text-sm" style={{ color: c.textMuted }}>30 min · complimentary call · Times in America/New_York</p>
+          <p className="mt-6 text-sm" style={{ color: c.textMuted }}>
+            Miami, FL · replies within one business day
+          </p>
         </motion.div>
       </div>
     </section>

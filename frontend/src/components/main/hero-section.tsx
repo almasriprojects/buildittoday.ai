@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { defaultColors, type ThemeColors } from "./craft-demos";
+import { ENTRY, money } from "@/lib/pricing";
 
 interface HeroSectionProps {
   colors?: ThemeColors;
@@ -76,7 +77,7 @@ export function HeroSection({ colors = defaultColors }: HeroSectionProps) {
               className="mt-8 text-lg md:text-xl max-w-xl leading-relaxed font-light text-on-dark"
             >
               We design and build websites for small businesses — custom, fast, and yours to keep.
-              Launch in one week, from <strong className="text-on-dark-white">$1,500</strong>.
+              Launch in one week, from <strong className="text-on-dark-white">{money(ENTRY.setup)}</strong>.
             </motion.p>
 
             {/* CTAs */}

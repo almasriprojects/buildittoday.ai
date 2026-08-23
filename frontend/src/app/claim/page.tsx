@@ -1,12 +1,13 @@
 import { createServiceRoleClient } from "@/lib/supabase";
 import { ClaimForm } from "@/components/claim/claim-form";
+import { HEADLINE, money } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Claim Your Website — BuildItToday.ai",
   description:
-    "Your website is already built. Claim it for $1,500 and we launch it on your own domain within a week.",
+    `Your website is already built. Claim it for ${money(HEADLINE.setup)} and we launch it on your own domain within a week.`,
 };
 
 const INCLUDED = [
@@ -94,11 +95,11 @@ export default async function ClaimPage({
         {/* Price */}
         <section className="mt-14 rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="text-5xl font-semibold tracking-tight">$1,500</span>
+            <span className="text-5xl font-semibold tracking-tight">{money(HEADLINE.setup)}</span>
             <span className="text-lg text-neutral-600">one time</span>
           </div>
           <p className="mt-2 text-base text-neutral-600">
-            Then <strong className="font-semibold text-neutral-900">$50/month</strong> for hosting,
+            Then <strong className="font-semibold text-neutral-900">{money(HEADLINE.monthly)}/month</strong> for hosting,
             updates, and support. Cancel any time.
           </p>
 
@@ -136,7 +137,7 @@ export default async function ClaimPage({
                 </dd>
               </div>
               <div>
-                <dt className="font-medium text-neutral-900">What is the $50/month for?</dt>
+                <dt className="font-medium text-neutral-900">What is the {money(HEADLINE.monthly)}/month for?</dt>
                 <dd className="mt-1 text-neutral-600">
                   Hosting, SSL, security updates, backups, and small content changes when you need
                   them. Cancel any time — you keep the site.
