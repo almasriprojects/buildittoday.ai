@@ -1,7 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, Check, Mail, Send } from "lucide-react";
+import { AlertTriangle, Check, Mail, Play, Send } from "lucide-react";
+
+type Queue = {
+  enrolled: number;
+  dueNow: number;
+  nextStep: Record<string, number>;
+  byStatus: Record<string, number>;
+  approvedDemos: number;
+  emailableLeads: number;
+};
 
 type Settings = {
   from_name: string;
@@ -32,20 +41,49 @@ export default function EmailsPage() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [open, setOpen] = useState<string | null>(null);
+  const [queue, setQueue] = useState<Queue | null>(null);
+  const [running, setRunning] = useState(false);
 
   const load = useCallback(() => {
-    fetch("/api/email/settings")
-      .then((r) => r.json())
-      .then((d) => {
+    Promise.all([
+      fetch("/api/email/settings").then((r) => r.json()),
+      fetch("/api/email/sequence/run").then((r) => r.json()).catch(() => null),
+    ])
+      .then(([d, q]) => {
         setSettings(d.settings);
         setTemplates(d.templates ?? []);
         setSentToday(d.sentToday ?? 0);
         setResendOk(Boolean(d.resendConfigured));
+        if (q && !q.error) setQueue(q);
       })
       .finally(() => setLoading(false));
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  async function runNow() {
+    setRunning(true);
+    setErr(null);
+    setMsg(null);
+    try {
+      const res = await fetch("/api/email/sequence/run", { method: "POST" });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      if (!d.ran) setErr(d.reason);
+      else {
+        const parts = [`${d.sent.length} sent`];
+        if (d.enrolled) parts.push(`${d.enrolled} newly enrolled`);
+        if (d.failed.length) parts.push(`${d.failed.length} failed`);
+        if (d.reason) parts.push(d.reason);
+        setMsg(parts.join(" · "));
+      }
+      load();
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Run failed.");
+    } finally {
+      setRunning(false);
+    }
+  }
 
   async function save(patch: Partial<Settings>) {
     setSaving(true);
@@ -88,6 +126,53 @@ export default function EmailsPage() {
         <Check3 ok={Boolean(settings.postal_address)} label="Postal address" detail={settings.postal_address ? "CAN-SPAM satisfied" : "Legally required — add below"} />
         <Check3 ok={settings.sending_enabled} label="Sending" detail={settings.sending_enabled ? `On · ${sentToday}/${settings.daily_cap} today` : "Off — nothing can go out"} />
       </div>
+
+      {/* Sequence queue */}
+      {queue && (
+        <div className="rounded-xl border bg-card p-5">
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-sm font-semibold">Queue</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                Runs hourly on its own. Approved demos join automatically.
+              </p>
+            </div>
+            <button
+              onClick={runNow}
+              disabled={running}
+              className="inline-flex h-9 items-center gap-2 rounded-lg border px-4 text-sm font-medium transition hover:bg-muted disabled:opacity-40"
+            >
+              <Play className="h-3.5 w-3.5" />
+              {running ? "Running…" : "Run now"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Stat n={queue.approvedDemos} label="Approved demos" />
+            <Stat n={queue.enrolled} label="In sequence" />
+            <Stat n={queue.dueNow} label="Due now" />
+            <Stat n={queue.emailableLeads} label="Reachable leads" />
+          </div>
+
+          {queue.approvedDemos === 0 && (
+            <p className="mt-4 rounded-lg bg-amber-50 px-3 py-2 text-xs leading-relaxed text-amber-900">
+              Nothing can go out yet — no demo has been approved. Approve one in{" "}
+              <a href="/admin/sites" className="font-medium underline">Generated Sites</a>{" "}
+              and it joins the sequence on the next run.
+            </p>
+          )}
+
+          {Object.keys(queue.nextStep).length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2 border-t pt-4">
+              {Object.entries(queue.nextStep).map(([step, n]) => (
+                <span key={step} className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                  {n} due for step {step}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Settings */}
       <div className="rounded-xl border bg-card p-5">
@@ -172,6 +257,15 @@ export default function EmailsPage() {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function Stat({ n, label }: { n: number; label: string }) {
+  return (
+    <div className="rounded-lg border bg-background px-3 py-2.5">
+      <div className="text-xl font-semibold tabular-nums">{n}</div>
+      <div className="mt-0.5 text-xs text-muted-foreground">{label}</div>
     </div>
   );
 }
