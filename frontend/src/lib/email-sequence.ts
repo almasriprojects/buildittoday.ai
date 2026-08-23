@@ -1,6 +1,6 @@
 import { createServiceRoleClient } from "@/lib/supabase";
 import {
-  buildVars, getEmailSettings, renderTemplate, sendEmail, withFooter,
+  buildVars, deliver, getEmailSettings, renderTemplate, withFooter,
   type EmailSettings, type LeadForEmail,
 } from "@/lib/email";
 
@@ -221,11 +221,10 @@ async function sendOne(
   const subject = renderTemplate(template.subject, vars);
   const text = withFooter(renderTemplate(template.body_text, vars), settings, lead.id);
 
-  const res = await sendEmail({
-    to: lead.contact_email,
+  const res = await deliver({
+    settings,
+    intendedTo: lead.contact_email,
     subject, text,
-    from: `${settings.from_name} <${settings.from_email}>`,
-    replyTo: settings.reply_to,
     leadId: lead.id,
   });
 
@@ -234,7 +233,8 @@ async function sendOne(
   if (!res.ok) {
     await supabase.from("email_sends").insert({
       lead_id: lead.id, template_slug: slug, sequence_step: step,
-      to_email: lead.contact_email, subject, error: res.error,
+      to_email: lead.contact_email, intended_to: lead.contact_email,
+      was_test: settings.test_mode, subject, error: res.error,
     });
     // Left due on purpose — a provider blip should be retried next run.
     return { ok: false, error: res.error };
@@ -242,7 +242,9 @@ async function sendOne(
 
   await supabase.from("email_sends").insert({
     lead_id: lead.id, template_slug: slug, sequence_step: step,
-    to_email: lead.contact_email, subject, provider_id: res.id,
+    // to_email records where it actually went; intended_to where it was aimed.
+    to_email: res.actualTo, intended_to: lead.contact_email,
+    was_test: res.redirected, subject: res.subject, provider_id: res.id,
   });
   await supabase.from("outreach_events").insert({
     lead_id: lead.id, channel: "email", event_type: "sent",

@@ -7,6 +7,7 @@ export type EmailSettings = {
   postal_address: string | null;
   daily_cap: number;
   sending_enabled: boolean;
+  test_mode: boolean;
 };
 
 export type LeadForEmail = {
@@ -25,11 +26,14 @@ export async function getEmailSettings(): Promise<EmailSettings> {
   const { data } = await supabase.from("email_settings").select("*").eq("id", 1).maybeSingle();
   return (data as EmailSettings) ?? {
     from_name: "BuildItToday.ai",
-    from_email: "hello@buildittoday.ai",
+    from_email: "contact@buildittoday.ai",
     reply_to: "contact@buildittoday.ai",
     postal_address: null,
     daily_cap: 10,
     sending_enabled: false,
+    // If settings cannot be read, assume the most cautious posture rather than
+    // the most permissive one.
+    test_mode: true,
   };
 }
 
@@ -128,7 +132,50 @@ ${settings.postal_address ?? ""}
 Don't want these emails? Unsubscribe: ${unsub}`;
 }
 
-export async function sendEmail(args: {
+export type DeliveryResult =
+  | { ok: true; id: string; actualTo: string; subject: string; redirected: boolean }
+  | { ok: false; error: string };
+
+/**
+ * The only way mail leaves this system.
+ *
+ * Every route and job goes through here rather than calling sendEmail directly,
+ * because test mode has to be impossible to forget. A check that each caller
+ * must remember to make is a check that will eventually be skipped by the one
+ * caller written in a hurry — so the redirect lives at the single point all
+ * sending funnels through, not in the callers.
+ *
+ * While test_mode is on, every message goes to the operator's own inbox with
+ * the intended recipient shown in the subject. Nothing else changes: the
+ * sequence advances, tracking fires, state moves. The rehearsal is real in
+ * every respect except who receives it.
+ */
+export async function deliver(args: {
+  settings: EmailSettings;
+  intendedTo: string;
+  subject: string;
+  text: string;
+  leadId: string;
+}): Promise<DeliveryResult> {
+  const { settings } = args;
+  const redirected = settings.test_mode;
+  const to = redirected ? settings.reply_to : args.intendedTo;
+  const subject = redirected
+    ? `[TEST → ${args.intendedTo}] ${args.subject}`
+    : args.subject;
+
+  const res = await sendEmail({
+    to, subject, text: args.text,
+    from: `${settings.from_name} <${settings.from_email}>`,
+    replyTo: settings.reply_to,
+    leadId: args.leadId,
+  });
+
+  if (!res.ok) return res;
+  return { ok: true, id: res.id, actualTo: to, subject, redirected };
+}
+
+async function sendEmail(args: {
   to: string;
   subject: string;
   text: string;

@@ -50,6 +50,19 @@ export async function PATCH(request: NextRequest) {
     patch.daily_cap = Math.floor(body.daily_cap);
   }
 
+  // Leaving test mode is the one irreversible-feeling action here — the next
+  // send reaches a real business. It requires saying so explicitly, so it
+  // cannot happen as a side effect of saving some other field.
+  if (typeof body.test_mode === "boolean") {
+    if (body.test_mode === false && body.confirm_live !== "SEND TO REAL BUSINESSES") {
+      return NextResponse.json(
+        { error: "To leave test mode, confirm you understand the next send reaches real businesses." },
+        { status: 400 }
+      );
+    }
+    patch.test_mode = body.test_mode;
+  }
+
   if (typeof body.sending_enabled === "boolean") {
     // Turning sending on without a postal address would put every subsequent
     // email in breach of CAN-SPAM, so the switch itself refuses.

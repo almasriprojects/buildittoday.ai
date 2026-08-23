@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
 import {
-  buildVars, getEmailSettings, isSuppressed, renderTemplate,
-  sendEmail, withFooter, type LeadForEmail,
+  buildVars, deliver, getEmailSettings, isSuppressed, renderTemplate,
+  withFooter, type LeadForEmail,
 } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
@@ -104,30 +104,34 @@ export async function POST(request: NextRequest) {
 
   const subject = renderTemplate(template.subject, vars);
   const text = withFooter(renderTemplate(template.body_text, vars), settings, lead.id);
-  const from = `${settings.from_name} <${settings.from_email}>`;
 
-  const result = await sendEmail({
-    to, subject, text, from, replyTo: settings.reply_to, leadId: lead.id,
+  const result = await deliver({
+    settings, intendedTo: to, subject, text, leadId: lead.id,
   });
 
   if (!result.ok) {
     if (!test) {
       await supabase.from("email_sends").insert({
         lead_id: lead.id, template_slug: template.slug, sequence_step: template.sequence_step,
-        to_email: to, subject, error: result.error,
+        to_email: to, intended_to: to, was_test: settings.test_mode,
+        subject, error: result.error,
       });
     }
     return NextResponse.json({ error: result.error }, { status: 502 });
   }
 
   if (test) {
-    return NextResponse.json({ ok: true, test: true, sentTo: to, subject, preview: text });
+    return NextResponse.json({
+      ok: true, test: true, sentTo: result.actualTo,
+      subject: result.subject, preview: text,
+    });
   }
 
   const now = new Date().toISOString();
   await supabase.from("email_sends").insert({
     lead_id: lead.id, template_slug: template.slug, sequence_step: template.sequence_step,
-    to_email: to, subject, provider_id: result.id,
+    to_email: result.actualTo, intended_to: to, was_test: result.redirected,
+    subject: result.subject, provider_id: result.id,
   });
   await supabase.from("leads").update({ outreach_sent_at: now }).eq("id", lead.id);
   await supabase.from("outreach_events").insert({

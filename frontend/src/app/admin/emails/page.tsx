@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertTriangle, Check, Mail, Play, Send } from "lucide-react";
+import { AlertTriangle, Check, Mail, Play, Send, Shield } from "lucide-react";
 
 type Queue = {
   enrolled: number;
@@ -19,6 +19,7 @@ type Settings = {
   postal_address: string | null;
   daily_cap: number;
   sending_enabled: boolean;
+  test_mode: boolean;
 };
 
 type Template = {
@@ -60,6 +61,37 @@ export default function EmailsPage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  // Typing the phrase is the point: leaving test mode should take a deliberate
+  // act, not a click that could happen by reflex.
+  async function goLive() {
+    const phrase = "SEND TO REAL BUSINESSES";
+    const typed = window.prompt(
+      `This turns off test mode. The next send goes to real businesses.\n\nType exactly:\n${phrase}`
+    );
+    if (typed !== phrase) {
+      if (typed !== null) setErr("Phrase didn't match — still in test mode.");
+      return;
+    }
+    setSaving(true);
+    setErr(null);
+    setMsg(null);
+    try {
+      const res = await fetch("/api/email/settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ test_mode: false, confirm_live: phrase }),
+      });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error);
+      setSettings(d.settings);
+      setMsg("Test mode off — sends now go to real businesses.");
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : "Could not change mode.");
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function runNow() {
     setRunning(true);
@@ -119,6 +151,55 @@ export default function EmailsPage() {
           Sender identity, sending controls, and the outreach sequence.
         </p>
       </div>
+
+      {/* Test mode is the loudest thing on this page by design: the whole point
+          is that you can never be unsure whether real businesses are receiving. */}
+      {settings.test_mode ? (
+        <div className="rounded-xl border-2 border-emerald-500 bg-emerald-50 p-5">
+          <div className="flex items-start gap-3">
+            <Shield className="mt-0.5 h-5 w-5 shrink-0 text-emerald-700" />
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-semibold text-emerald-900">
+                Test mode is ON — no real business can be emailed
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-emerald-800">
+                Every message is redirected to <strong>{settings.reply_to}</strong>, with the
+                intended recipient shown in the subject. The sequence still advances, tracking
+                still fires, the schedule still runs — only the recipient changes. Rehearse the
+                whole pipeline here first.
+              </p>
+              <button
+                onClick={goLive}
+                disabled={saving}
+                className="mt-3 inline-flex h-8 items-center gap-2 rounded-lg border border-emerald-700 px-3 text-xs font-medium text-emerald-900 transition hover:bg-emerald-100 disabled:opacity-40"
+              >
+                Go live — send to real businesses
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="rounded-xl border-2 border-red-500 bg-red-50 p-5">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-red-700" />
+            <div className="min-w-0 flex-1">
+              <h2 className="text-sm font-semibold text-red-900">
+                LIVE — real businesses will receive these emails
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-red-800">
+                Test mode is off. Every send goes to the lead&rsquo;s real address.
+              </p>
+              <button
+                onClick={() => save({ test_mode: true })}
+                disabled={saving}
+                className="mt-3 inline-flex h-8 items-center rounded-lg border border-red-700 px-3 text-xs font-medium text-red-900 transition hover:bg-red-100 disabled:opacity-40"
+              >
+                Back to test mode
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Readiness */}
       <div className="grid gap-3 sm:grid-cols-3">
