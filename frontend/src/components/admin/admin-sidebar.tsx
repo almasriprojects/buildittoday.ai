@@ -15,15 +15,21 @@ import {
   Settings,
   LogOut,
   Globe,
+  CalendarClock,
+  UserPlus,
+  GitBranch,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leads", icon: Target },
   { href: "/admin/sites", label: "Generated Sites", icon: Globe },
+  { href: "/admin/bookings", label: "Call Requests", icon: CalendarClock },
+  { href: "/admin/potential-customers", label: "Sign-ups", icon: UserPlus },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/campaigns", label: "Campaigns", icon: Mail },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/admin/attribution", label: "Attribution", icon: GitBranch },
   { href: "/admin/billing", label: "Billing", icon: CreditCard },
 ];
 

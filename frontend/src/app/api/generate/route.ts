@@ -1,75 +1,101 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase";
+import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
 
-// POST - Generate a website for a customer
+export const dynamic = "force-dynamic";
+export const maxDuration = 300;
+
+/**
+ * POST /api/generate — generate website copy for a lead.
+ *
+ * Body: { leadId } for one lead, or { maxLeads } to work through the queue.
+ * Delegates to the generate-site edge function, which owns the eligibility
+ * rules (qualified, enriched, no existing website) and the content prompt.
+ */
 export async function POST(request: NextRequest) {
+  const authed = await createServerClient();
+  const {
+    data: { user },
+  } = await authed.auth.getUser();
+  if (!user) {
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  }
+
+  let body: { leadId?: string; maxLeads?: number };
   try {
-    const body = await request.json();
-    const {
-      customerId,
-      businessName,
-      industry,
-      phone,
-      email,
-      address,
-    } = body;
+    body = await request.json();
+  } catch {
+    body = {};
+  }
 
-    if (!businessName || !industry) {
-      return NextResponse.json(
-        { error: "Business name and industry are required" },
-        { status: 400 }
-      );
-    }
+  const { leadId } = body;
+  const maxLeads = body.maxLeads ?? (leadId ? undefined : 5);
 
-    // In production, this would:
-    // 1. Call Claude API to analyze competitors
-    // 2. Generate HTML/React components
-    // 3. Deploy to Vercel
-    // 4. Return the deployed URL
-
-    // For now, return mock data
-    const demoUrl = `/demo/${customerId || Math.random().toString(36).substring(7)}`;
-
-    return NextResponse.json({
-      success: true,
-      deploymentId: Math.random().toString(36).substring(7),
-      demoUrl,
-      status: "generating",
-      message: "Website generation started. This typically takes 2-3 minutes.",
-      estimatedCompletion: "180 seconds",
-    });
-  } catch (error: any) {
+  if (!leadId && !maxLeads) {
     return NextResponse.json(
-      { error: error.message || "Internal server error" },
-      { status: 500 }
+      { error: "Provide leadId to generate for one lead, or maxLeads for a batch." },
+      { status: 400 }
     );
   }
+
+  const supabase = createServiceRoleClient();
+  const started = Date.now();
+
+  const { data, error } = await supabase.functions.invoke("generate-site", {
+    body: leadId ? { leadId } : { maxLeads },
+  });
+
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: 502 });
+  }
+
+  const result = data as {
+    ok?: boolean;
+    processed?: number;
+    succeeded?: number;
+    failed?: number;
+    error?: string;
+    results?: { business_name: string; ok: boolean; demoSlug?: string; error?: string }[];
+  } | null;
+
+  if (result?.ok === false) {
+    return NextResponse.json({ error: result.error ?? "Generation failed" }, { status: 502 });
+  }
+
+  return NextResponse.json({
+    ok: true,
+    processed: result?.processed ?? 0,
+    succeeded: result?.succeeded ?? 0,
+    failed: result?.failed ?? 0,
+    results: result?.results ?? [],
+    elapsedMs: Date.now() - started,
+    // Copy only. The visual demo (images, video hero, HTML) is produced by the
+    // media pipeline separately — a lead is not sendable until that has run.
+    note: "Generated website copy. Demo media is produced by the media pipeline.",
+  });
 }
 
-// GET - Check generation status
-export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const deploymentId = searchParams.get("deploymentId");
+/**
+ * GET /api/generate — how much of the generation queue is left.
+ * Mirrors the eligibility filter inside generate-site.
+ */
+export async function GET() {
+  const supabase = createServiceRoleClient();
 
-    if (!deploymentId) {
-      return NextResponse.json(
-        { error: "Deployment ID is required" },
-        { status: 400 }
-      );
-    }
+  const [{ count: eligible }, { count: withCopy }, { count: withDemo }] = await Promise.all([
+    supabase
+      .from("leads")
+      .select("*", { count: "exact", head: true })
+      .eq("target_fit", "yes")
+      .eq("dataskip_checked", true)
+      .not("site_generated", "is", true)
+      .is("maps_website", null),
+    supabase.from("leads").select("*", { count: "exact", head: true }).not("generated_content", "is", null),
+    supabase.from("demo_sites").select("*", { count: "exact", head: true }).eq("status", "ready"),
+  ]);
 
-    // In production, check Supabase for deployment status
-    return NextResponse.json({
-      deploymentId,
-      status: "building",
-      progress: 45,
-      estimatedTimeRemaining: "90 seconds",
-    });
-  } catch (error: any) {
-    return NextResponse.json(
-      { error: error.message || "Internal server error" },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json({
+    eligible: eligible ?? 0,
+    withCopy: withCopy ?? 0,
+    withDemo: withDemo ?? 0,
+  });
 }
