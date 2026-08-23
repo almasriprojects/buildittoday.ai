@@ -8,11 +8,14 @@ import { usePathname } from "next/navigation";
 const pageTitles: Record<string, string> = {
   "/admin": "Dashboard",
   "/admin/leads": "Leads",
+  "/admin/sites": "Generated Sites",
+  "/admin/bookings": "Call Requests",
+  "/admin/potential-customers": "Sign-ups",
   "/admin/customers": "Customers",
-  "/admin/campaigns": "Campaigns",
+  "/admin/emails": "Email",
   "/admin/analytics": "Analytics",
+  "/admin/attribution": "Attribution",
   "/admin/billing": "Billing",
-  "/admin/settings": "Settings",
 };
 
 export function AdminHeader() {

@@ -106,19 +106,19 @@ export default async function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
           <CardContent className="pt-6">
-            <h3 className="font-semibold mb-2">Generate Websites</h3>
-            <p className="text-sm text-muted-foreground mb-4">Auto-generate demo sites for leads</p>
-            <Link href="/admin/campaigns/new">
-              <Button size="sm" className="w-full">Start Generator</Button>
+            <h3 className="font-semibold mb-2">Review Demo Sites</h3>
+            <p className="text-sm text-muted-foreground mb-4">Approve the sites leads will be shown</p>
+            <Link href="/admin/sites">
+              <Button size="sm" className="w-full">Open Generated Sites</Button>
             </Link>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6">
-            <h3 className="font-semibold mb-2">Mail Postcards</h3>
-            <p className="text-sm text-muted-foreground mb-4">Send postcard campaigns via Lob</p>
-            <Link href="/admin/campaigns/new">
-              <Button size="sm" className="w-full">Create Campaign</Button>
+            <h3 className="font-semibold mb-2">Email Outreach</h3>
+            <p className="text-sm text-muted-foreground mb-4">Sequence, sending controls, and templates</p>
+            <Link href="/admin/emails">
+              <Button size="sm" className="w-full">Open Email</Button>
             </Link>
           </CardContent>
         </Card>

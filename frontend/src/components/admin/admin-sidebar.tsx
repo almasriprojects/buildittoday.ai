@@ -12,7 +12,6 @@ import {
   Mail,
   BarChart3,
   CreditCard,
-  Settings,
   LogOut,
   Globe,
   CalendarClock,
@@ -95,31 +94,13 @@ export function AdminSidebar() {
         })}
       </nav>
 
-      {/* Bottom Section: Settings + Sign Out */}
+      {/* Bottom Section: Sign Out.
+          There was a Settings link here pointing at a page of hardcoded
+          placeholder values whose save button reported success without saving
+          anything. Everything genuinely configurable lives on its own page —
+          sending and templates under Email — so the link is gone rather than
+          leading somewhere that lies. */}
       <div className="px-3 pb-4 pt-3 border-t border-on-dark flex flex-col gap-1">
-        <div className="relative">
-          {isActive("/admin/settings") && (
-            <span className="absolute -left-3 top-1/2 -translate-y-1/2 w-1 h-6 rounded-r-full bg-accent-primary" />
-          )}
-          <Link
-            href="/admin/settings"
-            className={cn(
-              "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
-              isActive("/admin/settings")
-                ? "bg-accent-primary text-white font-semibold shadow-sm"
-                : "text-on-dark hover:bg-white/10 hover:text-white"
-            )}
-          >
-            <Settings
-              className={cn(
-                "w-4 h-4 shrink-0",
-                isActive("/admin/settings") ? "text-white" : "text-accent-primary"
-              )}
-            />
-            Settings
-          </Link>
-        </div>
-
         <button
           type="button"
           onClick={handleSignOut}

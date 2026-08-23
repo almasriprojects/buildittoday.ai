@@ -37,12 +37,30 @@ export default function NewCustomerPage() {
     subscriptionStatus: "pending",
   });
   const [created, setCreated] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const update = (key: string, value: string | boolean) => setForm((f) => ({ ...f, [key]: value }));
 
-  const handleSubmit = () => {
-    // TODO: Replace with real API call to /api/customers
-    setCreated(true);
+  const handleSubmit = async () => {
+    setSaving(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Could not create the customer.");
+      // Success is only claimed once the record actually exists. This screen
+      // used to congratulate the user without saving anything.
+      setCreated(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Could not create the customer.");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (created) {
@@ -141,9 +159,18 @@ export default function NewCustomerPage() {
         </CardContent>
       </Card>
 
+      {error && (
+        <p role="alert" className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
       <div className="flex justify-end">
-        <Button onClick={handleSubmit} disabled={!form.businessName || !form.phone || !form.email}>
-          Create Customer
+        <Button
+          onClick={handleSubmit}
+          disabled={saving || !form.businessName || !form.phone || !form.email}
+        >
+          {saving ? "Creating…" : "Create Customer"}
         </Button>
       </div>
     </div>
