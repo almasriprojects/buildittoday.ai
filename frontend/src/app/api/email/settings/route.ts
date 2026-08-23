@@ -27,6 +27,13 @@ export async function GET() {
     templates: templates ?? [],
     sentToday: sentToday ?? 0,
     resendConfigured: Boolean(process.env.RESEND_API_KEY),
+    // Presence only, never the values. Vercel injects env vars at build time,
+    // so a variable added after the last deploy is invisible until the next
+    // one — which is indistinguishable from never having set it unless the
+    // running build can be asked directly.
+    webhookConfigured: Boolean(process.env.RESEND_WEBHOOK_SECRET),
+    cronConfigured: Boolean(process.env.CRON_SECRET),
+    buildCheck: "env-diagnostics-v1",
   });
 }
 
