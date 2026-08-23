@@ -31,7 +31,11 @@ export function PackagesSection({ colors = defaultColors }: { colors?: ThemeColo
                 <span className="absolute -top-3 left-8 px-3 py-1 rounded-full text-xs font-semibold text-white" style={{ backgroundColor: c.primary }}>Most popular</span>
               )}
               <h3 className="text-xl font-medium mb-1" style={{ color: c.dark }}>{p.name}</h3>
-              <div className="text-4xl font-light mb-4" style={{ color: c.dark }}>{p.price}</div>
+              <div className="mb-4">
+                  <span className="text-4xl font-light" style={{ color: c.dark }}>{p.price}</span>
+                  <span className="ml-2 text-sm" style={{ color: c.textMuted }}>once</span>
+                  <div className="mt-1 text-sm" style={{ color: c.primary }}>then {p.monthly}</div>
+                </div>
               <p className="text-sm leading-relaxed mb-6" style={{ color: c.textOnLight }}>{p.tagline}</p>
               <ul className="space-y-3 mb-8 flex-1">
                 {p.features.map((f) => (

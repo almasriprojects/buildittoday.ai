@@ -39,7 +39,7 @@ export const TIERS: Tier[] = [
       "Built from photos you already have",
       "Fast and mobile-first, not mobile-tolerant",
       "Your own domain, SSL, and hosting configured",
-      "$50/month after launch — cancel any time",
+      "Cancel any time — no contract",
     ],
     cta: "Start here",
     href: "/claim",

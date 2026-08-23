@@ -102,6 +102,8 @@ export const crafts: Craft[] = [
 export interface Package {
   name: string;
   price: string;
+  /** Rendered next to the setup fee — never leave the recurring cost implied. */
+  monthly: string;
   tagline: string;
   features: string[];
   popular?: boolean;
@@ -112,6 +114,7 @@ export interface Package {
 export const packages: Package[] = TIERS.map((t) => ({
   name: t.name,
   price: money(t.setup),
+  monthly: `${money(t.monthly)}/month`,
   tagline: t.tagline,
   features: t.features,
   popular: t.popular,
