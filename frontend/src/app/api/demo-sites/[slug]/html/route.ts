@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -15,23 +16,14 @@ async function resolve(slug: string) {
   return data;
 }
 
-async function requireAdmin() {
-  const authed = await createServerClient();
-  const {
-    data: { user },
-  } = await authed.auth.getUser();
-  return user;
-}
-
 // GET — the raw HTML, for the admin code view.
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  if (!(await requireAdmin())) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   const site = await resolve(slug);
   if (!site?.storage_path) {
@@ -58,10 +50,8 @@ export async function PUT(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const user = await requireAdmin();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: { html?: string };
   try {
@@ -111,7 +101,7 @@ export async function PUT(
     .from("demo_sites")
     .update({
       generator_version: "hand-edited",
-      reviewed_by: user.email ?? user.id,
+      reviewed_by: gate.email,
       reviewed_at: new Date().toISOString(),
     })
     .eq("demo_slug", slug);

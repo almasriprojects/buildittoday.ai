@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -12,13 +13,8 @@ type BulkStatus = (typeof BULK_ALLOWED)[number];
 const MAX_SLUGS = 500;
 
 export async function POST(request: NextRequest) {
-  const authed = await createServerClient();
-  const {
-    data: { user },
-  } = await authed.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: { slugs?: unknown; status?: unknown };
   try {
@@ -54,7 +50,7 @@ export async function POST(request: NextRequest) {
     .update({
       review_status: status,
       reviewed_at: new Date().toISOString(),
-      reviewed_by: user.email ?? user.id,
+      reviewed_by: gate.email,
     })
     .in("demo_slug", slugs)
     .select("demo_slug, review_status");

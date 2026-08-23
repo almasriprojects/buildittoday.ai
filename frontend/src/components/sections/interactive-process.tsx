@@ -528,7 +528,7 @@ export function InteractiveProcess({ colors }: InteractiveProcessProps) {
             )}
 
             <a
-              href="/auth/register"
+              href="#book"
               className="inline-flex items-center justify-center px-8 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: c.primary }}
             >

@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
-  const authed = await createServerClient();
-  const { data: { user } } = await authed.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   const supabase = createServiceRoleClient();
   const [{ data: settings }, { data: templates }, { count: sentToday }] = await Promise.all([
@@ -38,9 +38,8 @@ export async function GET() {
 }
 
 export async function PATCH(request: NextRequest) {
-  const authed = await createServerClient();
-  const { data: { user } } = await authed.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: Record<string, unknown>;
   try {

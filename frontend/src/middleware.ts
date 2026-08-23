@@ -27,10 +27,27 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user && request.nextUrl.pathname.startsWith("/admin")) {
-    const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/auth/login";
-    return NextResponse.redirect(loginUrl);
+  if (request.nextUrl.pathname.startsWith("/admin")) {
+    if (!user) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/auth/login";
+      return NextResponse.redirect(loginUrl);
+    }
+
+    // Signed in is not the same as staff. This previously admitted any account
+    // Supabase would create, which meant anyone who registered could read every
+    // lead record and operate the outreach controls.
+    const allowed = (process.env.ADMIN_EMAILS ?? "admin@ananalmasri.com")
+      .split(",")
+      .map((e) => e.trim().toLowerCase())
+      .filter(Boolean);
+
+    if (!allowed.includes((user.email ?? "").trim().toLowerCase())) {
+      const home = request.nextUrl.clone();
+      home.pathname = "/";
+      home.search = "";
+      return NextResponse.redirect(home);
+    }
   }
 
   return supabaseResponse;

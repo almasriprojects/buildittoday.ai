@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -14,13 +15,8 @@ export async function POST(
   const { slug } = await params;
 
   // Only a signed-in admin may change review state.
-  const authed = await createServerClient();
-  const {
-    data: { user },
-  } = await authed.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: { status?: string; note?: string };
   try {
@@ -44,7 +40,7 @@ export async function POST(
       review_status: status,
       review_note: body.note?.trim() || null,
       reviewed_at: new Date().toISOString(),
-      reviewed_by: user.email ?? user.id,
+      reviewed_by: gate.email,
     })
     .eq("demo_slug", slug)
     .select("demo_slug, review_status, review_note, reviewed_at, reviewed_by")

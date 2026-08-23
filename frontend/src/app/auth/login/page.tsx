@@ -91,12 +91,14 @@ export default function LoginPage() {
             </Button>
           </form>
           
+          {/* Self-registration is gone. This console reads every lead record and
+              operates the outreach, so accounts are provisioned, not requested. */}
           <div className="mt-6 text-center text-sm">
             <p className="text-muted-foreground">
-              Don't have an account?{" "}
-              <Link href="/auth/register" className="text-primary hover:underline">
-                Register
-              </Link>
+              Staff access only.{" "}
+              <a href="mailto:contact@buildittoday.ai" className="text-primary hover:underline">
+                Contact us
+              </a>
             </p>
           </div>
           

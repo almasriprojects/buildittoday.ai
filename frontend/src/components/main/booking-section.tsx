@@ -11,7 +11,10 @@ interface BookingSectionProps {
 export function BookingSection({ colors = defaultColors }: BookingSectionProps) {
   const c = colors;
   return (
-    <section className="py-24 md:py-32" style={{ backgroundColor: c.light }}>
+    // Every "Book a call" button on the page targets this anchor. Before, they
+    // all pointed at /auth/register — a password form — so nobody who wanted a
+    // call could reach the calendar sitting right here.
+    <section id="book" className="scroll-mt-20 py-24 md:py-32" style={{ backgroundColor: c.light }}>
       <div className="container-max">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-start">
           {/* Copy */}

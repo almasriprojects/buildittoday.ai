@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -12,13 +13,8 @@ export const maxDuration = 300;
  * rules (qualified, enriched, no existing website) and the content prompt.
  */
 export async function POST(request: NextRequest) {
-  const authed = await createServerClient();
-  const {
-    data: { user },
-  } = await authed.auth.getUser();
-  if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
-  }
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: { leadId?: string; maxLeads?: number };
   try {

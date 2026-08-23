@@ -43,7 +43,7 @@ export function PackagesSection({ colors = defaultColors }: { colors?: ThemeColo
                   </li>
                 ))}
               </ul>
-              <a href={p.href ?? "/auth/register"} className="inline-flex items-center justify-center h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
+              <a href={p.href ?? "#book"} className="inline-flex items-center justify-center h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
                 {p.cta}
               </a>
             </motion.div>

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 import { runSequence } from "@/lib/email-sequence";
 
 export const dynamic = "force-dynamic";
@@ -10,9 +11,8 @@ export const maxDuration = 300;
  * inspected before sending is ever switched on.
  */
 export async function GET() {
-  const authed = await createServerClient();
-  const { data: { user } } = await authed.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   const supabase = createServiceRoleClient();
   const now = new Date().toISOString();
@@ -61,17 +61,11 @@ export async function POST(request: NextRequest) {
   const secret = process.env.CRON_SECRET;
   const presented = request.headers.get("x-cron-secret");
 
-  let authorised = false;
-  if (secret && presented && presented === secret) {
-    authorised = true;
-  } else {
-    const authed = await createServerClient();
-    const { data: { user } } = await authed.auth.getUser();
-    authorised = Boolean(user);
-  }
-
-  if (!authorised) {
-    return NextResponse.json({ error: "Not authorised" }, { status: 401 });
+  // Either the scheduler's shared secret, or a signed-in admin pressing
+  // "Run now". Merely being signed in is not enough — this endpoint sends mail.
+  if (!(secret && presented && presented === secret)) {
+    const gate = await requireAdmin();
+    if (!gate.ok) return gate.response;
   }
 
   try {

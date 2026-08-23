@@ -65,7 +65,7 @@ export function CraftsShowcase({ colors = defaultColors }: CraftsShowcaseProps) 
             <h3 className="text-3xl md:text-4xl font-light mb-3" style={{ color: c.dark }}>{craft.title}</h3>
             <p className="text-lg font-medium mb-4" style={{ color: c.primary }}>{craft.tagline}</p>
             <p className="text-base leading-relaxed mb-6" style={{ color: c.textOnLight }}>{craft.copy}</p>
-            <a href="/auth/register" className="inline-flex items-center justify-center px-8 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
+            <a href="#book" className="inline-flex items-center justify-center px-8 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
               Book a call
             </a>
           </motion.div>

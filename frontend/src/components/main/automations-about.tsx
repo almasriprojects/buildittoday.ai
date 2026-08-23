@@ -101,7 +101,7 @@ export function ContactSection({ colors = defaultColors }: { colors?: ThemeColor
             Thirty minutes. Already have a site? We&rsquo;ll review it and show you clear ways to turn more visitors into booked calls. Starting fresh? We&rsquo;ll map the site you need so you launch ready to earn them.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="/auth/register" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
+            <a href="#book" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
               Book a Website Call
             </a>
             <a href="mailto:contact@buildittoday.ai" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium border transition-colors" style={{ borderColor: c.border, color: c.dark }}>

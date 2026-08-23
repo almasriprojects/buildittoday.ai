@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
+import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 import {
   buildVars, deliver, getEmailSettings, isSuppressed, renderTemplate,
   withFooter, type LeadForEmail,
@@ -17,9 +18,8 @@ export const maxDuration = 120;
  * real thing can be checked end to end without contacting a business.
  */
 export async function POST(request: NextRequest) {
-  const authed = await createServerClient();
-  const { data: { user } } = await authed.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
 
   let body: { leadId?: string; templateSlug?: string; test?: boolean };
   try {
