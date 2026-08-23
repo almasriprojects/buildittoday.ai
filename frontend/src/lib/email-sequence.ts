@@ -51,15 +51,24 @@ export async function runSequence(): Promise<SequenceResult> {
   const supabase = createServiceRoleClient();
   const settings: EmailSettings = await getEmailSettings();
 
-  const empty = { enrolled: 0, sent: [], failed: [], dailyCap: settings.daily_cap };
+  // Enrolment happens first and unconditionally. It sends nothing — it only
+  // builds the queue — so it must not sit behind the sending guard, or the
+  // queue reads empty right up until the moment mail starts going out. Filling
+  // it early is what lets the list be inspected before the switch is thrown.
+  const enrolled = await enrolNewLeads(supabase);
+
+  const empty = { sent: [], failed: [], dailyCap: settings.daily_cap };
 
   // The same two guards the manual send route applies. A scheduled job must
   // never be a way around them.
   if (!settings.sending_enabled) {
-    return { ran: false, reason: "Sending is switched off.", sentToday: 0, ...empty };
+    return { ran: false, reason: "Sending is switched off.", sentToday: 0, enrolled, ...empty };
   }
   if (!settings.postal_address) {
-    return { ran: false, reason: "No postal address on file (CAN-SPAM).", sentToday: 0, ...empty };
+    return {
+      ran: false, reason: "No postal address on file (CAN-SPAM).",
+      sentToday: 0, enrolled, ...empty,
+    };
   }
 
   const midnight = new Date(new Date().toDateString()).toISOString();
@@ -74,11 +83,9 @@ export async function runSequence(): Promise<SequenceResult> {
   if (budget <= 0) {
     return {
       ran: true, reason: `Daily cap reached (${used}/${settings.daily_cap}).`,
-      sentToday: used, ...empty,
+      sentToday: used, enrolled, ...empty,
     };
   }
-
-  const enrolled = await enrolNewLeads(supabase);
 
   // Due, oldest first, so nobody waits behind a later arrival.
   const { data: due } = await supabase
