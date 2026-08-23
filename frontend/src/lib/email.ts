@@ -34,21 +34,59 @@ export async function getEmailSettings(): Promise<EmailSettings> {
 }
 
 /**
- * Only the first name, and only when it plausibly belongs to the owner.
+ * Words that mark a string as an organisation rather than a person. Position is
+ * irrelevant, which is the whole point: "Salcone Family Trust The" reads as a
+ * person until you get past the first word. Checking only the leading token
+ * sends "Hi Salcone" to a trust.
+ */
+const ENTITY_WORDS = new Set([
+  "the", "trust", "trustee", "trustees", "family", "revocable", "irrevocable",
+  "living", "estate", "heirs", "llc", "llp", "lp", "pllc", "pa", "inc",
+  "incorporated", "corp", "corporation", "co", "company", "holdings",
+  "holding", "properties", "property", "realty", "homes", "group", "groups",
+  "enterprise", "enterprises", "ventures", "partners", "partnership",
+  "associates", "association", "management", "investment", "investments",
+  "investors", "capital", "services", "solutions", "and", "&", "of", "bank",
+  "na", "borrower", "limited", "liability", "delaware", "dept", "department",
+  "tax", "invitation", "acquisitions", "ventures",
+]);
+
+/**
+ * Tokens that are never a first name, though some are fine further along
+ * ("John Smith Jr" is a person; "Jr Smith" is parsed junk).
+ */
+const NOT_A_FIRST_NAME = new Set([
+  "mr", "mrs", "ms", "miss", "dr", "prof", "rev", "sir",
+  "jr", "sr", "ii", "iii", "iv", "md", "dds", "esq", "phd",
+]);
+
+/**
+ * Only the first name, and only when it plausibly belongs to a real person.
  *
- * Skip-traced contacts are frequently a different person from the registered
- * owner, and greeting a stranger by the wrong name is worse than not greeting
- * them at all — so anything that doesn't look like a personal first name
- * degrades to no salutation rather than guessing.
+ * Roughly two thirds of skip-traced contacts are a different person from the
+ * registered owner, or an entity rather than a person at all. Greeting a
+ * stranger by the wrong name is worse than not greeting them — so anything
+ * short of confident degrades to no salutation instead of guessing.
  */
 export function firstNameOf(lead: LeadForEmail): string | null {
   const raw = (lead.contact_full_name ?? "").trim();
   if (!raw) return null;
-  const first = raw.split(/\s+/)[0];
-  if (!first || first.length < 2 || first.length > 20) return null;
-  if (!/^[A-Za-z][a-z'-]+$/.test(first)) return null; // rejects "770", "LLC", "THE"
-  const notNames = new Set(["the", "trust", "family", "llc", "inc", "corp", "company"]);
-  if (notNames.has(first.toLowerCase())) return null;
+
+  const tokens = raw.split(/\s+/).map((t) => t.replace(/[.,]/g, "")).filter(Boolean);
+  // People have one to four name parts. Longer strings are entities.
+  if (tokens.length === 0 || tokens.length > 4) return null;
+
+  // A single entity word anywhere disqualifies the entire string.
+  if (tokens.some((t) => ENTITY_WORDS.has(t.toLowerCase()))) return null;
+
+  const first = tokens[0];
+  if (first.length < 2 || first.length > 20) return null;
+  // Letters, apostrophes and hyphens only — rejects "770" and other parse junk.
+  // Case is not a signal: skip-trace data arrives shouting, and "JOHN" is a
+  // perfectly good name once it is normalised.
+  if (!/^[A-Za-z][A-Za-z'’-]*$/.test(first)) return null;
+  if (NOT_A_FIRST_NAME.has(first.toLowerCase())) return null;
+
   return first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
 }
 
