@@ -19,6 +19,7 @@ export async function GET(request: NextRequest) {
   const src = searchParams.get("src") ?? channel;
 
   let demoSlug: string | null = null;
+  let publicSlug: string | null = null;
 
   if (leadId) {
     try {
@@ -33,9 +34,22 @@ export async function GET(request: NextRequest) {
 
       const { data } = await supabase
         .from("leads")
-        .select("document_number, email_clicked_at")
+        .select("document_number, demo_slug, email_clicked_at")
         .eq("id", leadId)
         .maybeSingle();
+
+      if (data?.demo_slug) {
+        // Prefer the readable address. This used to hop through /demo/{filing
+        // number}, which then redirected again — two redirects to arrive at a
+        // URL that announced the page as a demo.
+        const { data: site } = await supabase
+          .from("demo_sites")
+          .select("public_slug")
+          .eq("demo_slug", data.demo_slug)
+          .eq("status", "ready")
+          .maybeSingle();
+        if (site?.public_slug) publicSlug = site.public_slug;
+      }
 
       if (data?.document_number) {
         demoSlug = data.document_number;
@@ -58,8 +72,9 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // ?src carries through so the demo page can record acquisition_channel.
-  const target = new URL(demoSlug ? `/demo/${demoSlug}` : "/demo", request.url);
+  // ?src carries through so the page can record acquisition_channel.
+  const path = publicSlug ? `/${publicSlug}` : demoSlug ? `/demo/${demoSlug}` : "/demo";
+  const target = new URL(path, request.url);
   target.searchParams.set("src", src);
   return NextResponse.redirect(target);
 }

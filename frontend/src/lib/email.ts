@@ -156,10 +156,18 @@ export async function deliver(args: {
   subject: string;
   text: string;
   leadId: string;
+  /**
+   * Where a test copy should land instead of the operator's own inbox — for
+   * showing a colleague what the email looks like. Only consulted while
+   * test_mode is on, so this can never be used to reach a lead.
+   */
+  testRecipient?: string;
 }): Promise<DeliveryResult> {
   const { settings } = args;
   const redirected = settings.test_mode;
-  const to = redirected ? settings.reply_to : args.intendedTo;
+  const to = redirected
+    ? args.testRecipient?.trim() || settings.reply_to
+    : args.intendedTo;
   const subject = redirected
     ? `[TEST → ${args.intendedTo}] ${args.subject}`
     : args.subject;

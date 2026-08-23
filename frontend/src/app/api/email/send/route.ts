@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
 
-  let body: { leadId?: string; templateSlug?: string; test?: boolean };
+  let body: { leadId?: string; templateSlug?: string; test?: boolean; testTo?: string };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  const { leadId, templateSlug, test = false } = body;
+  const { leadId, templateSlug, test = false, testTo } = body;
   if (!leadId || !templateSlug) {
     return NextResponse.json({ error: "leadId and templateSlug are required." }, { status: 400 });
   }
@@ -107,6 +107,8 @@ export async function POST(request: NextRequest) {
 
   const result = await deliver({
     settings, intendedTo: to, subject, text, leadId: lead.id,
+    // Only honoured while test_mode is on — see deliver().
+    testRecipient: test ? testTo : undefined,
   });
 
   if (!result.ok) {
