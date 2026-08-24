@@ -15,10 +15,20 @@ export async function GET(
 
   const { data: site } = await supabase
     .from("demo_sites")
-    .select("storage_path")
+    .select("storage_path, public_slug")
     .eq("demo_slug", slug)
     .eq("status", "ready")
     .maybeSingle();
+
+  // This address is kept alive only so links already sent keep working. The
+  // canonical home of a site is /{business-name} — nobody should be looking at
+  // a URL with "demo-sites" and a state filing number in it.
+  if (site?.public_slug) {
+    const to = new URL(`/${site.public_slug}`, request.url);
+    const src = new URL(request.url).searchParams.get("src");
+    if (src) to.searchParams.set("src", src);
+    return NextResponse.redirect(to, 308);
+  }
 
   if (!site || !site.storage_path) {
     return new NextResponse("Not found", { status: 404 });

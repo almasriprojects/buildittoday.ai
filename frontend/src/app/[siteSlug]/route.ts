@@ -54,7 +54,13 @@ export async function GET(
   });
   if (!res.ok) return new NextResponse("Not found", { status: 404 });
 
-  const html = await res.text();
+  // Point every asset at our own domain. The stored HTML hardcodes storage
+  // URLs, and rewriting on the way out avoids rewriting 43 files — and keeps
+  // working for every site generated after this.
+  const html = (await res.text()).replaceAll(
+    /https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/demo-media\//g,
+    "/m/"
+  );
 
   // Recorded after the HTML is in hand, so a tracking failure can never cost
   // the visitor their page.

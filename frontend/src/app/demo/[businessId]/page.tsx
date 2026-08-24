@@ -8,6 +8,17 @@ import { DemoGate } from "@/components/demo/demo-gate";
 // If the new AI-generated bespoke HTML pipeline (generate-design-html) has
 // produced a ready site for this slug, redirect to it. Leads that haven't
 // gone through that pipeline yet fall through to the legacy template below.
+async function publicSlugFor(demoSlug: string): Promise<string | null> {
+  const supabase = createServiceRoleClient();
+  const { data } = await supabase
+    .from("demo_sites")
+    .select("public_slug")
+    .eq("demo_slug", demoSlug)
+    .eq("status", "ready")
+    .maybeSingle();
+  return data?.public_slug ?? null;
+}
+
 async function checkForDesignHtmlSite(demoSlug: string): Promise<boolean> {
   const supabase = createServiceRoleClient();
   const { data } = await supabase
@@ -48,6 +59,11 @@ export default async function DemoPage({
   const { businessId } = await params;
   const { src } = await searchParams;
 
+  // Straight to the readable address rather than through /demo-sites.
+  const publicSlug = await publicSlugFor(businessId);
+  if (publicSlug) {
+    redirect(`/${publicSlug}${src ? `?src=${src}` : ""}`);
+  }
   if (await checkForDesignHtmlSite(businessId)) {
     redirect(`/demo-sites/${businessId}${src ? `?src=${src}` : ""}`);
   }
