@@ -23,6 +23,15 @@ export type Tier = {
   popular?: boolean;
   cta: string;
   href?: string;
+  /**
+   * What pressing the button does.
+   *
+   * "checkout" goes straight to Stripe — no intermediate form, because the
+   * business name is already known and Stripe collects the email itself.
+   * "call" books a conversation instead, which is the honest handling for a
+   * price nobody pays on impulse from a cold email.
+   */
+  action: "checkout" | "call";
 };
 
 export const TIERS: Tier[] = [
@@ -42,7 +51,7 @@ export const TIERS: Tier[] = [
       "Cancel any time — no contract",
     ],
     cta: "Start here",
-    href: "/claim",
+    action: "checkout",
   },
   {
     key: "professional",
@@ -65,7 +74,7 @@ export const TIERS: Tier[] = [
     ],
     popular: true,
     cta: "Claim your site",
-    href: "/claim",
+    action: "checkout",
   },
   {
     key: "signature",
@@ -85,6 +94,7 @@ export const TIERS: Tier[] = [
     ],
     cta: "Book a call",
     href: "/#book",
+    action: "call",
   },
 ];
 

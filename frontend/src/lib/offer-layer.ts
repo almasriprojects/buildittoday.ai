@@ -27,6 +27,18 @@ export function offerLayer(opts: {
       .slice(0, 4)
       .map((f) => `<li>${esc(f)}</li>`)
       .join("");
+
+    // Buying goes straight to Stripe; the top tier books a conversation
+    // instead. Sending every button to /claim made the "Book a call" button
+    // land on a checkout page, which is a promise broken on the click.
+    const href =
+      t.action === "checkout"
+        ? `/api/checkout/start?slug=${encodeURIComponent(demoSlug)}&tier=${t.key}`
+        : t.href ?? "/#book";
+    const note =
+      t.action === "checkout"
+        ? "Secure checkout — card details never touch our servers"
+        : "No payment now — we talk first";
     return `
       <div class="bit-card${t.popular ? " bit-pop" : ""}">
         ${t.popular ? '<span class="bit-badge">Recommended</span>' : ""}
@@ -34,10 +46,10 @@ export function offerLayer(opts: {
         <div class="bit-price">${money(t.setup)}</div>
         <div class="bit-mo">then ${money(t.monthly)}/month</div>
         <ul class="bit-feats">${feats}</ul>
-        <a class="bit-buy" data-bit-tier="${t.key}"
-           href="/claim?slug=${encodeURIComponent(demoSlug)}&tier=${t.key}">
+        <a class="bit-buy" data-bit-tier="${t.key}" href="${href}">
           ${esc(t.cta)}
         </a>
+        <span class="bit-note">${esc(note)}</span>
       </div>`;
   }).join("");
 
@@ -96,6 +108,7 @@ export function offerLayer(opts: {
   padding:12px;border-radius:9px;text-decoration:none;font-size:14.5px}
 .bit-pop .bit-buy{background:#0D9488}
 .bit-buy:hover{opacity:.88}
+.bit-note{display:block;text-align:center;margin-top:8px;font-size:11.5px;color:#94A3B8;line-height:1.4}
 .bit-foot{margin-top:20px;padding-top:16px;border-top:1px solid #E2E8F0;
   font-size:13px;color:#64748B;line-height:1.55}
 @media (prefers-reduced-motion:reduce){.bit-bar{transition:none}}
