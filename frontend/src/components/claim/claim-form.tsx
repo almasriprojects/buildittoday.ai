@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { HEADLINE, money } from "@/lib/pricing";
+import { byKey, money, type TierKey } from "@/lib/pricing";
 
 export function ClaimForm({
   businessName,
   demoSlug,
+  tier,
 }: {
   businessName: string | null;
   demoSlug: string | null;
+  tier: TierKey;
 }) {
+  const chosen = byKey(tier);
   const [name, setName] = useState(businessName ?? "");
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,7 +26,7 @@ export function ClaimForm({
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ businessName: name, email, demoSlug }),
+        body: JSON.stringify({ businessName: name, email, demoSlug, tier }),
       });
       const data = await res.json();
       if (!res.ok || !data.url) {
@@ -80,7 +83,7 @@ export function ClaimForm({
         disabled={loading}
         className="inline-flex h-12 w-full items-center justify-center rounded-full bg-neutral-900 px-8 text-base font-medium text-white transition hover:bg-neutral-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        {loading ? "Starting checkout…" : `Claim this website — ${money(HEADLINE.setup)}`}
+        {loading ? "Starting checkout…" : `Claim this website — ${money(chosen.setup)}`}
       </button>
 
       <p className="text-sm text-neutral-500">

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
-import { HEADLINE, money } from "@/lib/pricing";
+import { HEADLINE, TIERS, byKey, money, type TierKey } from "@/lib/pricing";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -8,7 +8,14 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { businessName, email, demoSlug } = body;
+    const { businessName, email, demoSlug, tier } = body;
+
+    // Never take the price from the client. The tier is a key; the amount is
+    // looked up here, so a tampered request cannot buy Professional for $1.
+    const chosen =
+      typeof tier === "string" && TIERS.some((t) => t.key === tier)
+        ? byKey(tier as TierKey)
+        : HEADLINE;
 
     if (!businessName || !email) {
       return NextResponse.json(
@@ -26,12 +33,12 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: `Website Setup — ${businessName}`,
-              description: `One-time setup. Site built, launched on your domain. ${money(HEADLINE.monthly)}/month hosting starts after launch.`,
+              name: `${chosen.name} Website — ${businessName}`,
+              description: `One-time setup. Site built, launched on your domain. ${money(chosen.monthly)}/month hosting starts after launch.`,
             },
             // Derived rather than typed, so the amount charged can never drift
             // from the price advertised on the claim page. Stripe wants cents.
-            unit_amount: HEADLINE.setup * 100,
+            unit_amount: chosen.setup * 100,
           },
           quantity: 1,
         },
@@ -42,7 +49,7 @@ export async function POST(request: NextRequest) {
         : `${process.env.NEXT_PUBLIC_URL}/claim?checkout=cancelled`,
       // demoSlug is what lets the webhook tie a payment back to the lead.
       // Without it a successful payment is an orphan.
-      metadata: { businessName, demoSlug: demoSlug ?? "", email },
+      metadata: { businessName, demoSlug: demoSlug ?? "", email, tier: chosen.key },
     });
 
     return NextResponse.json({ url: session.url, sessionId: session.id });

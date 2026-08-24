@@ -1,33 +1,32 @@
 import { createServiceRoleClient } from "@/lib/supabase";
 import { ClaimForm } from "@/components/claim/claim-form";
-import { HEADLINE, money } from "@/lib/pricing";
+import { HEADLINE, TIERS, byKey, money, type TierKey } from "@/lib/pricing";
 
 export const dynamic = "force-dynamic";
 
 export const metadata = {
   title: "Claim Your Website — BuildItToday.ai",
   description:
-    `Your website is already built. Claim it for ${money(HEADLINE.setup)} and we launch it on your own domain within a week.`,
+    `Your website is already built. Claim it and we launch it on your own domain within a week.`,
 };
-
-const INCLUDED = [
-  "The site you already saw, launched on your own domain",
-  "Custom design built for your business — not a template",
-  "Hosting, SSL, and domain setup handled for you",
-  "Mobile-first, fast, and built to be found",
-  "Live within one week of payment",
-];
 
 export default async function ClaimPage({
   searchParams,
 }: {
-  searchParams: Promise<{ slug?: string; checkout?: string }>;
+  searchParams: Promise<{ slug?: string; checkout?: string; tier?: string }>;
 }) {
-  const { slug, checkout } = await searchParams;
+  const { slug, checkout, tier } = await searchParams;
+
+  // Which package they picked on their own site. Professional is the default
+  // for anyone arriving without a choice — it is the one the emails quote.
+  const isTier = (t?: string): t is TierKey =>
+    Boolean(t) && TIERS.some((x) => x.key === t);
+  const chosen = isTier(tier) ? byKey(tier) : HEADLINE;
 
   let businessName: string | null = null;
   let city: string | null = null;
   let hasDemo = false;
+  let publicSlug: string | null = null;
 
   if (slug) {
     const supabase = createServiceRoleClient();
@@ -42,11 +41,12 @@ export default async function ClaimPage({
     }
     const { data: site } = await supabase
       .from("demo_sites")
-      .select("id")
+      .select("id, public_slug")
       .eq("demo_slug", slug)
       .eq("status", "ready")
       .maybeSingle();
     hasDemo = Boolean(site);
+    publicSlug = site?.public_slug ?? null;
   }
 
   return (
@@ -83,7 +83,7 @@ export default async function ClaimPage({
 
         {hasDemo && slug && (
           <a
-            href={`/demo-sites/${slug}`}
+            href={publicSlug ? `/${publicSlug}` : `/demo-sites/${slug}`}
             target="_blank"
             rel="noopener noreferrer"
             className="mt-8 inline-flex items-center gap-2 text-base font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
@@ -95,16 +95,16 @@ export default async function ClaimPage({
         {/* Price */}
         <section className="mt-14 rounded-2xl border border-neutral-200 bg-neutral-50 p-8">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="text-5xl font-semibold tracking-tight">{money(HEADLINE.setup)}</span>
+            <span className="text-5xl font-semibold tracking-tight">{money(chosen.setup)}</span>
             <span className="text-lg text-neutral-600">one time</span>
           </div>
           <p className="mt-2 text-base text-neutral-600">
-            Then <strong className="font-semibold text-neutral-900">{money(HEADLINE.monthly)}/month</strong> for hosting,
+            Then <strong className="font-semibold text-neutral-900">{money(chosen.monthly)}/month</strong> for hosting,
             updates, and support. Cancel any time.
           </p>
 
           <ul className="mt-8 space-y-3">
-            {INCLUDED.map((item) => (
+            {chosen.features.map((item) => (
               <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-neutral-700">
                 <span aria-hidden="true" className="mt-[7px] h-1.5 w-1.5 flex-none rounded-full bg-neutral-900" />
                 {item}
@@ -113,7 +113,7 @@ export default async function ClaimPage({
           </ul>
 
           <div className="mt-10">
-            <ClaimForm businessName={businessName} demoSlug={slug ?? null} />
+            <ClaimForm businessName={businessName} demoSlug={slug ?? null} tier={chosen.key} />
           </div>
         </section>
 
@@ -137,7 +137,7 @@ export default async function ClaimPage({
                 </dd>
               </div>
               <div>
-                <dt className="font-medium text-neutral-900">What is the {money(HEADLINE.monthly)}/month for?</dt>
+                <dt className="font-medium text-neutral-900">What is the {money(chosen.monthly)}/month for?</dt>
                 <dd className="mt-1 text-neutral-600">
                   Hosting, SSL, security updates, backups, and small content changes when you need
                   them. Cancel any time — you keep the site.

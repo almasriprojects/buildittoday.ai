@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { offerLayer } from "@/lib/offer-layer";
 
 /**
  * GET /{business-name} — the site itself, at a URL worth sending someone.
@@ -37,7 +38,7 @@ export async function GET(
   const supabase = createServiceRoleClient();
   const { data: site } = await supabase
     .from("demo_sites")
-    .select("demo_slug, storage_path, status")
+    .select("demo_slug, business_name, storage_path, status")
     .eq("public_slug", slug)
     .eq("status", "ready")
     .maybeSingle();
@@ -57,10 +58,28 @@ export async function GET(
   // Point every asset at our own domain. The stored HTML hardcodes storage
   // URLs, and rewriting on the way out avoids rewriting 43 files — and keeps
   // working for every site generated after this.
-  const html = (await res.text()).replaceAll(
+  let html = (await res.text()).replaceAll(
     /https:\/\/[a-z0-9]+\.supabase\.co\/storage\/v1\/object\/public\/demo-media\//g,
     "/m/"
   );
+
+  // The reason any of this exists. Until now the page had no price, no button
+  // and no way to buy — someone who loved it could only reply to the email.
+  // ?admin=1 is the review iframe, which should see the site as the lead does
+  // minus the sales layer.
+  if (new URL(request.url).searchParams.get("admin") !== "1") {
+    const { data: lead } = await supabase
+      .from("leads").select("id").eq("demo_slug", site.demo_slug).maybeSingle();
+
+    const layer = offerLayer({
+      businessName: site.business_name ?? "your business",
+      demoSlug: site.demo_slug,
+      leadId: lead?.id ?? null,
+    });
+    html = html.includes("</body>")
+      ? html.replace(/<\/body>/i, `${layer}</body>`)
+      : html + layer;
+  }
 
   // Recorded after the HTML is in hand, so a tracking failure can never cost
   // the visitor their page.
