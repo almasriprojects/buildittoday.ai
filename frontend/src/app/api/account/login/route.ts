@@ -83,3 +83,45 @@ contact@buildittoday.ai
     return generic;
   }
 }
+
+/**
+ * GET — a signed-in admin can confirm the send path works without waiting for
+ * an inbox. Returns whether the address matches a customer and whether Resend
+ * accepted the message, never the link itself.
+ */
+export async function GET(request: NextRequest) {
+  const { requireAdmin } = await import("@/lib/admin-auth");
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
+  const email = (new URL(request.url).searchParams.get("email") ?? "").trim().toLowerCase();
+  if (!email) return NextResponse.json({ error: "email required" }, { status: 400 });
+
+  const supabase = createServiceRoleClient();
+  const { data: customer } = await supabase
+    .from("customers").select("id, business_name").ilike("email", email).maybeSingle();
+  if (!customer) return NextResponse.json({ matched: false });
+
+  const { data, error } = await supabase.auth.admin.generateLink({
+    type: "magiclink",
+    email,
+    options: { redirectTo: `${SITE}/auth/callback?next=/account` },
+  });
+  if (error || !data?.properties?.action_link) {
+    return NextResponse.json({ matched: true, linkGenerated: false, error: error?.message });
+  }
+
+  const sent = await sendTransactional({
+    to: email,
+    subject: "Your sign-in link",
+    text: `Hi,\n\nHere's your link to sign in to the ${customer.business_name} account:\n\n${data.properties.action_link}\n\nIt works once and expires in an hour.\n\nBuildItToday.ai`,
+  });
+
+  return NextResponse.json({
+    matched: true,
+    business: customer.business_name,
+    linkGenerated: true,
+    resendAccepted: sent.ok,
+    resendError: sent.ok ? null : sent.error,
+  });
+}
