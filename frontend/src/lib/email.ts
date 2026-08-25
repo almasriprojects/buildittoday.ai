@@ -193,6 +193,46 @@ export async function deliver(args: {
   return { ok: true, id: res.id, actualTo: to, subject, redirected };
 }
 
+
+/**
+ * Transactional mail — a login link, a receipt, "your site is live".
+ *
+ * Deliberately does NOT go through deliver(). Test mode exists to stop cold
+ * outreach reaching a business by accident; applying it here would redirect a
+ * customer's own login link to the operator's inbox, which is a broken product
+ * rather than a safety net.
+ *
+ * No unsubscribe footer and no List-Unsubscribe header either: someone cannot
+ * opt out of being able to sign in, and marking these as bulk mail is how they
+ * end up in spam.
+ */
+export async function sendTransactional(args: {
+  to: string;
+  subject: string;
+  text: string;
+}): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+  const key = process.env.RESEND_API_KEY;
+  if (!key) return { ok: false, error: "RESEND_API_KEY is not configured" };
+
+  const settings = await getEmailSettings();
+
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: `${settings.from_name} <${settings.from_email}>`,
+      to: [args.to],
+      subject: args.subject,
+      text: args.text,
+      reply_to: settings.reply_to,
+    }),
+  });
+
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok) return { ok: false, error: body?.message ?? `Resend ${res.status}` };
+  return { ok: true, id: body.id };
+}
+
 async function sendEmail(args: {
   to: string;
   subject: string;

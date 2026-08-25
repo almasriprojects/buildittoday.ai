@@ -27,7 +27,21 @@ export async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (request.nextUrl.pathname.startsWith("/admin")) {
+  const path = request.nextUrl.pathname;
+
+  // The customer account. Signing in is enough — the page itself only ever
+  // shows the row bound to this auth user, and an admin has no special claim
+  // to it either.
+  if (path.startsWith("/account") && !path.startsWith("/account/login")) {
+    if (!user) {
+      const login = request.nextUrl.clone();
+      login.pathname = "/account/login";
+      login.search = "";
+      return NextResponse.redirect(login);
+    }
+  }
+
+  if (path.startsWith("/admin")) {
     if (!user) {
       const loginUrl = request.nextUrl.clone();
       loginUrl.pathname = "/auth/login";
@@ -54,5 +68,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/account/:path*"],
 };
