@@ -1,0 +1,18 @@
+{
+  "sources_reviewed": [
+    {"note": "Brody Associates (creative direction consultancy) via Siteinspire curation", "url_pattern": "brody-associates.com"},
+    {"note": "Wellput (copywriting consultancy) via Siteinspire curation", "url_pattern": "hellowellput.com"}
+  ],
+  "style_signals": {
+    "observation_1": "Both boutique consultancies avoid the generic 'headline + subhead + stock photo' pattern entirely. Their hero is a single confident statement of what they do, set in large type, functioning as both headline and value prop in one breath -- not two separate lines competing for attention.",
+    "observation_2": "Both lean into a near-monochrome palette (one dominant dark tone + white/off-white) rather than a multi-color 'brand palette' -- restraint reads as confidence at this business tier, not lack of investment.",
+    "observation_3": "Nav labels favor plain, direct language over generic categories -- Wellput uses 'What / Why / How / Who' instead of 'Services / About / Team'. This is a transferable pattern: nav-as-conversation rather than nav-as-sitemap.",
+    "observation_4": "Typography carries almost the entire design weight -- oversized, tightly set headline type is the dominant visual element on both sites, more than photography or color.",
+    "not_recommended_for_replication": "Neither site's actual color values, copy, layout grid, or imagery should be reused -- these are observed patterns/signals only, not source material."
+  },
+  "transferable_signals_for_this_lead": [
+    "Consider a single-statement hero (headline that reads as a full sentence/value prop) rather than headline+separate-subheadline as two disconnected lines",
+    "Typography-led hero is a legitimate alternative to photo/video-led hero for a solo boutique consultancy -- worth weighing against the video-hero default",
+    "Nav could use plainer, more conversational labels if it fits Tim Todd's voice, though this is optional -- category defaults (Home/About/Services/Contact) are also fine and more universally clear for a local FL small-business audience unfamiliar with agency-style nav"
+  ]
+}

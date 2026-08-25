@@ -1,0 +1,513 @@
+[
+  {
+    "demo_slug": "L26000417911",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000417911/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000417911/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#003D5C",
+        "secondary": "#0A7EA4",
+        "accent": "#F4A261",
+        "background": "#F8FAFB",
+        "text_on_dark": "#E8F1F5",
+        "reasoning": "Deep nautical navy anchors the brand with maritime authority, complemented by ocean teal that evokes South Florida's turquoise waters. Warm copper accent suggests quality brass marine hardware and sunset reflections on hulls. Cool pale background maintains professionalism while the soft cyan text ensures readability over dark hero footage."
+      },
+      "typography": {
+        "heading_style": "Strong, confident serif with maritime heritage feel - commanding but approachable",
+        "body_style": "Clean, highly readable sans-serif optimized for service descriptions and technical clarity",
+        "google_font_heading": "Fraunces",
+        "google_font_body": "Inter",
+        "reasoning": "Fraunces brings craftsmanship and established maritime tradition with its elegant serifs, perfect for a trade service that values precision. Inter provides exceptional legibility for service details and contact information, maintaining professionalism across all devices."
+      },
+      "tone_descriptors": [
+        "Professional",
+        "Trustworthy",
+        "Nautical-Heritage"
+      ],
+      "motion_intensity": "subtle",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": false
+      },
+      "effects_reasoning": "Subtle film grain adds tactile quality evoking salt spray and weathered dock wood, elevating perceived craftsmanship. Avoid marquee (too promotional for trade services) and oversized type (would compete with the hero video's visual storytelling). The grain texture reinforces hands-on, real-world marine work.",
+      "scenes": [
+        {
+          "scene_name": "Fort Lauderdale Marina Establishing",
+          "image_prompt": "Wide establishing shot of Fort Lauderdale marina at golden hour, luxury yachts and sport fishing boats moored at wooden docks, glassy Intracoastal water reflecting warm amber sunlight, palm trees silhouetted against pastel sky, professional marine service truck visible on dock in mid-ground, shallow depth of field with sharp foreground boat cleats and soft background waterway, cinematic 16:9 composition, editorial yacht magazine quality, no text or signage visible",
+          "video_motion_prompt": "Extremely slow dolly drift right along the dock line, water surface gently rippling with ambient movement, subtle boat hull rocking motion on moorings, soft bokeh shimmer in background reflections, palm fronds swaying barely perceptibly in breeze, golden hour light slowly intensifying on chrome and fiberglass surfaces, camera motion nearly imperceptible"
+        },
+        {
+          "scene_name": "Technician Engine Work",
+          "image_prompt": "Medium shot of marine technician's hands working on open outboard engine compartment on boat stern, professional tools arranged on clean workspace, engine components gleaming under focused task lighting, Fort Lauderdale marina blurred in soft background, late afternoon natural light mixing with work light, shallow depth of field isolating hands and engine detail, photorealistic texture of metal engine parts and weathered gelcoat, cinematic color grading with teal and copper tones, 16:9 editorial composition, no faces clearly visible",
+          "video_motion_prompt": "Locked-off camera with only the subtlest breathing motion, technician's hands frozen mid-task with imperceptible micro-movement, soft light flicker from passing cloud shadows, gentle heat shimmer rising from engine bay, background water barely shifting focus in bokeh, ambient marina reflections drifting slowly across metal surfaces, no distinct hand or body animation"
+        },
+        {
+          "scene_name": "Hull Detail Closeup",
+          "image_prompt": "Extreme close-up of pristine boat hull meeting waterline, fresh antifouling bottom paint in deep blue transitioning to glossy white gelcoat above, crystal clear South Florida water with turquoise gradient, afternoon sunlight creating caustic light patterns dancing on hull surface, shallow depth of field with sharp paint edge and soft water background, droplets beading on waxed surface, photorealistic marine-grade finish texture, editorial detail shot, 16:9 composition, luxury yacht magazine quality",
+          "video_motion_prompt": "Camera locked on hull surface, gentle water lapping motion creating slow vertical rise and fall, caustic light patterns drifting lazily across painted surface, water droplets slowly coalescing and sliding, subtle refraction shimmer in turquoise water, background soft focus water texture shifting almost imperceptibly, no camera movement beyond faint natural breathing"
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Fort Lauderdale Marina Establishing",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000417911/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Technician Engine Work",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000417911/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Hull Detail Closeup",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000417911/scene3.png",
+        "video_ok": true
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000420154",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420154/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420154/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#D84315",
+        "secondary": "#FFA726",
+        "accent": "#00897B",
+        "background": "#FFFBF5",
+        "text_on_dark": "#FFF8E1",
+        "reasoning": "Warm terracotta and amber evoke Southern coastal sunsets and bold spice, while teal accent nods to Florida's Gulf waters. The creamy off-white background keeps it approachable and fresh, avoiding heavy dark tones that would feel too formal for a comfort-driven eatery."
+      },
+      "typography": {
+        "heading_style": "Bold, confident serif with personality\u2014slightly condensed for impact but never stuffy",
+        "body_style": "Clean, legible sans-serif with generous spacing for menu readability and warmth",
+        "google_font_heading": "Fraunces",
+        "google_font_body": "DM Sans",
+        "reasoning": "Fraunces brings character and a touch of craft without feeling precious\u2014perfect for a place that's welcoming but not generic. DM Sans is approachable, modern, and highly readable for menus and service descriptions."
+      },
+      "tone_descriptors": [
+        "warm_and_inviting",
+        "bold_yet_approachable",
+        "coastal_casual_confidence"
+      ],
+      "motion_intensity": "moderate",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": true
+      },
+      "effects_reasoning": "Subtle grain adds tactile warmth and a hint of craft authenticity. Oversized typography reinforces bold flavors and confidence. Marquee omitted to keep focus on the food and atmosphere rather than gimmick.",
+      "scenes": [
+        {
+          "scene_name": "Exterior Welcome",
+          "image_prompt": "Wide exterior shot of a coastal Florida restaurant at golden hour, warm amber sunlight washing over painted wood siding and a welcoming front porch with string lights just beginning to glow, lush tropical plantings framing the entrance, empty tables visible through large windows, soft shadows stretching across weathered deck boards, no signage or text visible, cinematic shallow depth of field on foreground foliage, 16:9",
+          "video_motion_prompt": "Extremely slow dolly push toward the entrance, string lights gently swaying in a light breeze, palm fronds drifting subtly at frame edges, golden hour light gradually intensifying on the building facade, ambient warmth increasing, no camera shake, no sudden movements, final frame nearly identical to opening with slightly tighter framing"
+        },
+        {
+          "scene_name": "Kitchen Craft in Action",
+          "image_prompt": "Medium shot of a chef's hands plating a vibrant dish\u2014seared protein with colorful garnishes and sauce drizzle\u2014on a rustic ceramic plate at a stainless steel prep station, warm overhead kitchen lighting mixing with natural side light, steam rising gently from the hot plate, shallow depth of field isolating the dish while blurred kitchen activity glows softly in background, rich textures of fresh ingredients visible, no faces or logos, 16:9",
+          "video_motion_prompt": "Locked-off camera with faintest upward drift, steam rising and dissipating naturally from the hot plate, subtle shimmer of sauce catching light, soft bokeh of background kitchen lights gently pulsing as someone moves out of focus, no hand or arm movement, ambient heat haze barely visible, final frame matches opening composition with steam slightly dispersed"
+        },
+        {
+          "scene_name": "Finished Dish Detail",
+          "image_prompt": "Extreme close-up of a beautifully plated signature dish on a rustic wooden table\u2014charred edges, vibrant greens, glistening glaze, garnish details in sharp focus\u2014soft afternoon sunlight streaming from the side creating warm highlights and gentle shadows, blurred background suggests a cozy dining space with warm wood tones and soft candlelight, shallow depth of field, editorial food photography quality, no text or branding, 16:9",
+          "video_motion_prompt": "Nearly locked-off macro shot with imperceptible slow zoom in, sunlight slowly shifting across the plate surface creating subtle highlight drift, faint steam or heat shimmer rising from warm elements, background bokeh lights gently pulsing as if candles flickering out of focus, no movement of food or utensils, final frame almost identical with slightly tighter crop on dish detail"
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Exterior Welcome",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420154/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Kitchen Craft in Action",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420154/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Finished Dish Detail",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420154/scene3.png",
+        "video_ok": true
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000421065",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421065/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421065/scene1.png",
+    "clip_count": 2,
+    "brief_json": {
+      "palette": {
+        "primary": "#2C4A3E",
+        "secondary": "#8B9D83",
+        "accent": "#C9A86A",
+        "background": "#F5F3EF",
+        "text_on_dark": "#F5F3EF",
+        "reasoning": "Deep forest green evokes natural tranquility and grounding, complemented by sage for organic wellness. Warm gold accent suggests premium care without ostentation. Warm off-white background creates a cocoon-like sanctuary feeling appropriate for a spa environment."
+      },
+      "typography": {
+        "heading_style": "Elegant serif with refined proportions, conveying sophistication and timeless calm",
+        "body_style": "Clean, highly legible sans-serif that feels modern yet warm and approachable",
+        "google_font_heading": "Cormorant Garamond",
+        "google_font_body": "Outfit",
+        "reasoning": "Cormorant Garamond brings graceful, editorial refinement perfect for a wellness sanctuary. Outfit provides excellent readability with a gentle, rounded softness that feels welcoming rather than clinical."
+      },
+      "tone_descriptors": [
+        "serene",
+        "nurturing",
+        "refined"
+      ],
+      "motion_intensity": "subtle",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": false
+      },
+      "effects_reasoning": "Subtle film grain adds organic tactility and premium quality to the spa aesthetic. Marquee bands would feel too energetic and commercial for a wellness sanctuary. Typography should be elegant but not dominating\u2014the focus is on visual serenity and the immersive video experience.",
+      "scenes": [
+        {
+          "scene_name": "Sanctuary Entry",
+          "image_prompt": "Wide exterior shot of a serene spa entrance in Sarasota, soft morning light filtering through lush tropical foliage and palm fronds framing a minimalist wooden door, warm limestone pathway leading to entrance, dappled sunlight creating gentle shadows on textured walls, shallow depth of field blurring background greenery, tranquil and inviting atmosphere, editorial spa photography, 16:9, no signage or text visible",
+          "video_motion_prompt": "Extremely gentle breeze causing palm fronds and foliage to sway almost imperceptibly in the foreground and mid-ground, dappled light patterns shifting subtly across the pathway and wall surfaces as leaves move overhead, faint atmospheric haze drifting through the sunbeams, camera locked steady with no movement"
+        },
+        {
+          "scene_name": "Healing Hands",
+          "image_prompt": "Medium shot of massage therapy in progress, therapist's hands applying gentle pressure to client's shoulders, warm amber lighting from soft lamps creating intimate glow, natural linen textures and earth-tone treatment room, smooth river stones and rolled towels visible in soft-focus background, steam rising faintly from essential oil diffuser, peaceful and nurturing mood, high-end spa editorial photography, 16:9, faces obscured or out of frame",
+          "video_motion_prompt": "Delicate wisps of aromatic steam rising slowly from the diffuser in the background, the faintest shimmer of candlelight reflecting on smooth stones, subtle breathing rhythm visible only in the drape of fabric over the client, hands remain perfectly still in therapeutic contact, warm light flickering almost imperceptibly, camera completely locked"
+        },
+        {
+          "scene_name": "Ritual Detail",
+          "image_prompt": "Intimate close-up of spa ritual elements, ceramic bowl filled with rose petals floating in water, smooth polished stones arranged beside organic skincare products in amber glass bottles, soft directional light creating gentle highlights on water surface, warm wooden tray underneath, shallow depth of field with creamy bokeh, luxurious texture and detail, editorial product photography aesthetic, 16:9, no labels or text visible on bottles",
+          "video_motion_prompt": "Rose petals drifting almost imperceptibly on the water surface with the faintest ripple, light reflecting and shimmering gently on the water, tiny beads of condensation slowly forming on the glass bottles, subtle ambient movement suggesting a peaceful environment, no camera movement, last frame nearly identical to first"
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Sanctuary Entry",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421065/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Healing Hands",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421065/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Ritual Detail",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421065/scene3.png",
+        "video_ok": false
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000421575",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421575/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421575/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#1B3A52",
+        "secondary": "#4A7C9D",
+        "accent": "#D4A574",
+        "background": "#F8F6F3",
+        "text_on_dark": "#FFFFFF",
+        "reasoning": "Deep navy conveys trust and strategic depth essential for consulting. Warm gold accent suggests value and premium service without ostentation. Soft warm background creates approachable sophistication appropriate for Winter Haven's business community."
+      },
+      "typography": {
+        "heading_style": "Refined serif with strong presence, communicating authority and established expertise",
+        "body_style": "Clean, highly legible sans-serif that conveys clarity and precision",
+        "google_font_heading": "Fraunces",
+        "google_font_body": "Inter",
+        "reasoning": "Fraunces provides sophisticated gravitas for a consulting brand while remaining contemporary. Inter ensures exceptional readability for detailed service descriptions and strategic messaging."
+      },
+      "tone_descriptors": [
+        "authoritative",
+        "trustworthy",
+        "thoughtful"
+      ],
+      "motion_intensity": "subtle",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": false
+      },
+      "effects_reasoning": "Subtle grain adds tactile quality suggesting substance and depth of experience. Marquee would feel too promotional for professional services. Typography should be strong but measured, not oversized\u2014consulting requires confidence without showmanship.",
+      "scenes": [
+        {
+          "scene_name": "Strategic Overview",
+          "image_prompt": "Wide establishing shot of Winter Haven, Florida downtown business district at golden hour, modern office buildings with palm trees in foreground, warm amber light casting long shadows across clean streets, professional yet inviting atmosphere, shot from elevated perspective showing organized urban landscape, clear blue sky transitioning to warm tones, architectural details visible, cinematic depth of field with foreground slightly soft, 16:9 aspect ratio, no signage or text visible",
+          "video_motion_prompt": "Extremely slow upward drift of camera position (barely perceptible), gentle sway of palm fronds in evening breeze, subtle shift in golden hour lighting as sun descends, faint movement of distant traffic lights, atmospheric depth gradually becoming more pronounced, shadows lengthening almost imperceptibly, warm glow intensifying slightly on building facades"
+        },
+        {
+          "scene_name": "Collaborative Process",
+          "image_prompt": "Medium shot of executive conference table from corner angle, open laptop displaying data charts and strategic documents spread across polished wood surface, professional leather chairs partially visible, natural window light from side creating soft shadows, warm interior with subtle reflections on glossy table surface, coffee cup and notepad suggesting active working session, shallow depth of field with background softly blurred, sophisticated neutral tones, no people visible but scene suggests recent presence, 16:9 format",
+          "video_motion_prompt": "Gentle drift of steam rising from coffee cup, extremely subtle shift in natural window light as clouds pass outside, faint reflection movement on polished table surface, laptop screen with barely perceptible brightness variation suggesting active display, pages of documents with microscopic flutter from HVAC air movement, soft ambient light gradually warming, shadows shifting almost imperceptibly"
+        },
+        {
+          "scene_name": "Results Focus",
+          "image_prompt": "Close-up detail shot of fountain pen resting on printed financial growth chart showing upward trend, crisp business documents with strategic planning annotations visible, soft focus background showing office environment, warm desk lamp creating focused pool of light on documents, shallow depth of field emphasizing pen and chart intersection, professional color palette of navy and gold accents in charts, textures of paper and metal pen visible, sophisticated composition suggesting precision and results, 16:9 ratio",
+          "video_motion_prompt": "Extremely slow push-in toward pen and chart intersection, subtle warm light fluctuation from desk lamp, faint shadows shifting as if from someone working nearby off-camera, barely visible micro-movements in paper from ambient air, reflective pen surface catching light with gentle variation, depth of field gradually narrowing, background bokeh slowly intensifying, chart details becoming more prominent in frame"
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Strategic Overview",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421575/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Collaborative Process",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421575/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Results Focus",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421575/scene3.png",
+        "video_ok": true
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000420195",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420195/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420195/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#2C3E2F",
+        "secondary": "#8B7355",
+        "accent": "#C9A882",
+        "background": "#F5F3EF",
+        "text_on_dark": "#F5F3EF",
+        "reasoning": "Deep sage green primary evokes natural sophistication and the 'Sage' in the brand name. Warm leather brown secondary and sandy gold accent create an earthy, curated boutique aesthetic. Off-white background maintains airiness while feeling more refined than pure white\u2014perfect for a retail brand emphasizing quality and curation."
+      },
+      "typography": {
+        "heading_style": "Elegant serif with moderate contrast, refined but approachable",
+        "body_style": "Clean sans-serif with excellent readability, modern and spacious",
+        "google_font_heading": "Fraunces",
+        "google_font_body": "DM Sans",
+        "reasoning": "Fraunces brings editorial sophistication with soft-baroque details that signal curation and taste without pretension. DM Sans provides geometric clarity for product descriptions and navigation, ensuring the shopping experience feels contemporary and effortless. The pairing balances aspiration with accessibility."
+      },
+      "tone_descriptors": [
+        "curated",
+        "tactile",
+        "understated-elegance"
+      ],
+      "motion_intensity": "subtle",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": false
+      },
+      "effects_reasoning": "Fine film grain adds tactile warmth and craft authenticity to product presentation\u2014suggesting the care behind curation. No marquee (too promotional for this refined aesthetic). Typography stays elegant rather than oversized to let products be the hero. The overall effect should feel like stepping into a thoughtfully designed boutique.",
+      "scenes": [
+        {
+          "scene_name": "Curated Display Establishing",
+          "image_prompt": "Wide interior shot of a beautifully styled retail display table in soft morning light, Bradenton boutique aesthetic. Foreground features artfully arranged lifestyle products\u2014ceramic vessels, linen textiles, wooden objects\u2014on a natural oak surface. Shallow depth of field blurs background shelving with more curated goods. Warm sunlight streams through unseen window creating gentle shadows and highlighting texture. Color palette of creams, sage greens, terracotta, natural wood. Editorial product photography style, 16:9, no visible text or branding.",
+          "video_motion_prompt": "Extremely slow push-in toward the display table, barely perceptible forward drift. Sunlight subtly shifts intensity as if a cloud passes, creating gentle shadow movement across the surfaces. Dust motes drift lazily through the sunbeam. Fabric edge of linen textile has faintest natural sway from ambient air. Camera movement is locked-off feel with only the slightest creep forward. No object repositioning, no hand interaction."
+        },
+        {
+          "scene_name": "Product Interaction Detail",
+          "image_prompt": "Medium close-up of hands gently placing a handcrafted ceramic bowl onto natural wood shelf, shallow depth of field. Hands are softly lit from window light, showing careful curation action. Background shelving displays blurred artisan goods in warm neutral tones. The ceramic piece has organic glaze in sage and cream tones. Forearms visible wearing natural linen, suggesting shop owner or curator. Intimate, tactile moment. Cinematic color grading with warm highlights and soft shadows, 16:9, no faces visible.",
+          "video_motion_prompt": "Hands are frozen mid-placement, creating a suspended moment of curation. Extremely subtle micro-movement in the fabric of the linen sleeves from barely-there breathing. Soft light flicker as if window light shifts slightly through leaves outside. Background blur has faint shimmer from ambient light change. The bowl and hands remain essentially still\u2014this is a captured moment, not an action sequence. Camera is locked-off with no drift."
+        },
+        {
+          "scene_name": "Texture and Craft Close-Up",
+          "image_prompt": "Extreme close-up of layered artisan product textures\u2014woven natural fiber, glazed ceramic edge, raw wood grain, folded linen fabric\u2014all in soft directional light. Macro photography revealing material quality and craftsmanship. Color palette of oatmeal, sage, warm oak, stone gray. Beautiful tactile detail showing why these products were curated. Shallow depth of field isolates the texture layers. Warm afternoon light creates gentle highlights along edges. 16:9, editorial product detail photography.",
+          "video_motion_prompt": "Nearly static shot with only the most subtle light drift across the textures, as if the sun is slowly moving. Fabric shows microscopic natural fiber movement from air currents\u2014barely visible. Light reflections on the ceramic glaze have gentle shimmer variation. Camera is completely locked, no movement. The focus plane remains constant. This is about revealing material quality through patient observation, not action."
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Curated Display Establishing",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420195/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Product Interaction Detail",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420195/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Texture and Craft Close-Up",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420195/scene3.png",
+        "video_ok": true
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000420713",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#1a1a1a",
+        "secondary": "#d4af37",
+        "accent": "#8b0000",
+        "background": "#0a0a0a",
+        "text_on_dark": "#f5f5f5",
+        "reasoning": "Deep charcoal black conveys sophistication and exclusivity, champagne gold represents prestige and luxury, deep crimson accent adds passion and power. This palette mirrors high-end automotive showrooms and luxury branding\u2014timeless, confident, aspirational."
+      },
+      "typography": {
+        "heading_style": "Elegant serif with strong contrast and refined proportions for prestige",
+        "body_style": "Clean geometric sans-serif for modern luxury readability",
+        "google_font_heading": "Cormorant Garamond",
+        "google_font_body": "Outfit",
+        "reasoning": "Cormorant Garamond brings editorial sophistication and old-world prestige perfect for luxury automotive. Outfit provides contemporary geometric clarity that feels premium without competing. Together they balance heritage craftsmanship with modern performance."
+      },
+      "tone_descriptors": [
+        "sophisticated",
+        "aspirational",
+        "cinematic"
+      ],
+      "motion_intensity": "moderate",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": false,
+        "oversized_typography": true
+      },
+      "effects_reasoning": "Fine film grain adds tactile luxury and photographic authenticity\u2014evoking high-end automotive editorial shoots. Oversized typography creates dramatic impact befitting exotic vehicles. No marquee band to maintain sophisticated restraint and let the vehicles command attention.",
+      "scenes": [
+        {
+          "scene_name": "Arrival Prestige",
+          "image_prompt": "Wide establishing shot of a gleaming exotic sports car in metallic midnight blue parked in front of an upscale South Florida waterfront location at golden hour, palm trees silhouetted against warm peach and lavender sky, wet pavement reflecting the vehicle and tropical landscape, shallow depth of field isolating the car's sculptural lines, cinematic automotive photography lighting with rim light catching the curves, no people visible, no text or logos, 16:9 aspect ratio",
+          "video_motion_prompt": "Extremely slow push-in toward the vehicle, barely perceptible drift right, palm fronds sway gently in warm breeze, subtle light shimmer on wet pavement reflections, soft bokeh shifts in background sky gradient, water ripples faintly in distant canal, ambient golden hour light slowly intensifies on chrome and paint, no camera shake, locked-off feel with minimal movement"
+        },
+        {
+          "scene_name": "Crafted Detail",
+          "image_prompt": "Intimate close-up of an exotic car's steering wheel and dashboard interior, butter-soft perforated leather with contrast stitching in champagne gold, carbon fiber accents catching directional light, polished metal paddle shifters gleaming, shallow depth of field blurring the windshield view to bokeh of Florida palms and blue sky beyond, warm afternoon light streaming through tinted glass creating dramatic shadows, editorial luxury automotive detail photography, no hands or people, 16:9",
+          "video_motion_prompt": "Camera locked completely still, subtle light shift as if clouds passing overhead outside, faint dust motes drifting through the shaft of sunlight, leather texture micro-detail visible, bokeh background palm shapes barely drifting, dashboard reflections subtly breathing with changing exterior light, no movement of steering wheel or any controls, ambient stillness with living light"
+        },
+        {
+          "scene_name": "Florida Presence",
+          "image_prompt": "Dramatic low-angle shot of an exotic supercar's front quarter panel and wheel on Deerfield Beach oceanfront at dusk, deep metallic paint reflecting the violet and pink twilight sky, high-performance wheel with red brake caliper visible, Art Deco architecture softly blurred in background, wet sand foreground with gentle foam from receding wave, professional automotive photography with graduated ND filter effect, moody blue hour lighting, no people or signage, 16:9",
+          "video_motion_prompt": "Extremely slow dolly-in maintaining low angle, gentle wave foam recedes across sand in real-time, twilight sky subtly deepens from violet to deeper blue, soft reflections shift on glossy paint surface, distant palm silhouettes barely sway, ambient ocean breeze suggested through faint sand texture movement, no wheel rotation, locked composition with only natural coastal motion elements"
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Arrival Prestige",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Crafted Detail",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Florida Presence",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene3.png",
+        "video_ok": true
+      }
+    ]
+  },
+  {
+    "demo_slug": "L26000421232",
+    "status": "ready",
+    "hero_video_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421232/hero.mp4",
+    "hero_poster_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421232/scene1.png",
+    "clip_count": 3,
+    "brief_json": {
+      "palette": {
+        "primary": "#0A0A0A",
+        "secondary": "#E63946",
+        "accent": "#F1FAEE",
+        "background": "#FAFAFA",
+        "text_on_dark": "#F1FAEE",
+        "reasoning": "Deep charcoal black anchors the brand with authority and sophistication. Bold crimson red injects energy and urgency\u2014the 'break through' moment. Off-white provides breathing room and balance. This palette signals confidence, creative disruption, and strategic precision."
+      },
+      "typography": {
+        "heading_style": "Bold, commanding, with strong geometric presence and tight spacing for impact",
+        "body_style": "Clean, highly legible sans-serif with generous line-height for clarity and professionalism",
+        "google_font_heading": "Space Grotesk",
+        "google_font_body": "Inter",
+        "reasoning": "Space Grotesk brings geometric boldness and modern edge\u2014perfect for a studio that 'breaks through.' Inter ensures crystal-clear readability for strategic messaging, balancing creative flair with professional clarity."
+      },
+      "tone_descriptors": [
+        "bold",
+        "strategic",
+        "disruptive"
+      ],
+      "motion_intensity": "moderate",
+      "effects": {
+        "grain_texture": true,
+        "marquee_band": true,
+        "oversized_typography": true
+      },
+      "effects_reasoning": "Grain texture adds analog warmth and tactile authenticity to digital work. Marquee band creates kinetic energy\u2014the sense that this brand is constantly in motion, never static. Oversized typography reinforces bold messaging and the 'break through' positioning. Together, these effects signal a studio that's confident, modern, and unafraid to make a statement.",
+      "scenes": [
+        {
+          "scene_name": "Strategic Command Center",
+          "image_prompt": "Overhead shot of a modern creative studio workspace in Gainesville, golden hour light streaming through large windows casting long shadows across a large table covered with brand mood boards, color swatches, sketches, markers, and an open laptop displaying campaign analytics. Hands are positioned mid-gesture over the materials but frozen in stillness. Shallow depth of field with the foreground materials sharp and background softly blurred. Warm, directional natural light creates dramatic contrast. Cinematic 16:9 composition with rich shadows and highlights. Photorealistic editorial quality, no visible faces, no text or logos on materials.",
+          "video_motion_prompt": "Extremely subtle downward drift of the camera perspective, as if slowly leaning in to examine the work. Gentle play of shadow movement as clouds pass outside the window, creating barely perceptible shifts in light intensity across the table surface. Faint shimmer on the laptop screen suggesting live data refresh. No hand movement, no paper shuffling\u2014only ambient light breathing and the slowest possible camera descent."
+        },
+        {
+          "scene_name": "Creative Capture in Action",
+          "image_prompt": "Mid-shot of a professional photographer in a Gainesville studio setting, camera on tripod pointed toward a styled product setup with dramatic rim lighting. The photographer's silhouette is visible from behind/side, hand resting on camera but motionless. Atmospheric haze from a fog machine catches colored gels\u2014deep red and cool blue\u2014creating layered depth. Shallow focus on the product setup in foreground with beautiful bokeh from practical lights in background. Moody, cinematic lighting with strong color contrast. 16:9 editorial photography aesthetic, no visible branding or signage.",
+          "video_motion_prompt": "Slow horizontal drift of atmospheric haze moving through the colored light beams. Subtle pulsing of bokeh lights in background as if breathing. Extremely gentle camera push forward, nearly imperceptible, maintaining framing. No photographer movement\u2014figure remains completely still. Light particles floating lazily through the fog, catching colored illumination. The motion suggests active creative work frozen in a contemplative moment."
+        },
+        {
+          "scene_name": "Brand Impact Revealed",
+          "image_prompt": "Extreme close-up of freshly printed brand collateral on premium textured paper stock\u2014business cards, letterhead corner, and a folded brochure edge\u2014arranged on a matte black surface. Dramatic side lighting creates deep shadows and highlights the paper texture and embossed details. A subtle reflection of crimson red from an off-camera light source creates color accent. Macro photography depth of field with razor-sharp focus on embossed elements fading to soft blur. Rich blacks, crisp whites, and that signature red accent. Cinematic product photography aesthetic, 16:9, no readable text or complete logos visible.",
+          "video_motion_prompt": "Extremely slow push-in on the embossed detail, maintaining shallow depth of field throughout. Subtle shift in the crimson reflection's intensity as if a distant neon sign is pulsing off-camera. Barely perceptible settling of the paper materials\u2014the faintest compression suggesting weight and quality. No hand interaction, no paper movement\u2014only the camera's glacial advance and the breathing quality of ambient light on premium materials."
+        }
+      ]
+    },
+    "scenes_json": [
+      {
+        "idx": 1,
+        "scene_name": "Strategic Command Center",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421232/scene1.png",
+        "video_ok": true
+      },
+      {
+        "idx": 2,
+        "scene_name": "Creative Capture in Action",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421232/scene2.png",
+        "video_ok": true
+      },
+      {
+        "idx": 3,
+        "scene_name": "Brand Impact Revealed",
+        "image_url": "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000421232/scene3.png",
+        "video_ok": true
+      }
+    ]
+  }
+]

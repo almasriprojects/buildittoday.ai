@@ -1,0 +1,106 @@
+[
+  {
+    "business_name": "Swiftkeys LLC",
+    "business_category": "Creative & Marketing",
+    "city": "Tampa",
+    "state": "FL",
+    "demo_slug": "L26000421140",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Start Your Project",
+        "headline": "Tampa's Strategic Creative Partner for Brands Ready to Stand Out",
+        "subheadline": "We craft compelling content, bold brand identities, and strategic marketing campaigns that capture attention and drive results."
+      },
+      "about": {
+        "body": "Swiftkeys LLC is a Tampa-based creative studio specializing in helping businesses tell their story through impactful visual content and strategic marketing. We blend creative vision with marketing intelligence to deliver work that doesn't just look good\u2014it performs.",
+        "heading": "Where Strategy Meets Creativity"
+      },
+      "tagline": "Creative Content That Moves Your Audience",
+      "services": [
+        {
+          "title": "Brand Identity & Design",
+          "description": "Distinctive visual identities that communicate your values and differentiate you in the market."
+        },
+        {
+          "title": "Content Production",
+          "description": "Photography, videography, and motion graphics designed to capture attention and tell your story."
+        },
+        {
+          "title": "Digital Marketing Strategy",
+          "description": "Data-informed campaigns across social, search, and paid channels that reach your ideal audience."
+        },
+        {
+          "title": "Creative Campaign Development",
+          "description": "Integrated campaigns that connect brand messaging with real business objectives."
+        },
+        {
+          "title": "Social Media Management",
+          "description": "Consistent, engaging content strategies that build community and drive engagement."
+        }
+      ],
+      "contact_cta": {
+        "body": "Let's discuss how strategic creative work can help your business grow and connect with the right audience.",
+        "heading": "Ready to Elevate Your Brand?",
+        "button_text": "Book a Discovery Call"
+      },
+      "why_choose_us": [
+        "Strategic approach that connects creative decisions to business goals",
+        "Fast turnaround without compromising quality or attention to detail",
+        "Collaborative process with clear communication at every stage",
+        "Work tailored specifically to Tampa's dynamic market landscape"
+      ]
+    }
+  },
+  {
+    "business_name": "Hoa Tech Advisors LLC",
+    "business_category": "Professional Services",
+    "city": "Panama City",
+    "state": "FL",
+    "demo_slug": "L26000421246",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Schedule a Consultation",
+        "headline": "Navigate Complex Technology Decisions with Confidence",
+        "subheadline": "Expert technology consulting services helping Panama City businesses optimize their IT infrastructure, streamline operations, and make informed technology investments."
+      },
+      "about": {
+        "body": "Hoa Tech Advisors provides independent technology consulting to businesses in Panama City and the surrounding region. We help organizations evaluate technology solutions, develop IT strategies, and make informed decisions that align with their business objectives and budget constraints.",
+        "heading": "Strategic Technology Partners for Growing Businesses"
+      },
+      "tagline": "Strategic Technology Guidance for Your Business",
+      "services": [
+        {
+          "title": "IT Strategy & Planning",
+          "description": "Comprehensive technology roadmaps aligned with your business goals and growth trajectory."
+        },
+        {
+          "title": "Technology Assessment & Optimization",
+          "description": "Evaluation of existing systems to identify inefficiencies, security gaps, and opportunities for improvement."
+        },
+        {
+          "title": "Vendor Selection & Management",
+          "description": "Objective guidance in selecting and managing technology vendors and service providers."
+        },
+        {
+          "title": "Digital Transformation Consulting",
+          "description": "Strategic support for modernizing operations and adopting new technologies effectively."
+        },
+        {
+          "title": "Cybersecurity Planning",
+          "description": "Risk assessment and security strategy development to protect your business assets."
+        }
+      ],
+      "contact_cta": {
+        "body": "Let's discuss how strategic technology guidance can help your business operate more efficiently and compete more effectively.",
+        "heading": "Ready to Make Smarter Technology Decisions?",
+        "button_text": "Get Started Today"
+      },
+      "why_choose_us": [
+        "Independent, vendor-neutral advice focused solely on your best interests",
+        "Clear, jargon-free communication that makes technology decisions understandable",
+        "Practical, actionable recommendations tailored to your specific business context",
+        "Local presence with deep understanding of Panama City business landscape"
+      ]
+    }
+  }
+]

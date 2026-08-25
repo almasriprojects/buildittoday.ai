@@ -1,0 +1,146 @@
+[
+  {
+    "business_name": "Sage And Hound LLC",
+    "business_category": "Retail & E-commerce",
+    "city": "Bradenton",
+    "state": "FL",
+    "demo_slug": "L26000420195",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Shop Our Collection",
+        "headline": "Discover Thoughtfully Selected Products in Bradenton",
+        "subheadline": "Sage And Hound brings you a curated collection of quality goods that blend style and function for everyday living."
+      },
+      "about": {
+        "body": "Sage And Hound is a Bradenton-based retailer offering a thoughtfully selected range of products for modern living. We believe in quality over quantity, choosing each item for its craftsmanship, design, and value to bring you goods worth investing in.",
+        "heading": "Carefully Curated for You"
+      },
+      "tagline": "Curated Goods for Your Modern Lifestyle",
+      "services": [
+        {
+          "title": "Curated Product Selection",
+          "description": "Hand-picked items chosen for quality, style, and everyday functionality."
+        },
+        {
+          "title": "Online Shopping",
+          "description": "Browse and purchase our full collection from the comfort of your home with secure checkout."
+        },
+        {
+          "title": "Local Bradenton Service",
+          "description": "Supporting our community with convenient shopping options and responsive customer care."
+        },
+        {
+          "title": "New Arrivals",
+          "description": "Regularly refreshed inventory to bring you the latest products that match our quality standards."
+        }
+      ],
+      "contact_cta": {
+        "body": "Explore our collection and find something special for your home and lifestyle today.",
+        "heading": "Ready to Shop?",
+        "button_text": "Browse Products"
+      },
+      "why_choose_us": [
+        "Carefully selected products that balance quality and value",
+        "Clean, easy shopping experience from browse to checkout",
+        "Responsive customer service and straightforward communication",
+        "Supporting local business right here in Bradenton"
+      ]
+    }
+  },
+  {
+    "business_name": "Ayiti Prestij Exotic Rentals LLC",
+    "business_category": "Retail & E-commerce",
+    "city": "Deerfield Beach",
+    "state": "FL",
+    "demo_slug": "L26000420713",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Browse Available Rentals",
+        "headline": "Experience Prestige with Premium Exotic Rentals",
+        "subheadline": "Elevate your special occasion or business event with our curated selection of luxury exotic rentals in Deerfield Beach and throughout South Florida."
+      },
+      "about": {
+        "body": "Ayiti Prestij Exotic Rentals specializes in providing premium exotic rental options for discerning clients in the Deerfield Beach area. We understand that exceptional moments deserve exceptional choices, and we're dedicated to delivering a seamless rental experience with personalized attention to detail.",
+        "heading": "Bringing Prestige to Your Event"
+      },
+      "tagline": "Luxury Exotic Rentals in South Florida",
+      "services": [
+        {
+          "title": "Exotic Vehicle Rentals",
+          "description": "Access to premium exotic vehicles for special occasions, photo shoots, and unforgettable experiences."
+        },
+        {
+          "title": "Event Rental Solutions",
+          "description": "Curated luxury rentals perfect for weddings, corporate events, and milestone celebrations."
+        },
+        {
+          "title": "Flexible Rental Terms",
+          "description": "Hourly, daily, and weekend rental options designed to fit your schedule and budget."
+        },
+        {
+          "title": "Concierge Service",
+          "description": "Personalized assistance with selection, scheduling, and delivery coordination for a stress-free experience."
+        }
+      ],
+      "contact_cta": {
+        "body": "Contact us today to check availability and reserve your premium exotic rental.",
+        "heading": "Ready to Make Your Event Extraordinary?",
+        "button_text": "Check Availability"
+      },
+      "why_choose_us": [
+        "Premium selection of exotic rentals maintained to the highest standards",
+        "Transparent pricing with no hidden fees or surprises",
+        "Convenient Deerfield Beach location serving all of South Florida",
+        "Responsive customer service focused on making your experience memorable"
+      ]
+    }
+  },
+  {
+    "business_name": "Phantom Playbook, LLC",
+    "business_category": "Creative & Marketing",
+    "city": "Gainesville",
+    "state": "FL",
+    "demo_slug": "L26000421232",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Start a Project",
+        "headline": "Marketing That Breaks Through",
+        "subheadline": "We craft bold campaigns and visual identities for brands ready to make an impact in Gainesville and beyond."
+      },
+      "about": {
+        "body": "Phantom Playbook is a Gainesville-based creative and marketing studio specializing in campaigns that connect with audiences and drive measurable results. We combine strategic thinking with compelling design to help businesses tell their story and stand out in competitive markets.",
+        "heading": "Creative Strategy Meets Execution"
+      },
+      "tagline": "Strategic creativity that moves the market",
+      "services": [
+        {
+          "title": "Brand Identity & Visual Design",
+          "description": "Logos, color systems, and visual guidelines that capture your brand's unique voice and personality."
+        },
+        {
+          "title": "Marketing Campaigns",
+          "description": "Integrated campaigns across digital and traditional channels designed to reach your target audience and achieve specific business goals."
+        },
+        {
+          "title": "Content Creation",
+          "description": "Photography, video, copywriting, and social media content that engages and converts."
+        },
+        {
+          "title": "Digital Strategy & Consulting",
+          "description": "Data-informed marketing strategies tailored to your business objectives and market landscape."
+        }
+      ],
+      "contact_cta": {
+        "body": "Let's discuss your vision and build a marketing strategy that delivers real results.",
+        "heading": "Ready to Elevate Your Brand?",
+        "button_text": "Book a Call"
+      },
+      "why_choose_us": [
+        "Strategic approach that ties creative work directly to business outcomes",
+        "Collaborative process with clear communication at every stage",
+        "Bold, distinctive creative that cuts through the noise",
+        "Local expertise with a deep understanding of the Gainesville market"
+      ]
+    }
+  }
+]

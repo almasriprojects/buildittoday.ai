@@ -1,0 +1,310 @@
+[
+  {
+    "business_name": "A & D Rivar Construction LLC",
+    "business_category": "Home & Trade Services",
+    "city": "Largo",
+    "state": "FL",
+    "demo_slug": "L26000416582",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Get a Free Estimate",
+        "headline": "Professional Construction Services for Your Home or Business",
+        "subheadline": "A & D Rivar Construction delivers reliable craftsmanship and attention to detail for residential and commercial projects throughout Largo and the surrounding Tampa Bay area."
+      },
+      "about": {
+        "body": "A & D Rivar Construction LLC serves homeowners and businesses throughout Largo with comprehensive construction services. We focus on clear communication, quality workmanship, and treating every project with the care and professionalism it deserves.",
+        "heading": "Building Quality Projects in Largo"
+      },
+      "tagline": "Quality Construction Services in Largo",
+      "services": [
+        {
+          "title": "Home Remodeling",
+          "description": "Transform your living spaces with kitchen renovations, bathroom updates, and whole-home remodeling projects tailored to your vision."
+        },
+        {
+          "title": "Room Additions",
+          "description": "Expand your home with expertly constructed additions that blend seamlessly with your existing structure."
+        },
+        {
+          "title": "Commercial Construction",
+          "description": "Professional build-outs and renovations for retail spaces, offices, and commercial properties."
+        },
+        {
+          "title": "General Repairs & Maintenance",
+          "description": "From drywall and flooring to structural repairs, we handle the construction needs that keep your property in top condition."
+        },
+        {
+          "title": "Custom Carpentry",
+          "description": "Skilled carpentry work including custom built-ins, trim installation, and finish carpentry for residential and commercial spaces."
+        }
+      ],
+      "contact_cta": {
+        "body": "Contact A & D Rivar Construction today to discuss your project needs and receive a detailed estimate.",
+        "heading": "Ready to Start Your Construction Project?",
+        "button_text": "Request Your Free Estimate"
+      },
+      "why_choose_us": [
+        "Transparent pricing and detailed estimates before work begins",
+        "Responsive communication throughout every phase of your project",
+        "Commitment to clean, organized job sites and timely completion",
+        "Focus on quality materials and lasting craftsmanship"
+      ]
+    }
+  },
+  {
+    "business_name": "Salty State Clothing LLC",
+    "business_category": "Retail & E-commerce",
+    "city": "New Smyrna Beach",
+    "state": "FL",
+    "demo_slug": "L26000416730",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Shop the Collection",
+        "headline": "Wear the Salt Life You Love",
+        "subheadline": "Curated apparel and accessories inspired by New Smyrna Beach and the authentic Florida coastal experience."
+      },
+      "about": {
+        "body": "Salty State Clothing brings you apparel that celebrates the laid-back beach lifestyle of Florida's coast. Our carefully selected pieces reflect the spirit of sun, surf, and sand that defines life by the ocean.",
+        "heading": "Where Coastal Culture Meets Comfortable Style"
+      },
+      "tagline": "Coastal Style for the Florida Lifestyle",
+      "services": [
+        {
+          "title": "Coastal Apparel",
+          "description": "T-shirts, hoodies, and casual wear designed for the beach lifestyle and Florida climate."
+        },
+        {
+          "title": "Beach Accessories",
+          "description": "Hats, bags, and essentials that complement your coastal wardrobe and active outdoor life."
+        },
+        {
+          "title": "Local-Inspired Designs",
+          "description": "Graphics and styles that capture the authentic vibe of New Smyrna Beach and Florida's surf culture."
+        },
+        {
+          "title": "Easy Online Shopping",
+          "description": "Browse our full collection and order with straightforward checkout and reliable shipping."
+        }
+      ],
+      "contact_cta": {
+        "body": "Browse our collection and find pieces that fit your beach lifestyle.",
+        "heading": "Ready to Upgrade Your Coastal Wardrobe?",
+        "button_text": "Start Shopping"
+      },
+      "why_choose_us": [
+        "Designs rooted in authentic Florida coastal culture and beach town lifestyle",
+        "Quality apparel built for comfort in the sun, surf, and sand",
+        "Curated selection that reflects the laid-back spirit of New Smyrna Beach",
+        "Straightforward shopping experience with clear product details and sizing"
+      ]
+    }
+  },
+  {
+    "business_name": "Image Medspa And Wellness LLC",
+    "business_category": "Health & Wellness",
+    "city": "Davie",
+    "state": "FL",
+    "demo_slug": "L26000416763",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Book Your Appointment",
+        "headline": "Personalized Wellness and Aesthetic Treatments in Davie",
+        "subheadline": "Experience a holistic approach to beauty and wellness with tailored treatments designed to help you look and feel your best."
+      },
+      "about": {
+        "body": "Image Medspa And Wellness offers a comprehensive range of aesthetic and wellness services in a serene, professional environment. Our approach combines advanced treatments with personalized care to help you achieve your health and beauty goals.",
+        "heading": "Your Wellness Journey Starts Here"
+      },
+      "tagline": "Rejuvenate Your Body and Mind",
+      "services": [
+        {
+          "title": "Aesthetic Injections",
+          "description": "Enhance your natural beauty with expertly administered cosmetic injectables and dermal fillers."
+        },
+        {
+          "title": "Skin Rejuvenation",
+          "description": "Revitalize your complexion with advanced facials, chemical peels, and skin resurfacing treatments."
+        },
+        {
+          "title": "Body Contouring",
+          "description": "Sculpt and tone your physique with non-invasive body shaping and fat reduction treatments."
+        },
+        {
+          "title": "Laser Treatments",
+          "description": "Address skin concerns including hair removal, pigmentation, and texture with precision laser technology."
+        },
+        {
+          "title": "Wellness Services",
+          "description": "Support your overall health with IV therapy, vitamin infusions, and wellness consultations."
+        }
+      ],
+      "contact_cta": {
+        "body": "Schedule your consultation today and discover how we can help you achieve your wellness and beauty goals.",
+        "heading": "Ready to Look and Feel Amazing?",
+        "button_text": "Schedule Consultation"
+      },
+      "why_choose_us": [
+        "Personalized treatment plans tailored to your unique needs and goals",
+        "Comfortable, spa-like atmosphere designed for relaxation and privacy",
+        "Advanced aesthetic technology and techniques for optimal results",
+        "Transparent consultations focused on realistic outcomes and your satisfaction"
+      ]
+    }
+  },
+  {
+    "business_name": "Swiftkeys LLC",
+    "business_category": "Creative & Marketing",
+    "city": "Tampa",
+    "state": "FL",
+    "demo_slug": "L26000421140",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Start Your Project",
+        "headline": "Tampa's Strategic Creative Partner for Brands Ready to Stand Out",
+        "subheadline": "We craft compelling content, bold brand identities, and strategic marketing campaigns that capture attention and drive results."
+      },
+      "about": {
+        "body": "Swiftkeys LLC is a Tampa-based creative studio specializing in helping businesses tell their story through impactful visual content and strategic marketing. We blend creative vision with marketing intelligence to deliver work that doesn't just look good\u2014it performs.",
+        "heading": "Where Strategy Meets Creativity"
+      },
+      "tagline": "Creative Content That Moves Your Audience",
+      "services": [
+        {
+          "title": "Brand Identity & Design",
+          "description": "Distinctive visual identities that communicate your values and differentiate you in the market."
+        },
+        {
+          "title": "Content Production",
+          "description": "Photography, videography, and motion graphics designed to capture attention and tell your story."
+        },
+        {
+          "title": "Digital Marketing Strategy",
+          "description": "Data-informed campaigns across social, search, and paid channels that reach your ideal audience."
+        },
+        {
+          "title": "Creative Campaign Development",
+          "description": "Integrated campaigns that connect brand messaging with real business objectives."
+        },
+        {
+          "title": "Social Media Management",
+          "description": "Consistent, engaging content strategies that build community and drive engagement."
+        }
+      ],
+      "contact_cta": {
+        "body": "Let's discuss how strategic creative work can help your business grow and connect with the right audience.",
+        "heading": "Ready to Elevate Your Brand?",
+        "button_text": "Book a Discovery Call"
+      },
+      "why_choose_us": [
+        "Strategic approach that connects creative decisions to business goals",
+        "Fast turnaround without compromising quality or attention to detail",
+        "Collaborative process with clear communication at every stage",
+        "Work tailored specifically to Tampa's dynamic market landscape"
+      ]
+    }
+  },
+  {
+    "business_name": "Hoa Tech Advisors LLC",
+    "business_category": "Professional Services",
+    "city": "Panama City",
+    "state": "FL",
+    "demo_slug": "L26000421246",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Schedule a Consultation",
+        "headline": "Navigate Complex Technology Decisions with Confidence",
+        "subheadline": "Expert technology consulting services helping Panama City businesses optimize their IT infrastructure, streamline operations, and make informed technology investments."
+      },
+      "about": {
+        "body": "Hoa Tech Advisors provides independent technology consulting to businesses in Panama City and the surrounding region. We help organizations evaluate technology solutions, develop IT strategies, and make informed decisions that align with their business objectives and budget constraints.",
+        "heading": "Strategic Technology Partners for Growing Businesses"
+      },
+      "tagline": "Strategic Technology Guidance for Your Business",
+      "services": [
+        {
+          "title": "IT Strategy & Planning",
+          "description": "Comprehensive technology roadmaps aligned with your business goals and growth trajectory."
+        },
+        {
+          "title": "Technology Assessment & Optimization",
+          "description": "Evaluation of existing systems to identify inefficiencies, security gaps, and opportunities for improvement."
+        },
+        {
+          "title": "Vendor Selection & Management",
+          "description": "Objective guidance in selecting and managing technology vendors and service providers."
+        },
+        {
+          "title": "Digital Transformation Consulting",
+          "description": "Strategic support for modernizing operations and adopting new technologies effectively."
+        },
+        {
+          "title": "Cybersecurity Planning",
+          "description": "Risk assessment and security strategy development to protect your business assets."
+        }
+      ],
+      "contact_cta": {
+        "body": "Let's discuss how strategic technology guidance can help your business operate more efficiently and compete more effectively.",
+        "heading": "Ready to Make Smarter Technology Decisions?",
+        "button_text": "Get Started Today"
+      },
+      "why_choose_us": [
+        "Independent, vendor-neutral advice focused solely on your best interests",
+        "Clear, jargon-free communication that makes technology decisions understandable",
+        "Practical, actionable recommendations tailored to your specific business context",
+        "Local presence with deep understanding of Panama City business landscape"
+      ]
+    }
+  },
+  {
+    "business_name": "Omar Construction Naples INC",
+    "business_category": "Home & Trade Services",
+    "city": "Naples",
+    "state": "FL",
+    "demo_slug": "P26000040131",
+    "generated_content": {
+      "hero": {
+        "cta_text": "Get a Free Estimate",
+        "headline": "Professional Construction Solutions for Naples Homes and Businesses",
+        "subheadline": "From renovations to new builds, we deliver skilled craftsmanship and reliable service throughout Collier County."
+      },
+      "about": {
+        "body": "Omar Construction Naples INC serves residential and commercial clients throughout the Naples area with comprehensive construction services. We focus on clear communication, quality workmanship, and bringing your vision to life on time and within budget.",
+        "heading": "Building Excellence in Naples"
+      },
+      "tagline": "Quality Construction Services in Naples",
+      "services": [
+        {
+          "title": "Home Renovations & Remodeling",
+          "description": "Complete kitchen and bathroom remodels, room additions, and whole-home renovations tailored to your lifestyle."
+        },
+        {
+          "title": "New Construction",
+          "description": "Custom home building and commercial construction projects managed from foundation to final walkthrough."
+        },
+        {
+          "title": "Interior & Exterior Improvements",
+          "description": "Flooring installation, drywall work, painting, siding, and exterior upgrades to enhance your property."
+        },
+        {
+          "title": "Commercial Construction Services",
+          "description": "Tenant improvements, office build-outs, and commercial renovation projects for Naples businesses."
+        },
+        {
+          "title": "Repairs & Maintenance",
+          "description": "Storm damage repairs, structural fixes, and ongoing maintenance to protect your investment."
+        }
+      ],
+      "contact_cta": {
+        "body": "Contact us today to discuss your construction needs and receive a detailed estimate for your Naples property.",
+        "heading": "Ready to Start Your Project?",
+        "button_text": "Request Your Free Quote"
+      },
+      "why_choose_us": [
+        "Detailed project planning and transparent pricing with no hidden fees",
+        "Direct communication throughout every phase of your project",
+        "Local Naples team familiar with Florida building requirements and climate considerations",
+        "Commitment to job site cleanliness and respecting your property"
+      ]
+    }
+  }
+]
