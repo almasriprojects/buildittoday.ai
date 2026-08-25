@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { sendWelcome } from "@/lib/customer-email";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -212,6 +213,24 @@ export async function POST(request: NextRequest) {
       { onConflict: "stripe_subscription_id" }
     );
     if (customerError) throw new Error(`customers upsert: ${customerError.message}`);
+
+    // Tell them immediately. A charge followed by silence is how a sale turns
+    // into a chargeback, and this is the only message that stops the customer
+    // wondering whether the payment worked.
+    //
+    // Deliberately after the upsert and deliberately not fatal: if Resend is
+    // having a bad minute, the payment record must still stand. sendWelcome is
+    // idempotent, so a Stripe retry cannot send it twice.
+    try {
+      const { data: saved } = await supabase
+        .from("customers")
+        .select("id")
+        .eq("stripe_subscription_id", subId ?? "")
+        .maybeSingle();
+      if (saved?.id) await sendWelcome(saved.id);
+    } catch {
+      // Swallowed on purpose — see above.
+    }
 
     return NextResponse.json({ received: true, leadId, amount, tier, subscription: subId });
   } catch (err) {
