@@ -32,7 +32,7 @@ export async function GET(
   const slug = decodeURIComponent(siteSlug).toLowerCase();
 
   if (RESERVED.has(slug) || slug.startsWith("_") || slug.includes(".")) {
-    return new NextResponse("Not found", { status: 404 });
+    return notFoundPage();
   }
 
   const supabase = createServiceRoleClient();
@@ -44,7 +44,7 @@ export async function GET(
     .maybeSingle();
 
   if (!site?.storage_path) {
-    return new NextResponse("Not found", { status: 404 });
+    return notFoundPage();
   }
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -53,7 +53,7 @@ export async function GET(
     headers: { Authorization: `Bearer ${key}`, apikey: key },
     cache: "no-store",
   });
-  if (!res.ok) return new NextResponse("Not found", { status: 404 });
+  if (!res.ok) return notFoundPage();
 
   // Point every asset at our own domain. The stored HTML hardcodes storage
   // URLs, and rewriting on the way out avoids rewriting 43 files — and keeps
@@ -142,4 +142,36 @@ async function recordView(demoSlug: string, request: NextRequest) {
       .eq("lead_id", lead.id)
       .eq("status", "active");
   }
+}
+
+/**
+ * This route sits at the root, so it catches every unmatched URL on the site —
+ * which meant a typo returned nine bytes of plain text on a blank white page.
+ * A Route Handler cannot render the app's not-found page, so it serves its own.
+ */
+function notFoundPage(): NextResponse {
+  return new NextResponse(
+    `<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Page not found · BuildItToday.ai</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  body{margin:0;background:#fff;color:#171717;min-height:100vh;display:flex;
+    align-items:center;justify-content:center;
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+  .w{max-width:32rem;padding:0 1.5rem;text-align:center}
+  .k{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:#737373;margin:0}
+  h1{font-size:1.9rem;font-weight:600;margin:.75rem 0 0;letter-spacing:-.01em}
+  p{color:#525252;line-height:1.6;margin:1rem 0 0}
+  .a{display:inline-flex;align-items:center;height:2.75rem;padding:0 1.5rem;margin-top:2rem;
+    border-radius:.5rem;background:#171717;color:#fff;text-decoration:none;
+    font-size:.875rem;font-weight:500}
+</style></head><body><div class="w">
+  <p class="k">404</p>
+  <h1>That page doesn&rsquo;t exist</h1>
+  <p>The link may be out of date, or the address slightly off. Nothing is broken on your end.</p>
+  <a class="a" href="/">Go to the homepage</a>
+</div></body></html>`,
+    { status: 404, headers: { "Content-Type": "text/html; charset=utf-8" } }
+  );
 }
