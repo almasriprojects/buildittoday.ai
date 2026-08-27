@@ -11,8 +11,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from brain_v2 import OR_KEY
 from brain_v3_fixes import has_visible_text
+import paths as P
 
-ENV = "/Users/ananalmasri/Downloads/autosite.ai/frontend/.env.local"
+ENV = str(P.FRONTEND_ENV)
 v = {}
 for line in open(ENV):
     m = re.match(r"^([A-Z_]+)=(.*)$", line.strip())

@@ -1,7 +1,8 @@
 import re
 import urllib.request
+import paths as P
 
-ENV_PATH = "/Users/ananalmasri/Downloads/autosite.ai/frontend/.env.local"
+ENV_PATH = str(P.FRONTEND_ENV)
 
 def load_env():
     vals = {}
@@ -17,7 +18,7 @@ env = load_env()
 SUPABASE_URL = env["NEXT_PUBLIC_SUPABASE_URL"]
 SERVICE_KEY = env["SUPABASE_SERVICE_ROLE_KEY"]
 
-VIDEO_LOCAL = "/private/tmp/claude-501/-Users-ananalmasri-Downloads-autosite-ai/d8d1f973-387b-45fb-bb53-9b4960fab6b7/scratchpad/hero_video_test_professional_services.mp4"
+VIDEO_LOCAL = str(P.work("hero_video_test_professional_services.mp4"))
 VIDEO_STORAGE_PATH = "professional-services/hero-video.mp4"
 BUCKET = "category-photography"
 

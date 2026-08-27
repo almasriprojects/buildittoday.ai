@@ -4,8 +4,9 @@ import re
 import time
 import urllib.request
 import urllib.error
+import paths as P
 
-ENV_PATH = "/Users/ananalmasri/Downloads/***_WORKING_NOW/SiteReplicate/.env"
+ENV_PATH = str(P.SITEREPLICATE_ENV or P.FRONTEND_ENV)
 
 def load_key():
     with open(ENV_PATH) as f:
@@ -18,7 +19,7 @@ def load_key():
 OPENROUTER_KEY = load_key()
 MODEL = "bytedance/seedance-2.0-mini"
 HERO_IMAGE_URL = "https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/professional-services/hero.png"
-OUT_DIR = "/private/tmp/claude-501/-Users-ananalmasri-Downloads-autosite-ai/d8d1f973-387b-45fb-bb53-9b4960fab6b7/scratchpad"
+OUT_DIR = str(P.WORK)
 
 PROMPT = (
     "Subtle, professional cinemagraph-style motion. Slow, steady camera push-in "

@@ -15,10 +15,11 @@ import time
 import urllib.request
 import urllib.error
 from concurrent.futures import ThreadPoolExecutor
+import paths as P
 
-SR_ENV = "/Users/ananalmasri/Downloads/***_WORKING_NOW/SiteReplicate/.env"
-FE_ENV = "/Users/ananalmasri/Downloads/autosite.ai/frontend/.env.local"
-OUT = "/private/tmp/claude-501/-Users-ananalmasri-Downloads-autosite-ai/d8d1f973-387b-45fb-bb53-9b4960fab6b7/scratchpad/brain_v2_out"
+SR_ENV = str(P.SITEREPLICATE_ENV or P.FRONTEND_ENV)
+FE_ENV = str(P.FRONTEND_ENV)
+OUT = str(P.work("brain_v2_out"))
 os.makedirs(OUT, exist_ok=True)
 
 

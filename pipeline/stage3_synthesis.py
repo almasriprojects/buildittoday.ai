@@ -1,8 +1,9 @@
 import json
 import re
 import urllib.request
+import paths as P
 
-ENV_PATH = "/Users/ananalmasri/Downloads/***_WORKING_NOW/SiteReplicate/.env"
+ENV_PATH = str(P.SITEREPLICATE_ENV or P.FRONTEND_ENV)
 
 def load_key():
     with open(ENV_PATH) as f:

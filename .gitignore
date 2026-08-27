@@ -45,3 +45,7 @@ category_photos/
 
 # supabase CLI local state
 **/supabase/.temp/
+
+# Pipeline run scratch — intermediate media and JSON, regenerated per run
+pipeline/_work/
+pipeline/__pycache__/

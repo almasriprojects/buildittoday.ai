@@ -6,8 +6,9 @@ from concurrent.futures import ThreadPoolExecutor
 
 from brain_v2 import COST, OUT, or_chat, upload
 from brain_v2_validate import validate
+import paths as P
 
-RUNTIME_PATH = "/private/tmp/claude-501/-Users-ananalmasri-Downloads-autosite-ai/d8d1f973-387b-45fb-bb53-9b4960fab6b7/scratchpad/motion_runtime_v2.6.js"
+RUNTIME_PATH = str(P.MOTION_RUNTIME)
 
 with open(os.path.join(OUT, "briefs.json")) as f:
     BRIEFS = json.load(f)

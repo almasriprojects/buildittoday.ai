@@ -14,8 +14,9 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 from brain_v2 import OR_KEY
+import paths as P
 
-ENV = "/Users/ananalmasri/Downloads/autosite.ai/frontend/.env.local"
+ENV = str(P.FRONTEND_ENV)
 v = {}
 for line in open(ENV):
     m = re.match(r"^([A-Z_]+)=(.*)$", line.strip())
