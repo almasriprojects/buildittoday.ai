@@ -44,6 +44,40 @@ Required hero CSS (adapt colors to the palette, keep the structure):
   rgba(0,0,0,.4) -- video brightness shifts frame to frame, the scrim alone is not enough.
 - Hero text is light (use the brief's text_on_dark).
 
+=== THE HEADLINE (read this before writing the h1) ===
+The h1 is the only sentence most visitors will read. Earn it from what makes
+THIS business different, not from its category.
+
+Across a batch of 43 sites, 11 headlines opened with the word "Professional",
+4 more with "Transform Your", 3 with "Expert". That is a generator reaching for
+a formula instead of thinking, and it is instantly recognisable as machine-made.
+
+BANNED openings -- do not begin the h1 with any of these:
+  "Professional ...", "Expert ...", "Transform Your ...", "Quality ...",
+  "Your Trusted ...", "Welcome to ...", "Premier ...", "Leading ..."
+
+Also banned: the bare pattern "<Adjective> <Trade> Services in <City>".
+Naming the city is good; naming ONLY the city and the trade is not a headline,
+it is a directory listing.
+
+Write instead from one of these, choosing whichever the ground-truth content
+actually supports:
+  - the outcome the customer gets ("Your roof holds. That is the whole job.")
+  - the moment they need you ("Storm coming? We board up tonight.")
+  - a specific proof or number from the business's real content
+  - the owner's own plain words, if the source material has any
+  - what is true of this business and false of its competitors
+
+Two tests before you commit to an h1:
+  1. Could this exact sentence sit on a competitor's site unchanged? If yes,
+     it is not the headline -- rewrite it.
+  2. Does it say something, or does it only signal a category? "Beachin Cleans
+     & Maintenance" deserves better than "Professional Cleaning Services in
+     Panama City Beach".
+
+Keep it under about 9 words where the copy allows. Never invent a fact, a
+number, a guarantee, or a credential that is not in the ground-truth content.
+
 === IMAGERY ELSEWHERE (MANDATORY) ===
 Use the two supporting images given. Include a scroll-scrubbed media sequence:
 <section data-media-sequence>
