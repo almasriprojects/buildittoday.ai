@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { alert } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -154,6 +155,14 @@ export async function POST(request: NextRequest) {
           lead_id: leadId, channel: "email", event_type: reason,
         });
       }
+
+      // A complaint is far more damaging than a bounce and is worth a louder
+      // signal — spam reports are what actually kill a sending domain.
+      await alert(
+        complaint ? "complaint" : "bounce",
+        complaint ? "Spam complaint" : "Email bounced",
+        `${send?.intended_to ?? to ?? "unknown address"} — suppressed and removed from the sequence`
+      ).catch(() => {});
 
       const address = send?.intended_to ?? (typeof to === "string" ? to : null);
       if (address) {

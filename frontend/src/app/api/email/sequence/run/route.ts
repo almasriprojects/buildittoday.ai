@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin-auth";
 import { runSequence } from "@/lib/email-sequence";
+import { alert } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -70,6 +71,19 @@ export async function POST(request: NextRequest) {
 
   try {
     const result = await runSequence();
+
+    // A run that fails silently is a day of outreach that never happened.
+    if (result.failed.length) {
+      await alert(
+        "sequencer_failed",
+        `${result.failed.length} send${result.failed.length > 1 ? "s" : ""} failed`,
+        result.failed.slice(0, 3).map((f) => f.error).join(" · ")
+      ).catch(() => {});
+    }
+    if (result.reason?.startsWith("Daily cap")) {
+      await alert("cap_reached", "Daily sending cap reached", result.reason).catch(() => {});
+    }
+
     return NextResponse.json(result);
   } catch (e) {
     // A scheduler needs a non-2xx to notice something is wrong.

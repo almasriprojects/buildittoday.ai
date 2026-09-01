@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { sendWelcome } from "@/lib/customer-email";
+import { alert } from "@/lib/telegram";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -228,6 +229,13 @@ export async function POST(request: NextRequest) {
         .eq("stripe_subscription_id", subId ?? "")
         .maybeSingle();
       if (saved?.id) await sendWelcome(saved.id);
+
+      // The one notification worth interrupting anything for.
+      await alert(
+        "payment",
+        `${businessName ?? "Someone"} just paid`,
+        `${tier ?? "unknown tier"} · $${(amount ?? 0).toLocaleString()} · ${email ?? "no email"}`
+      ).catch(() => {});
     } catch {
       // Swallowed on purpose — see above.
     }

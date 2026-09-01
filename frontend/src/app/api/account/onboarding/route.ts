@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerClient, createServiceRoleClient } from "@/lib/supabase";
 import { sendTransactional } from "@/lib/email";
+import { alert } from "@/lib/telegram";
 
 export const dynamic = "force-dynamic";
 
@@ -100,6 +101,12 @@ ${notes || "(none)"}
 
 Admin: https://www.buildittoday.ai/admin/customers`,
   }).catch(() => {});
+
+  await alert(
+    "onboarding",
+    `${customer.business_name} sent their details`,
+    needsDomain ? "Needs help choosing a domain" : `Domain: ${domain}`
+  ).catch(() => {});
 
   return NextResponse.json({ ok: true });
 }
