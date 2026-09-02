@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
     const { data, error, count } = await supabase
       .from("leads")
       .select(
-        "id,business_name,business_category,target_fit,street_address,full_address,city,state,zip,latitude,longitude",
+        "id,business_name,business_category,target_fit,street_address,full_address,city,state,zip,latitude,longitude,geo_precision",
         { count: "exact" }
       )
       .not("latitude", "is", null)

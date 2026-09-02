@@ -29,6 +29,8 @@ export interface MapLead {
   address: string;
   lat: number;
   lng: number;
+  /** "address" is the door; "zip" is the centre of the postcode. */
+  geo_precision?: string | null;
 }
 
 interface LeadsMapProps {
