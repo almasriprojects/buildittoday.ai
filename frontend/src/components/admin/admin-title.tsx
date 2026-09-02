@@ -19,6 +19,7 @@ const TITLES: [string, string][] = [
   ["/admin/analytics", "Analytics"],
   ["/admin/attribution", "Attribution"],
   ["/admin/billing", "Billing"],
+  ["/admin/agents", "Agents"],
   ["/admin/integrations", "Integrations"],
   ["/admin", "Dashboard"],
 ];

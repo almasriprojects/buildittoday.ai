@@ -18,6 +18,7 @@ import {
   UserPlus,
   GitBranch,
   Plug,
+  Bot,
 } from "lucide-react";
 
 const navItems = [
@@ -31,6 +32,7 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/attribution", label: "Attribution", icon: GitBranch },
   { href: "/admin/billing", label: "Billing", icon: CreditCard },
+  { href: "/admin/agents", label: "Agents", icon: Bot },
   { href: "/admin/integrations", label: "Integrations", icon: Plug },
 ];
 
