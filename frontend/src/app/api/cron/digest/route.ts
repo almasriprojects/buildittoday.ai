@@ -154,7 +154,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const text = await build();
-    if (!telegramConfigured()) {
+    if (!(await telegramConfigured())) {
       return NextResponse.json({ sent: false, reason: "Telegram not configured", preview: text });
     }
     // Silent: this arrives every morning and should not buzz. Alerts do.
@@ -175,5 +175,5 @@ export async function GET() {
   const gate = await requireAdmin();
   if (!gate.ok) return gate.response;
   const text = await build();
-  return NextResponse.json({ configured: telegramConfigured(), preview: text });
+  return NextResponse.json({ configured: await telegramConfigured(), preview: text });
 }

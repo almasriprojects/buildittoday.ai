@@ -11,14 +11,51 @@
 
 const API = "https://api.telegram.org";
 
-function creds() {
-  const token = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  return { token, chatId, ready: Boolean(token && chatId) };
+/**
+ * Credentials come from the database first, environment second.
+ *
+ * The database is the editable source — set from the admin panel, live the
+ * instant it is saved. Vercel injects environment variables at build time, so a
+ * key added there is invisible until the next deploy, which has twice left this
+ * project with a secret that was set but not working. The env fallback stays so
+ * an existing deployment keeps running unchanged.
+ */
+export async function telegramCreds(): Promise<{
+  token?: string; chatId?: string; webhookSecret?: string; ready: boolean;
+}> {
+  let row: {
+    telegram_bot_token: string | null;
+    telegram_chat_id: string | null;
+    telegram_webhook_secret: string | null;
+  } | null = null;
+
+  try {
+    const { createServiceRoleClient } = await import("@/lib/supabase");
+    const { data } = await createServiceRoleClient()
+      .from("app_secrets")
+      .select("telegram_bot_token, telegram_chat_id, telegram_webhook_secret")
+      .eq("id", 1)
+      .maybeSingle();
+    row = data ?? null;
+  } catch {
+    // Fall through to the environment — a database blip must not silence alerts.
+  }
+
+  const token = row?.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = row?.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
+  const webhookSecret =
+    row?.telegram_webhook_secret || process.env.TELEGRAM_WEBHOOK_SECRET;
+
+  return {
+    token: token ?? undefined,
+    chatId: chatId ?? undefined,
+    webhookSecret: webhookSecret ?? undefined,
+    ready: Boolean(token && chatId),
+  };
 }
 
-export function telegramConfigured(): boolean {
-  return creds().ready;
+export async function telegramConfigured(): Promise<boolean> {
+  return (await telegramCreds()).ready;
 }
 
 /**
@@ -34,8 +71,8 @@ export async function sendTelegram(
   text: string,
   opts: { silent?: boolean } = {}
 ): Promise<{ ok: true } | { ok: false; error: string }> {
-  const { token, chatId, ready } = creds();
-  if (!ready) return { ok: false, error: "TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set" };
+  const { token, chatId, ready } = await telegramCreds();
+  if (!ready) return { ok: false, error: "Telegram is not configured yet" };
 
   try {
     const res = await fetch(`${API}/bot${token}/sendMessage`, {
