@@ -1,9 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 import { HEADLINE, TIERS, byKey, money, type TierKey } from "@/lib/pricing";
 import { createCheckoutSession } from "@/lib/checkout";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { stripeClient } from "@/lib/secrets";
 
 /**
  * POST /api/checkout — checkout from the claim form, where an email was typed.
@@ -61,6 +59,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Session ID is required" }, { status: 400 });
     }
 
+    const { stripe } = await stripeClient();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     const tierKey = session.metadata?.tier;
     const tier =

@@ -23,34 +23,13 @@ const API = "https://api.telegram.org";
 export async function telegramCreds(): Promise<{
   token?: string; chatId?: string; webhookSecret?: string; ready: boolean;
 }> {
-  let row: {
-    telegram_bot_token: string | null;
-    telegram_chat_id: string | null;
-    telegram_webhook_secret: string | null;
-  } | null = null;
-
-  try {
-    const { createServiceRoleClient } = await import("@/lib/supabase");
-    const { data } = await createServiceRoleClient()
-      .from("app_secrets")
-      .select("telegram_bot_token, telegram_chat_id, telegram_webhook_secret")
-      .eq("id", 1)
-      .maybeSingle();
-    row = data ?? null;
-  } catch {
-    // Fall through to the environment — a database blip must not silence alerts.
-  }
-
-  const token = row?.telegram_bot_token || process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = row?.telegram_chat_id || process.env.TELEGRAM_CHAT_ID;
-  const webhookSecret =
-    row?.telegram_webhook_secret || process.env.TELEGRAM_WEBHOOK_SECRET;
-
+  const { getSecrets } = await import("@/lib/secrets");
+  const s = await getSecrets();
   return {
-    token: token ?? undefined,
-    chatId: chatId ?? undefined,
-    webhookSecret: webhookSecret ?? undefined,
-    ready: Boolean(token && chatId),
+    token: s.telegramBotToken,
+    chatId: s.telegramChatId,
+    webhookSecret: s.telegramWebhookSecret,
+    ready: Boolean(s.telegramBotToken && s.telegramChatId),
   };
 }
 

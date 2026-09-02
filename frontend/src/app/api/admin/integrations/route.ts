@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin-auth";
 import { sendTelegram, telegramCreds } from "@/lib/telegram";
+import { invalidateSecrets } from "@/lib/secrets";
 
 export const dynamic = "force-dynamic";
 
@@ -28,50 +29,51 @@ export async function GET() {
   if (!gate.ok) return gate.response;
 
   const supabase = createServiceRoleClient();
-  const { data } = await supabase
-    .from("app_secrets")
-    .select("telegram_bot_token, telegram_chat_id, telegram_webhook_secret, stripe_webhook_secret, updated_at")
-    .eq("id", 1)
-    .maybeSingle();
+  const { data } = await supabase.from("app_secrets").select("*").eq("id", 1).maybeSingle();
+  const row = (data ?? {}) as Record<string, string | boolean | null>;
+  const str = (k: string) => (typeof row[k] === "string" ? (row[k] as string) : null);
 
-  const creds = await telegramCreds();
+  const field = (col: string, env?: string) => ({
+    set: Boolean(str(col) || (env && process.env[env])),
+    hint: hint(str(col)),
+    inDatabase: Boolean(str(col)),
+    fromEnv: Boolean(!str(col) && env && process.env[env]),
+  });
+
+  const mode = (str("mode") as "test" | "live") ?? "test";
 
   return NextResponse.json({
+    mode,
     telegram: {
-      botToken: { set: Boolean(data?.telegram_bot_token), hint: hint(data?.telegram_bot_token ?? null) },
-      // The chat id is not a secret — it is just a number you own — so it is
-      // shown in full. Being able to see it is what makes it checkable.
-      chatId: { set: Boolean(data?.telegram_chat_id), value: data?.telegram_chat_id ?? null },
-      webhookSecret: { set: Boolean(data?.telegram_webhook_secret), hint: hint(data?.telegram_webhook_secret ?? null) },
-      ready: creds.ready,
-      fromEnvOnly:
-        !data?.telegram_bot_token && Boolean(process.env.TELEGRAM_BOT_TOKEN),
+      botToken: field("telegram_bot_token", "TELEGRAM_BOT_TOKEN"),
+      // Not a secret — a number you own. Shown in full so it is checkable.
+      chatId: { set: Boolean(str("telegram_chat_id")), value: str("telegram_chat_id") },
+      webhookSecret: field("telegram_webhook_secret", "TELEGRAM_WEBHOOK_SECRET"),
+      ready: Boolean(str("telegram_bot_token") && str("telegram_chat_id")),
       webhookUrl: `${SITE}/api/telegram/webhook`,
-      updatedAt: data?.updated_at ?? null,
     },
     stripe: {
-      webhookSecret: {
-        set: Boolean(data?.stripe_webhook_secret || process.env.STRIPE_WEBHOOK_SECRET),
-        hint: hint(data?.stripe_webhook_secret ?? null),
-        inDatabase: Boolean(data?.stripe_webhook_secret),
-      },
-      mode: process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_") ? "live" : "test",
+      secretKeyTest: field("stripe_secret_key_test", "STRIPE_SECRET_KEY"),
+      secretKeyLive: field("stripe_secret_key_live"),
+      webhookSecretTest: field("stripe_webhook_secret_test", "STRIPE_WEBHOOK_SECRET"),
+      webhookSecretLive: field("stripe_webhook_secret_live"),
       webhookUrl: `${SITE}/api/webhooks/stripe`,
     },
-    // Read-only status of the secrets that still live in Vercel, so this page
-    // is one place to see whether the system is wired rather than two.
-    environment: {
-      resendApiKey: Boolean(process.env.RESEND_API_KEY),
-      resendWebhookSecret: Boolean(process.env.RESEND_WEBHOOK_SECRET),
-      stripeSecretKey: Boolean(process.env.STRIPE_SECRET_KEY),
-      stripeWebhookSecret: Boolean(process.env.STRIPE_WEBHOOK_SECRET),
-      stripeMode: process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_")
-        ? "live"
-        : process.env.STRIPE_SECRET_KEY
-        ? "test"
-        : null,
-      cronSecret: Boolean(process.env.CRON_SECRET),
+    resend: {
+      apiKey: field("resend_api_key", "RESEND_API_KEY"),
+      webhookSecret: field("resend_webhook_secret", "RESEND_WEBHOOK_SECRET"),
+      webhookUrl: `${SITE}/api/webhooks/resend`,
     },
+    lob: {
+      apiKey: field("lob_api_key", "LOB_API_KEY"),
+      // Postcards cost real money per action, so the switch is explicit and
+      // separate from merely holding a key.
+      enabled: row.postcards_enabled === true,
+    },
+    // Stays in Vercel deliberately: pg_cron sends it, and pg_cron is configured
+    // in the database, so moving it here would be circular.
+    cron: { set: Boolean(process.env.CRON_SECRET) },
+    updatedAt: row.updated_at ?? null,
   });
 }
 
@@ -106,11 +108,35 @@ export async function PATCH(request: NextRequest) {
         : "That doesn't look like a bot token — BotFather gives you something like 8123456789:AAH…"),
     take("chatId", "telegram_chat_id", (v) =>
       /^-?\d{5,}$/.test(v) ? null : "A chat id is a number, sometimes negative for groups."),
-    take("webhookSecret", "telegram_webhook_secret", (v) =>
+    take("telegramWebhookSecret", "telegram_webhook_secret", (v) =>
       v.length >= 16 ? null : "Use at least 16 characters, or press Generate."),
-    take("stripeWebhookSecret", "stripe_webhook_secret", (v) =>
+
+    // Each Stripe field is checked against its own environment, so a live key
+    // cannot be pasted into the test slot — the mistake that would take real
+    // money while everyone believes they are testing.
+    take("stripeSecretKeyTest", "stripe_secret_key_test", (v) =>
+      v.startsWith("sk_test_") ? null : "That is not a test key — test keys start with sk_test_"),
+    take("stripeSecretKeyLive", "stripe_secret_key_live", (v) =>
+      v.startsWith("sk_live_") ? null : "That is not a live key — live keys start with sk_live_"),
+    take("stripeWebhookSecretTest", "stripe_webhook_secret_test", (v) =>
       v.startsWith("whsec_") ? null : "A Stripe signing secret starts with whsec_"),
+    take("stripeWebhookSecretLive", "stripe_webhook_secret_live", (v) =>
+      v.startsWith("whsec_") ? null : "A Stripe signing secret starts with whsec_"),
+
+    take("resendApiKey", "resend_api_key", (v) =>
+      v.startsWith("re_") ? null : "A Resend key starts with re_"),
+    take("resendWebhookSecret", "resend_webhook_secret", (v) =>
+      v.startsWith("whsec_") ? null : "A Resend signing secret starts with whsec_"),
+    take("lobApiKey", "lob_api_key", (v) =>
+      /^(test|live)_/.test(v) ? null : "A Lob key starts with test_ or live_"),
   ].filter(Boolean);
+
+  if (typeof body.mode === "string" && ["test", "live"].includes(body.mode)) {
+    patch.mode = body.mode;
+  }
+  if (typeof body.postcardsEnabled === "boolean") {
+    (patch as Record<string, unknown>).postcards_enabled = body.postcardsEnabled;
+  }
 
   if (errors.length) return NextResponse.json({ error: errors[0] }, { status: 400 });
   if (!Object.keys(patch).length) return NextResponse.json({ ok: true, changed: false });
@@ -118,6 +144,7 @@ export async function PATCH(request: NextRequest) {
   const { error } = await supabase.from("app_secrets").update(patch).eq("id", 1);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
 
+  invalidateSecrets();
   return NextResponse.json({ ok: true, changed: true });
 }
 
@@ -141,6 +168,7 @@ export async function POST(request: NextRequest) {
     const secret = crypto.randomBytes(24).toString("base64url");
     const { error } = await supabase
       .from("app_secrets").update({ telegram_webhook_secret: secret }).eq("id", 1);
+    invalidateSecrets();
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true, generated: true });
   }

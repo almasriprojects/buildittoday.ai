@@ -1,7 +1,6 @@
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { type Tier } from "@/lib/pricing";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { stripeClient } from "@/lib/secrets";
 
 /**
  * Building a Stripe Checkout session, in one place.
@@ -21,7 +20,8 @@ export async function createCheckoutSession(args: {
 }): Promise<Stripe.Checkout.Session> {
   const { tier, businessName, demoSlug, email } = args;
 
-  const recurring = await monthlyPriceId(tier);
+  const { stripe } = await stripeClient();
+  const recurring = await monthlyPriceId(stripe, tier);
   const base = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
 
   return stripe.checkout.sessions.create({
@@ -71,7 +71,7 @@ export async function createCheckoutSession(args: {
  * variable, so switching test to live is only a change of API key. Created by
  * scripts/stripe-setup.mjs.
  */
-async function monthlyPriceId(tier: Tier): Promise<string> {
+async function monthlyPriceId(stripe: Stripe, tier: Tier): Promise<string> {
   const key = `bit_${tier.key}_monthly`;
   const found = await stripe.prices.list({ lookup_keys: [key], active: true, limit: 1 });
   const price = found.data[0];

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { alert } from "@/lib/telegram";
+import { getSecrets } from "@/lib/secrets";
 
 export const dynamic = "force-dynamic";
 
@@ -56,7 +57,7 @@ type ResendEvent = {
 export async function POST(request: NextRequest) {
   const raw = await request.text();
 
-  const secret = process.env.RESEND_WEBHOOK_SECRET;
+  const { resendWebhookSecret: secret } = await getSecrets();
   if (!secret) {
     // Refuse rather than trust. An unauthenticated endpoint that can suppress
     // addresses is a way for anyone to switch off your outreach.

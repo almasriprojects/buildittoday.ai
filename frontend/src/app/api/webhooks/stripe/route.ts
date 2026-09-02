@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
+import type Stripe from "stripe";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { sendWelcome } from "@/lib/customer-email";
 import { alert } from "@/lib/telegram";
-import { appSecret } from "@/lib/app-secrets";
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+import { getSecrets, stripeClient } from "@/lib/secrets";
 
 // Stripe needs the raw body to verify the signature, so this route must not
 // let Next parse it first.
@@ -38,10 +36,11 @@ function invoiceSubscriptionId(inv: Stripe.Invoice): string | null {
 }
 
 export async function POST(request: NextRequest) {
-  const secret = await appSecret("stripe_webhook_secret", "STRIPE_WEBHOOK_SECRET");
+  const { stripe } = await stripeClient();
+  const { stripeWebhookSecret: secret } = await getSecrets();
   if (!secret) {
     return NextResponse.json(
-      { error: "STRIPE_WEBHOOK_SECRET is not configured" },
+      { error: "No Stripe webhook secret configured — set one in Integrations." },
       { status: 500 }
     );
   }

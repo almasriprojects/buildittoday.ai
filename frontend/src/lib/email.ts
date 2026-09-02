@@ -1,4 +1,5 @@
 import { createServiceRoleClient } from "@/lib/supabase";
+import { getSecrets } from "@/lib/secrets";
 
 export type EmailSettings = {
   from_name: string;
@@ -211,8 +212,8 @@ export async function sendTransactional(args: {
   subject: string;
   text: string;
 }): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return { ok: false, error: "RESEND_API_KEY is not configured" };
+  const { resendApiKey: key } = await getSecrets();
+  if (!key) return { ok: false, error: "No Resend API key configured — set one in Integrations." };
 
   const settings = await getEmailSettings();
 
@@ -241,8 +242,8 @@ async function sendEmail(args: {
   replyTo: string;
   leadId: string;
 }): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return { ok: false, error: "RESEND_API_KEY is not configured" };
+  const { resendApiKey: key } = await getSecrets();
+  if (!key) return { ok: false, error: "No Resend API key configured — set one in Integrations." };
 
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
