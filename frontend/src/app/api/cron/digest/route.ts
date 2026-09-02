@@ -96,7 +96,11 @@ async function build() {
   if (!settings.sending_enabled) blockers.push("Sending is switched off");
   if (settings.test_mode) blockers.push("Test mode on — nothing reaches a real business");
   if (approved === 0) blockers.push("No approved sites — nothing can enter the sequence");
-  if (!process.env.STRIPE_WEBHOOK_SECRET) blockers.push("Stripe webhook unset — a payment would be recorded nowhere");
+  const { data: secrets } = await supabase
+    .from("app_secrets").select("stripe_webhook_secret").eq("id", 1).maybeSingle();
+  if (!(secrets?.stripe_webhook_secret || process.env.STRIPE_WEBHOOK_SECRET)) {
+    blockers.push("Stripe webhook unset — a payment would be recorded nowhere");
+  }
   if (!process.env.RESEND_WEBHOOK_SECRET) blockers.push("Resend webhook unset — bounces go unrecorded");
 
   // Forecast, kept honest about small numbers rather than inventing precision.

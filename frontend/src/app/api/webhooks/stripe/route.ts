@@ -3,6 +3,7 @@ import Stripe from "stripe";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { sendWelcome } from "@/lib/customer-email";
 import { alert } from "@/lib/telegram";
+import { appSecret } from "@/lib/app-secrets";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
@@ -37,7 +38,7 @@ function invoiceSubscriptionId(inv: Stripe.Invoice): string | null {
 }
 
 export async function POST(request: NextRequest) {
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = await appSecret("stripe_webhook_secret", "STRIPE_WEBHOOK_SECRET");
   if (!secret) {
     return NextResponse.json(
       { error: "STRIPE_WEBHOOK_SECRET is not configured" },

@@ -30,7 +30,7 @@ export async function GET() {
   const supabase = createServiceRoleClient();
   const { data } = await supabase
     .from("app_secrets")
-    .select("telegram_bot_token, telegram_chat_id, telegram_webhook_secret, updated_at")
+    .select("telegram_bot_token, telegram_chat_id, telegram_webhook_secret, stripe_webhook_secret, updated_at")
     .eq("id", 1)
     .maybeSingle();
 
@@ -48,6 +48,15 @@ export async function GET() {
         !data?.telegram_bot_token && Boolean(process.env.TELEGRAM_BOT_TOKEN),
       webhookUrl: `${SITE}/api/telegram/webhook`,
       updatedAt: data?.updated_at ?? null,
+    },
+    stripe: {
+      webhookSecret: {
+        set: Boolean(data?.stripe_webhook_secret || process.env.STRIPE_WEBHOOK_SECRET),
+        hint: hint(data?.stripe_webhook_secret ?? null),
+        inDatabase: Boolean(data?.stripe_webhook_secret),
+      },
+      mode: process.env.STRIPE_SECRET_KEY?.startsWith("sk_live_") ? "live" : "test",
+      webhookUrl: `${SITE}/api/webhooks/stripe`,
     },
     // Read-only status of the secrets that still live in Vercel, so this page
     // is one place to see whether the system is wired rather than two.
@@ -99,6 +108,8 @@ export async function PATCH(request: NextRequest) {
       /^-?\d{5,}$/.test(v) ? null : "A chat id is a number, sometimes negative for groups."),
     take("webhookSecret", "telegram_webhook_secret", (v) =>
       v.length >= 16 ? null : "Use at least 16 characters, or press Generate."),
+    take("stripeWebhookSecret", "stripe_webhook_secret", (v) =>
+      v.startsWith("whsec_") ? null : "A Stripe signing secret starts with whsec_"),
   ].filter(Boolean);
 
   if (errors.length) return NextResponse.json({ error: errors[0] }, { status: 400 });
@@ -181,6 +192,65 @@ export async function POST(request: NextRequest) {
       .from("app_secrets").update({ telegram_chat_id: String(id) }).eq("id", 1);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json({ ok: true, chatId: String(id) });
+  }
+
+  if (action === "register_stripe_webhook") {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) return NextResponse.json({ error: "No Stripe key configured." }, { status: 400 });
+
+    const events = [
+      "checkout.session.completed",
+      "customer.subscription.updated",
+      "customer.subscription.deleted",
+      "invoice.payment_failed",
+    ];
+
+    // Reuse an endpoint already pointing here rather than stacking duplicates,
+    // which would deliver every event twice.
+    const list = await fetch("https://api.stripe.com/v1/webhook_endpoints?limit=100", {
+      headers: { Authorization: `Bearer ${key}` },
+    }).then((r) => r.json());
+    const url = `${SITE}/api/webhooks/stripe`;
+    const existing = (list?.data ?? []).find((e: { url: string }) => e.url === url);
+
+    const params = new URLSearchParams();
+    if (!existing) params.set("url", url);
+    events.forEach((e, i) => params.set(`enabled_events[${i}]`, e));
+
+    const res = await fetch(
+      existing
+        ? `https://api.stripe.com/v1/webhook_endpoints/${existing.id}`
+        : "https://api.stripe.com/v1/webhook_endpoints",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: params.toString(),
+      }
+    );
+    const json = await res.json();
+    if (json?.error) {
+      return NextResponse.json({ error: json.error.message }, { status: 502 });
+    }
+
+    // Stripe returns the signing secret only when the endpoint is created, so
+    // it is captured here rather than asked for.
+    if (json.secret) {
+      await supabase.from("app_secrets")
+        .update({ stripe_webhook_secret: json.secret }).eq("id", 1);
+    }
+
+    return NextResponse.json({
+      ok: true,
+      endpointId: json.id,
+      reused: Boolean(existing),
+      secretCaptured: Boolean(json.secret),
+      note: json.secret
+        ? undefined
+        : "Endpoint already existed, so Stripe did not return its secret. Reveal it in the Stripe dashboard and paste it below.",
+    });
   }
 
   if (action === "test_message") {
