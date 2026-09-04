@@ -21,6 +21,7 @@ const RESERVED = new Set([
   "pricing", "services", "faq", "privacy", "terms", "colors", "site", "sites",
   "login", "logout", "register", "dashboard", "account", "settings", "billing",
   "support", "help", "about", "contact", "blog", "docs", "status", "integrations", "agents",
+  "inventory", "analytics", "leads", "customers", "bookings", "emails",
   "sitemap.xml", "robots.txt", "favicon.ico", "opengraph-image", "icon",
 ]);
 

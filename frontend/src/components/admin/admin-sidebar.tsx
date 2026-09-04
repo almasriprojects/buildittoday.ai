@@ -19,6 +19,7 @@ import {
   GitBranch,
   Plug,
   Bot,
+  Building2,
 } from "lucide-react";
 
 const navItems = [
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/admin/potential-customers", label: "Sign-ups", icon: UserPlus },
   { href: "/admin/customers", label: "Customers", icon: Users },
   { href: "/admin/emails", label: "Email", icon: Mail },
+  { href: "/admin/inventory", label: "Lead Inventory", icon: Building2 },
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/attribution", label: "Attribution", icon: GitBranch },
   { href: "/admin/billing", label: "Billing", icon: CreditCard },
