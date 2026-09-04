@@ -34,29 +34,35 @@ const AGENTS: Record<string, {
     does: "Decides which new registrations are worth building a site for, and what trade they are in.",
     matters: "Roughly 40% of filings are holding companies and trusts nobody should be emailed about.",
   },
-  "site-quality-gate": {
+  "place-leads-on-map": {
     order: 3,
+    title: "Map placer",
+    does: "Puts each new lead on the map at the centre of its postcode, using points already held.",
+    matters: "Costs nothing. Geocoding each address individually would mean thousands of requests to a free service.",
+  },
+  "site-quality-gate": {
+    order: 4,
     title: "Quality gate",
     does: "Opens every newly built site and checks the video, images, copy and assets, then approves what passes.",
     matters: "Replaces reviewing each site by hand. Holds the first ten and a sample after that for human eyes.",
     endpoint: "/api/cron/site-gate",
   },
   "email-sequence-hourly": {
-    order: 4,
+    order: 5,
     title: "Outreach sequencer",
     does: "Sends the next email to whoever is due, branching to the warm version for anyone who clicked.",
     matters: "Sends at most three per run so an hourly cadence looks like a person working a list.",
     endpoint: "/api/email/sequence/run",
   },
   "annual-report-reminders": {
-    order: 5,
+    order: 6,
     title: "Renewal reminders",
     does: "Warns customers before Florida's 1 May annual report deadline.",
     matters: "The state adds $400 automatically. This is the strongest reason a customer stays past month three.",
     endpoint: "/api/cron/annual-reports",
   },
   "telegram-daily-digest": {
-    order: 6,
+    order: 7,
     title: "Morning digest",
     does: "Sends one Telegram message covering money, pipeline, engagement and what is blocking revenue.",
     matters: "Alerts fire separately and immediately for anything that cannot wait until morning.",
@@ -77,6 +83,7 @@ function readable(cron: string): string {
   const map: Record<string, string> = {
     "*/15 * * * *": "Every 15 minutes",
     "0 10 * * 1-5": "Weekdays at 10:00 UTC (6am ET)",
+    "40 10 * * 1-5": "Weekdays at 10:40 UTC (6:40am ET)",
     "40 11 * * *": "Daily at 11:40 UTC (7:40am ET)",
     "0 12 * * *": "Daily at 12:00 UTC (8am ET)",
     "5 14 * * *": "Daily at 14:05 UTC (10am ET)",
