@@ -25,6 +25,28 @@ import { createServiceRoleClient } from "@/lib/supabase";
 const SITE = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
 
 /** Sites that must be eyeballed before automation takes over. */
+/**
+ * Sites built by the site-generator engine carry this prefix in
+ * `generator_version`, and this gate must not touch them.
+ *
+ * `judge()` reads the raw HTML: it counts words, and requires a <video> tag
+ * and at least two <img> tags. That works on the server-rendered pages the old
+ * generator produced. An engine build is a client-rendered React SPA, so the
+ * initial HTML is a shell — measured against a real one: 3 words, no <video>,
+ * no <img>. Every engine site would be rejected as "too thin; no hero video".
+ *
+ * They are not ungated. The engine runs 21 rendered-DOM checks that subsume
+ * every one of these and test them properly, against the DOM after JavaScript
+ * has run, and it refuses to publish a build that fails. That verdict travels
+ * with the site; re-judging it here with a weaker instrument could only ever
+ * produce a false rejection.
+ */
+const ENGINE_PREFIX = "engine";
+
+export function isEngineBuilt(generatorVersion: string | null | undefined): boolean {
+  return (generatorVersion ?? "").trim().toLowerCase().startsWith(ENGINE_PREFIX);
+}
+
 const HOLD_FIRST = 10;
 /** Roughly one in this many is held for review afterwards. */
 const SPOT_CHECK_RATE = 20;
@@ -144,7 +166,7 @@ export async function runGate(opts: { dryRun?: boolean; limit?: number } = {}): 
 
   const { data: pending } = await supabase
     .from("demo_sites")
-    .select("demo_slug, public_slug, business_name")
+    .select("demo_slug, public_slug, business_name, generator_version")
     .eq("status", "ready")
     .eq("review_status", "pending")
     .order("created_at", { ascending: true })
@@ -157,6 +179,10 @@ export async function runGate(opts: { dryRun?: boolean; limit?: number } = {}): 
 
   for (const [i, site] of (pending ?? []).entries()) {
     if (!site.public_slug) continue;
+
+    // Already gated by the engine, and by a stricter instrument than this one.
+    // Judging it here would reject it for being a single-page app.
+    if (isEngineBuilt(site.generator_version)) continue;
 
     const v = await judge(site.demo_slug, site.public_slug, site.business_name ?? "");
     out.checked++;
