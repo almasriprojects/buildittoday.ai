@@ -154,6 +154,7 @@ retire the HTML generator. None of it blocks revenue.
 
 | Problem | Where | Severity |
 |---|---|---|
+| **Nothing automated has ever built a site.** `generate-site` writes copy onto the lead and sets `site_generated = true`, but produces no HTML, no storage object and no `demo_sites` row — so the lead cannot be served, gated, enrolled or emailed, while being marked done. All 43 live sites were made by the local Python pipeline on one Mac, by hand, between 18 and 20 August. The scheduled "Site builder" was unscheduled on 8 Sep after it stranded 20 leads, which were restored. | Both | **High — the funnel has no automated supply** |
 | **Cron secret in plaintext** inside `cron.job` command text — anyone with database read access can see it | Supabase | **High — rotate it** |
 | 30 engine sites carry invented statistics and are frozen (they fail the new content gate) — includes two law firms publishing "98% On-time delivery" | Engine | Medium |
 | 195 leads have filing dates in the future | Database | Medium |
