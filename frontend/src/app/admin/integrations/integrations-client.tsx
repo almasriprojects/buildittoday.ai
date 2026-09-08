@@ -6,6 +6,10 @@ import { AlertTriangle, Check, Copy, Search, Send, Link2, Sparkles } from "lucid
 type F = { set: boolean; hint: string | null; inDatabase: boolean; fromEnv: boolean };
 type Data = {
   mode: "test" | "live";
+  email: {
+    sendingEnabled: boolean; testMode: boolean;
+    dailyCap: number; redirectsTo: string | null;
+  };
   telegram: {
     botToken: F; chatId: { set: boolean; value: string | null }; webhookSecret: F;
     ready: boolean; webhookUrl: string;
@@ -109,34 +113,77 @@ export function IntegrationsClient() {
       {msg && <p className="text-sm text-emerald-700"><Check className="mr-1 inline h-3 w-3" />{msg}</p>}
       {err && <p role="alert" className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">{err}</p>}
 
-      {/* Mode — the single most consequential control on the page. */}
-      <div className={`rounded-xl border-2 p-5 ${
-        d.mode === "live" ? "border-red-400 bg-red-50" : "border-emerald-400 bg-emerald-50"}`}>
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div>
-            <h2 className={`text-sm font-semibold ${d.mode === "live" ? "text-red-900" : "text-emerald-900"}`}>
-              {d.mode === "live" ? "LIVE — real cards will be charged" : "Test mode — no real money moves"}
-            </h2>
-            <p className={`mt-1 text-xs leading-relaxed ${d.mode === "live" ? "text-red-800" : "text-emerald-800"}`}>
-              Both key sets are stored. Switching picks which one every payment uses — the live
-              key sits inert until this says live, and flipping back takes a second.
-            </p>
-          </div>
-          <button
-            onClick={() => patch(
+      {/* What is live.
+          There was one switch here, labelled "Go live", and it only ever meant
+          Stripe. Outreach has its own switch on the Email page and postcards a
+          third below, so "are we live" had three answers in three places — and
+          clicking the loudest one changed the least consequential. This states
+          what each channel is doing, in one panel, and switches each from here. */}
+      <div className="rounded-xl border bg-card p-5">
+        <h2 className="text-sm font-semibold">What is live</h2>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Three separate switches. Each changes what reaches the outside world.
+        </p>
+
+        <div className="mt-4 space-y-3">
+          <LiveRow
+            name="Payments"
+            live={d.mode === "live"}
+            liveText="Real cards are charged."
+            testText="Test keys — no money moves."
+            blocked={d.mode === "test" && !d.stripe.secretKeyLive.set
+              ? "Add a live Stripe key below first." : null}
+            busy={busy !== null}
+            onToggle={() => patch(
               { mode: d.mode === "live" ? "test" : "live" },
-              d.mode === "live" ? "Back to test mode." : "Now in LIVE mode — real cards will be charged."
+              d.mode === "live" ? "Payments back in test mode."
+                                : "Payments are LIVE — real cards will be charged.",
             )}
-            disabled={busy !== null || (d.mode === "test" && !d.stripe.secretKeyLive.set)}
-            className={`h-10 shrink-0 rounded-lg px-4 text-sm font-medium text-white disabled:opacity-40 ${
-              d.mode === "live" ? "bg-neutral-800 hover:bg-neutral-700" : "bg-red-600 hover:bg-red-700"}`}
-          >
-            {d.mode === "live" ? "Switch to test" : "Go live"}
-          </button>
+          />
+
+          {/* The only switch here that puts a message in front of a stranger. */}
+          <LiveRow
+            name="Outreach email"
+            live={!d.email.testMode}
+            liveText={d.email.sendingEnabled
+              ? `Emails go to the real business. Up to ${d.email.dailyCap} a day.`
+              : "Would go to real businesses, but sending is switched off."}
+            testText={`Redirected to ${d.email.redirectsTo ?? "the operator"} — no business is contacted.`}
+            blocked={d.email.sendingEnabled ? null : "Sending is off — turn it on under Email."}
+            busy={busy !== null}
+            onToggle={() => {
+              if (!d.email.testMode) {
+                patch({ emailTestMode: true }, "Outreach back in test mode.");
+                return;
+              }
+              const phrase = "SEND TO REAL BUSINESSES";
+              const typed = window.prompt(
+                `This sends real email to real businesses.\n\nType exactly:\n${phrase}`,
+              );
+              if (typed !== phrase) {
+                if (typed !== null) setErr("Phrase didn't match — still in test mode.");
+                return;
+              }
+              patch(
+                { emailTestMode: false, confirmLive: phrase },
+                "Outreach is LIVE — the next send goes to a real business.",
+              );
+            }}
+          />
+
+          <LiveRow
+            name="Postcards"
+            live={d.lob.enabled}
+            liveText="Postcards are posted. Each one costs money."
+            testText="Nothing is posted."
+            blocked={!d.lob.apiKey.set ? "Add a Lob key below first." : null}
+            busy={busy !== null}
+            onToggle={() => patch(
+              { postcardsEnabled: !d.lob.enabled },
+              d.lob.enabled ? "Postcards off." : "Postcards ON — every send costs money.",
+            )}
+          />
         </div>
-        {d.mode === "test" && !d.stripe.secretKeyLive.set && (
-          <p className="mt-3 text-xs text-emerald-800">Add a live Stripe key below before this can be switched.</p>
-        )}
       </div>
 
       {/* Telegram */}
@@ -370,6 +417,46 @@ function Env({ label, ok }: { label: string; ok: boolean }) {
       ok ? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50"}`}>
       {ok ? <Check className="h-4 w-4 text-emerald-700" /> : <AlertTriangle className="h-4 w-4 text-amber-700" />}
       <span className={ok ? "text-emerald-900" : "text-amber-900"}>{label}</span>
+    </div>
+  );
+}
+
+/**
+ * One channel, what it is doing right now, and the switch.
+ *
+ * Colour carries the meaning: red is "this reaches the outside world". A live
+ * channel must never sit there quietly green.
+ */
+function LiveRow({
+  name, live, liveText, testText, blocked, busy, onToggle,
+}: {
+  name: string; live: boolean; liveText: string; testText: string;
+  blocked: string | null; busy: boolean; onToggle: () => void;
+}) {
+  return (
+    <div className={`flex flex-wrap items-center justify-between gap-3 rounded-lg border-2 p-3 ${
+      live ? "border-red-300 bg-red-50" : "border-emerald-300 bg-emerald-50"}`}>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-medium">{name}</span>
+          <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+            live ? "bg-red-600 text-white" : "bg-emerald-600 text-white"}`}>
+            {live ? "LIVE" : "TEST"}
+          </span>
+        </div>
+        <p className={`mt-0.5 text-xs ${live ? "text-red-800" : "text-emerald-800"}`}>
+          {live ? liveText : testText}
+        </p>
+        {blocked && <p className="mt-1 text-xs text-muted-foreground">{blocked}</p>}
+      </div>
+      <button
+        onClick={onToggle}
+        disabled={busy || (!live && Boolean(blocked))}
+        className={`h-9 shrink-0 rounded-lg px-3 text-sm font-medium text-white disabled:opacity-40 ${
+          live ? "bg-neutral-800 hover:bg-neutral-700" : "bg-red-600 hover:bg-red-700"}`}
+      >
+        {live ? "Back to test" : "Go live"}
+      </button>
     </div>
   );
 }

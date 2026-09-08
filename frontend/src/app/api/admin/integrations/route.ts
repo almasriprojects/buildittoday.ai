@@ -42,8 +42,23 @@ export async function GET() {
 
   const mode = (str("mode") as "test" | "live") ?? "test";
 
+  // Outreach lives in email_settings, not app_secrets, but "is it live" is one
+  // question and the operator should not have to know which table answers it.
+  // The Stripe switch on this page was labelled simply "Go live", which read as
+  // the whole system going live when it only ever meant payments.
+  const { data: emailRow } = await supabase
+    .from("email_settings")
+    .select("sending_enabled, test_mode, daily_cap, reply_to")
+    .maybeSingle();
+
   return NextResponse.json({
     mode,
+    email: {
+      sendingEnabled: emailRow?.sending_enabled === true,
+      testMode: emailRow?.test_mode !== false,
+      dailyCap: emailRow?.daily_cap ?? 0,
+      redirectsTo: emailRow?.reply_to ?? null,
+    },
     telegram: {
       botToken: field("telegram_bot_token", "TELEGRAM_BOT_TOKEN"),
       // Not a secret — a number you own. Shown in full so it is checkable.
@@ -134,6 +149,32 @@ export async function PATCH(request: NextRequest) {
   if (typeof body.mode === "string" && ["test", "live"].includes(body.mode)) {
     patch.mode = body.mode;
   }
+  // Leaving email test mode is the one switch on this page that puts a message
+  // in front of a stranger, so it takes the same typed phrase as the Email page
+  // rather than a click. The phrase is checked server-side: a confirmation the
+  // browser can skip is decoration.
+  if (typeof body.emailTestMode === "boolean") {
+    if (body.emailTestMode === false && body.confirmLive !== "SEND TO REAL BUSINESSES") {
+      return NextResponse.json(
+        { error: 'Type "SEND TO REAL BUSINESSES" to take outreach live.' },
+        { status: 400 },
+      );
+    }
+    const { error: emailErr } = await supabase
+      .from("email_settings")
+      .update({ test_mode: body.emailTestMode, updated_at: new Date().toISOString() })
+      .not("id", "is", null);
+    if (emailErr) return NextResponse.json({ error: emailErr.message }, { status: 500 });
+  }
+
+  if (typeof body.emailSendingEnabled === "boolean") {
+    const { error: sendErr } = await supabase
+      .from("email_settings")
+      .update({ sending_enabled: body.emailSendingEnabled, updated_at: new Date().toISOString() })
+      .not("id", "is", null);
+    if (sendErr) return NextResponse.json({ error: sendErr.message }, { status: 500 });
+  }
+
   if (typeof body.postcardsEnabled === "boolean") {
     (patch as Record<string, unknown>).postcards_enabled = body.postcardsEnabled;
   }
