@@ -8,6 +8,10 @@ type Agent = {
   schedule: string; cron: string; active: boolean;
   lastRun: string | null; lastStatus: string | null;
   runs24h: number; failures24h: number; canRunNow: boolean;
+  // The honest verdict, from the real HTTP reply rather than from pg_cron,
+  // which reports success as soon as a request is queued.
+  verdict: string; healthy: boolean; overdue: boolean; neverRun: boolean;
+  hoursSince: number | null; lastHttp: number | null; lastReply: string | null;
 };
 type Resp = { at: string; status: number | null; endpoint: string; body: string; ok: boolean };
 
@@ -90,8 +94,8 @@ export function AgentsClient() {
                  : <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />}
         <span>
           {healthy
-            ? `All ${agents.length} agents active, no failures in the last 24 hours.`
-            : "Something needs attention — see the failures below."}
+            ? `All ${agents.length} agents running. Checked against what each endpoint actually replied, not just whether the schedule fired.`
+            : "Something has stopped or is failing — the agent is marked below."}
         </span>
       </div>
 
@@ -114,12 +118,19 @@ export function AgentsClient() {
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="font-semibold">{a.title}</h2>
-                  {!a.active && (
+                  {!a.active ? (
                     <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">paused</span>
-                  )}
-                  {a.failures24h > 0 && (
-                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-900">
-                      {a.failures24h} failed
+                  ) : a.neverRun ? (
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700">
+                      awaiting first run
+                    </span>
+                  ) : a.healthy ? (
+                    <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-800">
+                      working
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-800">
+                      {a.verdict}
                     </span>
                   )}
                 </div>
@@ -132,7 +143,20 @@ export function AgentsClient() {
                   </span>
                   <span>Last run {ago(a.lastRun)}</span>
                   <span>{a.runs24h} run{a.runs24h === 1 ? "" : "s"} in 24h</span>
+                  {a.lastHttp !== null && (
+                    <span className={a.lastHttp >= 200 && a.lastHttp < 300
+                      ? "text-emerald-700" : "text-red-700"}>
+                      endpoint replied {a.lastHttp}
+                    </span>
+                  )}
                 </div>
+                {/* What it actually said. A job can report a clean run history
+                    while its endpoint has been refusing for days. */}
+                {a.lastReply && (
+                  <p className="mt-2 truncate rounded bg-muted px-2 py-1 font-mono text-[11px] text-muted-foreground">
+                    {a.lastReply}
+                  </p>
+                )}
               </div>
 
               {a.canRunNow ? (

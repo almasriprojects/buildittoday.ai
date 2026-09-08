@@ -30,6 +30,7 @@ type Health = {
   active: boolean;
   hours_since: number | null;
   overdue: boolean;
+  never_run: boolean;
   last_http: number | null;
   last_reply: string | null;
   verdict: string;
@@ -55,14 +56,27 @@ export async function POST(request: NextRequest) {
   }
 
   const rows = (data ?? []) as Health[];
+
+  // never_run is excluded on purpose, and excluding it correctly took two
+  // attempts: the first version treated "has not run recently" and "has never
+  // run" as the same flag, so rescheduling six jobs — which gives them new ids
+  // and an empty history — fired an alarm naming six healthy agents. An alarm
+  // that is wrong once is an alarm that gets muted.
   const broken = rows.filter(
-    (r) => !r.active || r.overdue || r.verdict.startsWith("request failed") ||
+    (r) => !r.active || r.overdue ||
+           r.verdict.startsWith("request failed") ||
            r.verdict.startsWith("endpoint returned"),
   );
+  const newlyScheduled = rows.filter((r) => r.never_run && r.active);
 
   if (broken.length === 0) {
     return NextResponse.json({
-      ok: true, checked: rows.length, broken: 0,
+      ok: true,
+      checked: rows.length,
+      broken: 0,
+      // Reported, not alerted: these are visible on the Agents page and will
+      // resolve themselves the first time each job comes round.
+      awaitingFirstRun: newlyScheduled.map((r) => r.jobname),
       note: "All agents healthy — no alert sent.",
     });
   }

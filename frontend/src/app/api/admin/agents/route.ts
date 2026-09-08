@@ -104,18 +104,41 @@ export async function GET() {
   if (!gate.ok) return gate.response;
 
   const supabase = createServiceRoleClient();
-  const [{ data: status }, { data: responses }] = await Promise.all([
+  const [{ data: status }, { data: responses }, { data: health }] = await Promise.all([
     supabase.rpc("agent_status"),
     supabase.rpc("agent_responses", { limit_n: 25 }),
+    // The honest verdict. agent_status reports what pg_cron believes, which is
+    // that the request was queued; this reports what the endpoint actually
+    // said, and catches a job that has stopped running entirely.
+    supabase.rpc("agent_health"),
   ]);
+
+  type HealthRow = {
+    jobname: string; verdict: string; overdue: boolean; never_run: boolean;
+    hours_since: number | null; last_http: number | null; last_reply: string | null;
+  };
+  const healthBy = new Map<string, HealthRow>(
+    ((health ?? []) as HealthRow[]).map((h) => [h.jobname, h]),
+  );
 
   const rows = ((status ?? []) as Row[]).map((r) => {
     const meta = AGENTS[r.jobname] ?? {
       order: 99, title: r.jobname, does: "", matters: "",
     };
+    const h = healthBy.get(r.jobname);
     return {
       name: r.jobname,
       ...meta,
+      // What the endpoint really returned, and whether the job is still
+      // running at all. "ok" here means working; pg_cron's "succeeded" only
+      // ever meant the request left the building.
+      verdict: h?.verdict ?? "unknown",
+      healthy: (h?.verdict ?? "") === "ok",
+      overdue: Boolean(h?.overdue),
+      neverRun: Boolean(h?.never_run),
+      hoursSince: h?.hours_since ?? null,
+      lastHttp: h?.last_http ?? null,
+      lastReply: h?.last_reply ?? null,
       schedule: readable(r.schedule),
       cron: r.schedule,
       active: r.active,
@@ -143,7 +166,10 @@ export async function GET() {
   return NextResponse.json({
     agents: rows,
     recent,
-    healthy: rows.every((a) => a.active && a.failures24h === 0),
+    // A job awaiting its first run is not a fault, so it does not make the
+    // whole board unhealthy.
+    healthy: rows.every((a) => a.active && (a.verdict === "ok" || a.neverRun)),
+    awaitingFirstRun: rows.filter((a) => a.neverRun).map((a) => a.title),
   });
 }
 
