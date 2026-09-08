@@ -1,10 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 // POST /api/leads/geocode — geocode a batch of leads missing coordinates and store them.
 // Body: { batchSize?: number } (default 50)
 // Returns the number of leads geocoded and how many remain.
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function POST(request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   try {
     const body = await request.json().catch(() => ({}));
     const batchSize = Math.min(Number(body.batchSize ?? "50"), 100);

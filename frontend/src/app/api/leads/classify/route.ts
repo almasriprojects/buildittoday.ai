@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 // One classify-leads invocation self-limits to ~127s, so allow headroom.
@@ -15,7 +16,14 @@ async function countUnclassified() {
 }
 
 // GET — progress only, for the admin UI to show how much is left.
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function GET() {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   const supabase = createServiceRoleClient();
   const [{ count: unclassified }, { count: total }, { count: qualified }] = await Promise.all([
     supabase.from("leads").select("*", { count: "exact", head: true }).is("target_fit", null),
@@ -39,6 +47,9 @@ export async function GET() {
  * of the UI sitting silent for 50 minutes.
  */
 export async function POST(_request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   const before = await countUnclassified();
   if (before === 0) {
     return NextResponse.json({ ok: true, classified: 0, remaining: 0, done: true });

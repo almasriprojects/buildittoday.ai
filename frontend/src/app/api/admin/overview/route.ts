@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 export const dynamic = "force-dynamic";
 
@@ -11,7 +12,14 @@ export const dynamic = "force-dynamic";
  * which is the point: the day a real customer exists you need to be able to
  * trust what is on screen.
  */
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function GET() {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   const supabase = createServiceRoleClient();
 
   // Count rows in a table, optionally filtered by one column = value.

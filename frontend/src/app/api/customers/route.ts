@@ -1,8 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAnonClient, createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 // GET - List all customers (admin-only; requires SUPABASE_SERVICE_ROLE_KEY)
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function GET(request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   try {
     const supabase = createServiceRoleClient();
     const { searchParams } = new URL(request.url);
@@ -45,6 +53,9 @@ export async function GET(request: NextRequest) {
 
 // POST - Create a new customer
 export async function POST(request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   try {
     const body = await request.json();
     const {

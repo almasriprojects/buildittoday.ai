@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 // E-mail validation: a basic filter that rejects placeholder/junk addresses
 // commonly found in registry data (example.com, test, dots, etc.).
@@ -75,7 +76,14 @@ const SORTABLE_COLUMNS = new Set([
 ]);
 
 // GET /api/leads — list leads from Supabase with optional filters
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function GET(request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const search = searchParams.get("search")?.toLowerCase() ?? "";

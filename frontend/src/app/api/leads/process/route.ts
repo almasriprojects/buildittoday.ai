@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { requireAdmin } from "@/lib/admin-auth";
 
 // Edge function names — update these to match the deployed Supabase functions.
 // Confirmed deployed: sunbiz-pull, classify-leads, generate-site.
@@ -21,7 +22,14 @@ const EDGE_FUNCTIONS = {
 // (observed: 475 leads in ~2 minutes). Running it synchronously would exceed
 // Vercel's function timeout, so we fire-and-forget it in the background:
 // the request triggers the edge function and returns immediately.
+// Every handler below is admin-only. The middleware matcher covers /admin/*
+// and never covered /api/*, so these answered 200 to anyone who asked: the
+// lead table, the customer list, sign-ups, and the whole site inventory were
+// readable without signing in. A page-level redirect is not authorisation.
 export async function POST(request: NextRequest) {
+  const gate = await requireAdmin();
+  if (!gate.ok) return gate.response;
+
   try {
     const body = await request.json();
     const { action = "all", leadId, force = false } = body;
