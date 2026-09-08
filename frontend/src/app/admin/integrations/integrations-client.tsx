@@ -6,7 +6,11 @@ import { AlertTriangle, Check, Copy, Search, Send, Link2, Sparkles } from "lucid
 type F = { set: boolean; hint: string | null; inDatabase: boolean; fromEnv: boolean };
 type Data = {
   mode: "test" | "live";
-  email: {
+  // Optional on purpose. A response served before this field existed — a
+  // cached one, or a tab left open across a deploy — has no `email`, and a
+  // page that reads straight through it crashes entirely rather than
+  // degrading. Defaulted at the point of use below.
+  email?: {
     sendingEnabled: boolean; testMode: boolean;
     dailyCap: number; redirectsTo: string | null;
   };
@@ -101,6 +105,13 @@ export function IntegrationsClient() {
   if (loading) return <p className="py-10 text-center text-sm text-muted-foreground">Loading…</p>;
   if (!d) return <p role="alert" className="text-sm text-red-700">{err}</p>;
 
+  // Defaulted here as well as on load: state can be set from more than one
+  // place, and a page that shows "TEST" when it does not know is safe, whereas
+  // one that crashes tells you nothing at all.
+  const email = d.email ?? {
+    sendingEnabled: false, testMode: true, dailyCap: 0, redirectsTo: null,
+  };
+
   return (
     <div className="space-y-6">
       <div>
@@ -144,15 +155,15 @@ export function IntegrationsClient() {
           {/* The only switch here that puts a message in front of a stranger. */}
           <LiveRow
             name="Outreach email"
-            live={!d.email.testMode}
-            liveText={d.email.sendingEnabled
-              ? `Emails go to the real business. Up to ${d.email.dailyCap} a day.`
+            live={!email.testMode}
+            liveText={email.sendingEnabled
+              ? `Emails go to the real business. Up to ${email.dailyCap} a day.`
               : "Would go to real businesses, but sending is switched off."}
-            testText={`Redirected to ${d.email.redirectsTo ?? "the operator"} — no business is contacted.`}
-            blocked={d.email.sendingEnabled ? null : "Sending is off — turn it on under Email."}
+            testText={`Redirected to ${email.redirectsTo ?? "the operator"} — no business is contacted.`}
+            blocked={email.sendingEnabled ? null : "Sending is off — turn it on under Email."}
             busy={busy !== null}
             onToggle={() => {
-              if (!d.email.testMode) {
+              if (!email.testMode) {
                 patch({ emailTestMode: true }, "Outreach back in test mode.");
                 return;
               }
