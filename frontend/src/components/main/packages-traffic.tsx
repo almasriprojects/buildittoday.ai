@@ -67,7 +67,12 @@ export function TrafficSection({ colors = defaultColors }: { colors?: ThemeColor
           <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: c.primary }}>Growth & Traffic</span>
           <h2 className="text-3xl md:text-5xl font-light" style={{ color: c.dark }}>A launch is day one, not the finish line</h2>
           <p className="mt-4 text-lg" style={{ color: c.textOnLight }}>Traffic compounds — slowly, then suddenly. SEO + AEO with Ahrefs, Analytics + CRO with PostHog.</p>
-          <div className="mt-6 text-4xl font-light" style={{ color: c.dark }}>Starting at <span style={{ color: c.primary }}>$2,000/mo</span></div>
+          {/* No price here. "$2,000/mo" was invented — it is not in
+              lib/pricing.ts, the only place a price for this business is
+              defined, and it sat one screen below a hero offering a site
+              from $750. Growth work is quoted per business; asserting a
+              number nobody can honour made the real ladder look
+              negotiable. */}
         </motion.div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {trafficLayers.map((t, i) => (

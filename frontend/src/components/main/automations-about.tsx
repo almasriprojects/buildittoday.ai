@@ -19,7 +19,7 @@ export function AutomationsSection({ colors = defaultColors }: { colors?: ThemeC
         <motion.div {...fadeUp} className="text-center max-w-2xl mx-auto mb-16">
           <span className="inline-block text-xs font-semibold tracking-[0.2em] uppercase mb-4" style={{ color: c.primaryLight }}>Automations</span>
           <h2 className="text-3xl md:text-5xl font-light text-on-dark-white">A website that works the way a good employee would</h2>
-          <p className="mt-4 text-lg text-on-dark">Pick your modules. Take one. Take all eight. Starting at <span style={{ color: c.primaryLight }}>$2,500</span>.</p>
+            <p className="mt-4 text-lg text-on-dark">Pick your modules. Take one, or take all eight.</p>
         </motion.div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {automationModules.map((m, i) => (
