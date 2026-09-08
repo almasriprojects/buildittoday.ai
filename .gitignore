@@ -39,9 +39,14 @@ category_photos/
 *.png
 *.jpg
 *.jpeg
-!public/**/*.png
-!public/**/*.jpg
-!public/**/*.svg
+# Anchored at any depth. These were "!public/**" which resolves from the
+# repository root, and the application lives in frontend/ — so the un-ignore
+# never matched and frontend/public/images/hero-photo.png was silently absent
+# from every deploy. The homepage requested it and got a 404.
+!**/public/**/*.png
+!**/public/**/*.jpg
+!**/public/**/*.jpeg
+!**/public/**/*.svg
 
 # supabase CLI local state
 **/supabase/.temp/
