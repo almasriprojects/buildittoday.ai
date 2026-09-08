@@ -90,7 +90,9 @@ export async function renderPublicSite(
       : html + layer;
   }
 
-  if (track) recordView(site.demo_slug, request).catch(() => {});
+  // Both slugs: demo_slug identifies the lead, publicSlug is the address a
+  // human can actually open.
+  if (track) recordView(site.demo_slug, slug, request).catch(() => {});
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
@@ -132,7 +134,7 @@ export async function serveEngineAsset(rawSlug: string, path: string): Promise<N
   return new NextResponse(res.body, { status: 200, headers });
 }
 
-async function recordView(demoSlug: string, request: NextRequest) {
+async function recordView(demoSlug: string, publicSlug: string, request: NextRequest) {
   const url = new URL(request.url);
   if (url.searchParams.get("admin") === "1") return;
   const supabase = createServiceRoleClient();
@@ -140,10 +142,16 @@ async function recordView(demoSlug: string, request: NextRequest) {
   const now = new Date().toISOString();
   const { data: lead } = await supabase
     .from("leads")
-    .select("id, demo_viewed_at, email_clicked_at, acquisition_channel")
+    .select("id, business_name, city, demo_viewed_at, email_clicked_at, acquisition_channel")
     .eq("demo_slug", demoSlug)
     .maybeSingle();
   if (!lead) return;
+
+  // The first time a business opens the site we built them is the first real
+  // evidence any of this works, so it is worth interrupting someone for.
+  // Only the first time: a visitor reading four pages must not send four
+  // messages, and someone who returns next week should not either.
+  const isFirstView = !lead.demo_viewed_at;
 
   const channel = src === "postcard" ? "postcard" : "email";
   const patch: Record<string, string> = {};
@@ -162,6 +170,28 @@ async function recordView(demoSlug: string, request: NextRequest) {
       .update({ status: "clicked", last_event_at: now, updated_at: now })
       .eq("lead_id", lead.id)
       .eq("status", "active");
+  }
+
+  if (isFirstView) {
+    try {
+      const { alert } = await import("@/lib/telegram");
+      const who = [lead.business_name, lead.city].filter(Boolean).join(" · ");
+      const site = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
+      await alert(
+        "viewed",
+        `${lead.business_name ?? "A lead"} opened their site`,
+        [
+          who,
+          isFromOutreach
+            ? `Came from the ${channel} — they clicked the link.`
+            : "Arrived directly, without using the link we sent.",
+          `${site}/${publicSlug}`,
+        ].join("\n"),
+      );
+    } catch {
+      // Never let a notification cost somebody their page. This runs inside a
+      // request that is already serving HTML.
+    }
   }
 }
 

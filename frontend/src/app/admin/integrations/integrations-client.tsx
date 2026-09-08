@@ -27,12 +27,19 @@ type Data = {
   cron: { set: boolean };
 };
 
+/** Typed to leave test mode. Checked here and again on the server. */
+const LIVE_PHRASE = "SEND TO REAL BUSINESSES";
+
 export function IntegrationsClient() {
   const [d, setD] = useState<Data | null>(null);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  // Inline rather than window.prompt: prompt() is blocked in sandboxed and
+  // embedded browsers, where the switch silently did nothing.
+  const [confirming, setConfirming] = useState(false);
+  const [confirmText, setConfirmText] = useState("");
   const [v, setV] = useState<Record<string, string>>({});
 
   const set = (k: string, val: string) => setV((p) => ({ ...p, [k]: val }));
@@ -167,19 +174,21 @@ export function IntegrationsClient() {
                 patch({ emailTestMode: true }, "Outreach back in test mode.");
                 return;
               }
-              const phrase = "SEND TO REAL BUSINESSES";
-              const typed = window.prompt(
-                `This sends real email to real businesses.\n\nType exactly:\n${phrase}`,
-              );
-              if (typed !== phrase) {
-                if (typed !== null) setErr("Phrase didn't match — still in test mode.");
-                return;
-              }
-              patch(
-                { emailTestMode: false, confirmLive: phrase },
-                "Outreach is LIVE — the next send goes to a real business.",
-              );
+              setConfirming((c) => !c);
             }}
+            confirm={email.testMode && confirming ? {
+              phrase: LIVE_PHRASE,
+              value: confirmText,
+              onChange: setConfirmText,
+              onCancel: () => { setConfirming(false); setConfirmText(""); },
+              onConfirm: () => {
+                patch(
+                  { emailTestMode: false, confirmLive: LIVE_PHRASE },
+                  "Outreach is LIVE — the next send goes to a real business.",
+                );
+                setConfirming(false); setConfirmText("");
+              },
+            } : undefined}
           />
 
           <LiveRow
@@ -439,14 +448,19 @@ function Env({ label, ok }: { label: string; ok: boolean }) {
  * channel must never sit there quietly green.
  */
 function LiveRow({
-  name, live, liveText, testText, blocked, busy, onToggle,
+  name, live, liveText, testText, blocked, busy, onToggle, confirm,
 }: {
   name: string; live: boolean; liveText: string; testText: string;
   blocked: string | null; busy: boolean; onToggle: () => void;
+  confirm?: {
+    phrase: string; value: string;
+    onChange: (v: string) => void; onCancel: () => void; onConfirm: () => void;
+  };
 }) {
   return (
-    <div className={`flex flex-wrap items-center justify-between gap-3 rounded-lg border-2 p-3 ${
+    <div className={`rounded-lg border-2 p-3 ${
       live ? "border-red-300 bg-red-50" : "border-emerald-300 bg-emerald-50"}`}>
+    <div className="flex flex-wrap items-center justify-between gap-3">
       <div className="min-w-0">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium">{name}</span>
@@ -466,8 +480,38 @@ function LiveRow({
         className={`h-9 shrink-0 rounded-lg px-3 text-sm font-medium text-white disabled:opacity-40 ${
           live ? "bg-neutral-800 hover:bg-neutral-700" : "bg-red-600 hover:bg-red-700"}`}
       >
-        {live ? "Back to test" : "Go live"}
+        {live ? "Back to test" : confirm ? "Cancel" : "Go live"}
       </button>
+    </div>
+
+    {confirm && (
+      <div className="mt-3 rounded-lg border border-red-300 bg-white p-3">
+        <p className="text-xs text-red-900">
+          This sends real email to real businesses. Type{" "}
+          <code className="rounded bg-red-50 px-1 font-mono">{confirm.phrase}</code> to continue.
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          <input
+            autoFocus
+            value={confirm.value}
+            onChange={(e) => confirm.onChange(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && confirm.value === confirm.phrase) confirm.onConfirm();
+              if (e.key === "Escape") confirm.onCancel();
+            }}
+            placeholder={confirm.phrase}
+            className="h-9 min-w-0 flex-1 rounded-lg border px-2 font-mono text-sm"
+          />
+          <button
+            onClick={confirm.onConfirm}
+            disabled={confirm.value !== confirm.phrase}
+            className="h-9 shrink-0 rounded-lg bg-red-600 px-3 text-sm font-medium text-white hover:bg-red-700 disabled:opacity-40"
+          >
+            Send to real businesses
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 }

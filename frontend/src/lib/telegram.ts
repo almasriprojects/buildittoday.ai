@@ -89,7 +89,11 @@ export type AlertKind =
   | "cap_reached"
   // Something scheduled has stopped running, or is running and failing.
   // Silence from the watchdog is the success case, so this always means work.
-  | "agent_down";
+  | "agent_down"
+  // Outreach actually left the building, and somebody actually opened it.
+  // The second one is the first real sign the business works.
+  | "sent"
+  | "viewed";
 
 const ALERT_ICON: Record<AlertKind, string> = {
   payment: "💰",
@@ -99,6 +103,8 @@ const ALERT_ICON: Record<AlertKind, string> = {
   sequencer_failed: "❌",
   cap_reached: "⏸",
   agent_down: "🔴",
+  sent: "📤",
+  viewed: "👀",
 };
 
 export async function alert(kind: AlertKind, title: string, detail?: string) {

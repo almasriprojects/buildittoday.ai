@@ -152,6 +152,25 @@ export async function runSequence(): Promise<SequenceResult> {
     }
   }
 
+
+  // Report what actually left the building. Only when something did, and never
+  // for a rehearsal — a message claiming three businesses were contacted when
+  // they were not is worse than no message at all.
+  if (result.sent.length > 0 && !settings.test_mode) {
+    try {
+      const { alert } = await import("@/lib/telegram");
+      const lines = result.sent.map((x) => `• ${x.business} — touch ${x.step}`);
+      const left = Math.max(0, settings.daily_cap - used - result.sent.length);
+      await alert(
+        "sent",
+        `${result.sent.length} email${result.sent.length === 1 ? "" : "s"} sent`,
+        `${lines.join("\n")}\n\n${left} left of today's cap of ${settings.daily_cap}.`,
+      );
+    } catch {
+      // Telegram must never be able to fail a send that already happened.
+    }
+  }
+
   return result;
 }
 
