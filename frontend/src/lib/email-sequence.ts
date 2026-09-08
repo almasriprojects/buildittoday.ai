@@ -103,6 +103,12 @@ export async function runSequence(): Promise<SequenceResult> {
     .from("email_sends")
     .select("*", { count: "exact", head: true })
     .gte("sent_at", midnight)
+    // Rehearsals go to the operator's own inbox, so they are not contact with
+    // anyone and must not spend the day's allowance for contacting people.
+    // Twenty-five test emails had exhausted a cap of twenty-five, so the first
+    // hour of real sending reported "Daily cap reached (25/25)" and sent
+    // nothing at all — the switch was live and the pipeline was idle.
+    .eq("was_test", false)
     .is("error", null);
 
   const used = sentToday ?? 0;
