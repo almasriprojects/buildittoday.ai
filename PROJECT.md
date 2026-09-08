@@ -1,7 +1,7 @@
 # BuildItToday.ai — the only project document
 
-**Written 8 September 2026.** This replaces the 34 markdown files that came
-before it. Every number here was read from the live database, the two
+**Written 8 September 2026, updated the same evening.** This replaces the 34
+markdown files that came before it. Every number here was read from the live database, the two
 repositories, or a real build — not carried over from an older document. Where
 something is unverified it says so.
 
@@ -50,7 +50,8 @@ here — see section 7.
 | Leads on the map | 47,200 of 47,201 |
 | Demo sites built | 43 — **all single-HTML**, all in `demo-sites` bucket |
 | Demo sites approved | **42** |
-| **Emails sent, ever** | **0** |
+| **Emails sent, ever** | **3** — all test, all to the operator, **0 to a business** |
+| Leads enrolled and active in the sequence | **42** |
 | Engine builds published | **0** — `demo-dist` bucket is empty |
 
 **1.7% is the ceiling on email.** Everything else needs a postcard, which costs
@@ -76,97 +77,76 @@ migration. **It is uncommitted and has never served a request.**
 
 - **Build cost.** The documented $0.09 / $0.25 has never been measured. The CLI
   now prints it; the next build will settle it.
-- **Stripe is on test keys.** No live payment has ever been taken.
+- **No live payment has ever been taken.** The live catalogue and webhook now
+  exist, but the live secret key is not yet in the application, so the money
+  path is built and unproven.
 - **The live engine API.** No authenticated call has been made to it from here.
 
 ---
 
 ## 3. The plan, in order
 
-Do these in sequence. Do not skip ahead. Each step ends in something you can
-check, and the first four are the only ones between you and a reply from a real
-business.
+### Done on 8 September
 
-### Step 1 — Turn on email sending
+**Step 1 — email sending is on.** Postal address set to 1630 NW 19th Street,
+Unit 710, Miami, FL 33125 — legally required in every commercial email.
+`sending_enabled` on, daily cap raised from 10 to 25. The whole chain was then
+proven: three emails sent, all accepted by Resend, all redirected to the
+operator by test mode, none to a business. The unsubscribe link was tested and
+works. `List-Unsubscribe` is set.
 
-Nothing else matters until this works.
+**The data leak is closed.** Eleven API routes answered 200 to anyone —
+`/api/admin/overview`, `/api/demo-sites`, `/api/customers`,
+`/api/potential-customers` and the lead routes all returned real data with no
+session. They now require an admin. Found while checking it was safe to send;
+that batch would have driven 25 businesses to a site whose lead and customer
+tables were public.
 
-- Resend: verify the sending domain, set the API key in the deployed environment
-- Add the postal address at `/admin/emails` — **CAN-SPAM requires a physical
-  address in every commercial email; without it the whole batch is illegal**
-- Confirm test mode is ON, send one email to yourself, confirm it arrives
+**Stripe is built out in both modes** on the real account
+(`acct_1U4JrcAoS4OZ0yM0`). Three products and three recurring prices per mode,
+tax code `txcd_10701100`, found at runtime by `lookup_key`:
 
-**Check:** an email from the real sequence lands in your own inbox, renders
-correctly, and its unsubscribe link works.
+| Tier | lookup_key | Monthly |
+|---|---|---|
+| Starter | `bit_starter_monthly` | $50 |
+| Professional | `bit_professional_monthly` | $99 |
+| Signature | `bit_signature_monthly` | $199 |
 
-### Step 2 — Send twenty
+The setup fees ($750 / $1,500 / $3,500) need no products — checkout creates
+them inline, named after the business, tax code `txcd_10000000`. Verified on a
+real session: two line items, $99 recurring and $1,500 one-time, $1,599 total.
 
-Not 818. Twenty.
+Webhooks created in both modes at `/api/webhooks/stripe` for
+`checkout.session.completed`, `customer.subscription.updated`,
+`customer.subscription.deleted`, `invoice.payment_failed`.
 
-- Pick 20 approved sites whose leads have an email — use `/admin/inventory` to
-  choose the cohort
-- Read all 20 emails and open all 20 demo URLs yourself before sending
-- Turn test mode off, send, and watch
+| Mode | Webhook secret |
+|---|---|
+| Live | `whsec_Vf2HELCOi2kJ3heawJ2m2BbrEuRdlr1z` |
+| Test | `whsec_yHaTi9CbZTRyBPSxXVdyJtXyjqp5lk9t` |
 
-**Check:** 20 delivered, 0 bounces, opens and clicks recorded on the leads.
+### Step 2 — the three things left before money
 
-This is the single most valuable thing you can do. It tells you whether any of
-this sells, which nothing built so far has ever tested.
+**a. Paste the two Stripe secret keys.** Developers → API keys, one per mode,
+into `/admin/integrations`. Stripe never exposes secret keys through its API,
+so this cannot be automated. Until it is done the application still uses the
+old sandbox account and **no real payment can be taken**.
 
-### Step 3 — Answer replies by hand
+**b. Verify a live checkout.** Confirm the session comes back as `cs_live_…`,
+pay it, and confirm the webhook creates the customer row.
 
-There is no automation to build here. Reply personally, book calls, and find out
-what people actually object to. The email sequence handles follow-up on its own.
+**c. Flip `test_mode` to false.** 25 emails go that day, 17 the next, then
+touches 2, 3 and 4 run on their own schedule.
 
-**Check:** you have spoken to at least one business owner.
+### Step 3 — answer replies by hand
 
-### Step 4 — Take a real payment
+No automation to build. Reply personally and find out what people object to.
 
-Only once someone wants to buy.
+### Step 4 onward — the engine
 
-- Run `frontend/scripts/stripe-setup.mjs` against live keys
-- Register the live webhook, put live keys in `/admin/integrations`
-- Do one real checkout end to end and confirm the customer record appears
-
-**Check:** money in the account, customer row created, welcome email sent.
-
-**Steps 1–4 are the whole business.** Everything below improves it.
-
-### Step 5 — Finish the engine integration
-
-The serving layer is written. It needs proving.
-
-1. Apply `20260906_create_demo_dist_bucket.sql`
-2. Upload the Inshore build (114 files) to `demo-dist/inshore-landscape-design/`
-3. Insert its `demo_sites` row with `generator_version = 'engine-1'`
-4. Load `buildittoday.ai/inshore-landscape-design` and check: JS loads, images
-   and video play, `/services` deep-links, the offer modal opens, the response
-   carries `X-Robots-Tag: noindex`
-5. Commit the serving layer — it is still uncommitted
-
-**Check:** the Inshore site serves correctly from the real domain.
-
-### Step 6 — Automate the build loop
-
-- A cron tick submits builds; a **later** tick collects them. Vercel functions
-  die at 300 seconds and a build takes longer — never poll inside one request.
-- Record `gates`, `spend`, and `generator_version` on `demo_sites`
-- Hard daily spend cap so a loop cannot drain the budget overnight
-- Only `interrupted` jobs may be retried. A `blocked` build already cost money.
-
-**Check:** 20 sites built unattended, spend within cap, a broken brief recorded
-as blocked and not retried.
-
-### Step 7 — Retire the HTML generator
-
-Once step 6 is proven. Do not finish deploying v13. The 43 legacy sites keep
-serving through the existing single-file path; `site-gate.ts` stays alive for
-them alone.
-
-### Step 8 — Deploy the engine properly
-
-It runs on a laptop today. It needs a container host, persistent artifact
-storage, secrets, and a restart policy. Fly.io config exists but is unverified.
+Unchanged from the original plan: apply the `demo-dist` migration, upload the
+Inshore build, prove the serving path, then automate the build loop, then
+retire the HTML generator. None of it blocks revenue.
 
 ---
 
@@ -175,9 +155,9 @@ storage, secrets, and a restart policy. Fly.io config exists but is unverified.
 | Problem | Where | Severity |
 |---|---|---|
 | **Cron secret in plaintext** inside `cron.job` command text — anyone with database read access can see it | Supabase | **High — rotate it** |
-| `/api/*` routes have no server-side admin guard; middleware only covers `/admin/*` | BuildItToday | **High — lead and customer data** |
 | 30 engine sites carry invented statistics and are frozen (they fail the new content gate) — includes two law firms publishing "98% On-time delivery" | Engine | Medium |
 | 195 leads have filing dates in the future | Database | Medium |
+| SunBiz runs twice: Vercel cron at 06:00 UTC does the work, `pg_cron` at 10:00 repeats it and logs a false "skipped" on the Agents page | Both | Low |
 | 11,517 leads classified "Unclear" — 24% of the book | Database | Medium |
 | 12 of 18 tables exist nowhere in git; repo cannot rebuild the database | BuildItToday | Medium |
 | `.env` has no trailing newline on the VPS — the documented corruption trap is armed | Engine host | Low |
