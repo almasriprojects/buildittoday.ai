@@ -13,7 +13,7 @@ export default function Error({ reset }: { error: Error; reset: () => void }) {
         {/* Deliberately no stack trace or error message: it tells a visitor
             nothing useful and can leak internals. */}
         <p className="mt-4 leading-relaxed text-neutral-600">
-          Try again in a moment. If it keeps happening, call (305) 505-0153 and we&rsquo;ll
+          Try again in a moment. If it keeps happening, call (502) 406-0382 and we&rsquo;ll
           sort it out.
         </p>
         <button

@@ -108,8 +108,8 @@ export function ContactSection({ colors = defaultColors }: { colors?: ThemeColor
             build your site.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a href="tel:+13055050153" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
-              (305) 505-0153
+            <a href="tel:+15024060382" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: c.primary }}>
+              (502) 406-0382
             </a>
             <a href="mailto:contact@buildittoday.ai" className="inline-flex items-center justify-center px-10 h-12 rounded-full text-base font-medium border transition-colors" style={{ borderColor: c.border, color: c.dark }}>
               contact@buildittoday.ai

@@ -133,8 +133,8 @@ export default async function AccountPage() {
           </dl>
           <p className="mt-5 border-t pt-4 text-sm text-neutral-600">
             To change your card or cancel, call{" "}
-            <a href="tel:+13055050153" className="font-medium text-neutral-900 hover:underline">
-              (305) 505-0153
+            <a href="tel:+15024060382" className="font-medium text-neutral-900 hover:underline">
+              (502) 406-0382
             </a>{" "}
             or email us. No contract — cancel any time and the site stays yours.
           </p>
@@ -154,10 +154,10 @@ export default async function AccountPage() {
               Email us
             </a>
             <a
-              href="tel:+13055050153"
+              href="tel:+15024060382"
               className="inline-flex h-11 items-center rounded-lg border border-neutral-300 px-5 text-sm font-medium transition hover:bg-neutral-50"
             >
-              (305) 505-0153
+              (502) 406-0382
             </a>
           </div>
         </section>

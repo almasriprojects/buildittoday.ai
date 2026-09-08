@@ -75,12 +75,12 @@ export function Navigation() {
         {/* Right side */}
         <div className="flex items-center gap-4">
           <a
-            href="tel:+13055050153"
+            href="tel:+15024060382"
             className={`hidden lg:block text-sm font-medium transition-colors ${
               transparent ? "text-white/85 hover:text-white" : "text-muted-foreground hover:text-foreground"
             }`}
           >
-            (305) 505-0153
+            (502) 406-0382
           </a>
           <Link href="/auth/login">
             <Button

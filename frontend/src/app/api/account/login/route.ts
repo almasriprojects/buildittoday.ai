@@ -74,7 +74,7 @@ this — nothing has changed on your account.
 
 BuildItToday.ai
 contact@buildittoday.ai
-(305) 505-0153`,
+(502) 406-0382`,
     });
 
     return generic;

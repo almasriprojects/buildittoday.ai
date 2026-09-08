@@ -80,7 +80,7 @@ Already done it? Let us know and we'll stop reminding you:
 
 Anan
 BuildItToday.ai
-(305) 505-0153 · contact@buildittoday.ai`;
+(502) 406-0382 · contact@buildittoday.ai`;
 }
 
 /**

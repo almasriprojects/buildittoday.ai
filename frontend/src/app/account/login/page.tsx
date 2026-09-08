@@ -11,7 +11,7 @@ const MESSAGES: Record<string, string> = {
   expired: "That link has expired or has already been used. Enter your email for a fresh one.",
   missing: "That link was incomplete. Enter your email and we'll send another.",
   noaccount: "We couldn't find an account for that address. If you've just paid, give it a minute — or call us.",
-  unknown: "Something went wrong signing you in. Try again, or call us on (305) 505-0153.",
+  unknown: "Something went wrong signing you in. Try again, or call us on (502) 406-0382.",
 };
 
 export default async function AccountLoginPage({
@@ -44,8 +44,8 @@ export default async function AccountLoginPage({
 
         <p className="mt-10 border-t pt-6 text-sm text-neutral-500">
           Need a hand?{" "}
-          <a href="tel:+13055050153" className="font-medium text-neutral-900 hover:underline">
-            (305) 505-0153
+          <a href="tel:+15024060382" className="font-medium text-neutral-900 hover:underline">
+            (502) 406-0382
           </a>{" "}
           or{" "}
           <a

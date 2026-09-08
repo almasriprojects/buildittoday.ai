@@ -24,7 +24,7 @@ export default function PrivacyPage() {
         <p>
           BuildItToday.ai builds and hosts websites for small businesses in Florida. You can reach
           us at <a href="mailto:contact@buildittoday.ai">contact@buildittoday.ai</a> or
-          (305) 505-0153. Our postal address appears at the bottom of every email we send.
+          (502) 406-0382. Our postal address appears at the bottom of every email we send.
         </p>
       </LegalSection>
 

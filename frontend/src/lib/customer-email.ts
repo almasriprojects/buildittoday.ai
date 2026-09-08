@@ -17,7 +17,7 @@ import { TIERS, money } from "@/lib/pricing";
  */
 
 const SITE = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
-const PHONE = "(305) 505-0153";
+const PHONE = "(502) 406-0382";
 const CONTACT = "contact@buildittoday.ai";
 
 type Kind = "welcome" | "details_reminder" | "site_live";

@@ -133,7 +133,7 @@ export function offerLayer(opts: {
     <div class="bit-grid">${cards}</div>
     <p class="bit-foot">
       You own the code. No contract — cancel the monthly any time and the site stays yours.
-      Prefer to talk first? Call <a href="tel:+13055050153" style="color:#0D9488;font-weight:600">(305) 505-0153</a>
+      Prefer to talk first? Call <a href="tel:+15024060382" style="color:#0D9488;font-weight:600">(502) 406-0382</a>
       or email <a href="mailto:contact@buildittoday.ai" style="color:#0D9488;font-weight:600">contact@buildittoday.ai</a>.
     </p>
   </div>
