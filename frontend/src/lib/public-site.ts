@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { offerLayer } from "@/lib/offer-layer";
 import { fetchDistIndex, withBaseHref } from "@/lib/engine-ingest";
 import { createServiceRoleClient } from "@/lib/supabase";
@@ -90,9 +90,30 @@ export async function renderPublicSite(
       : html + layer;
   }
 
+  // after(), not fire-and-forget.
+  //
+  // This was `recordView(...).catch(() => {})` — started, not awaited, and left
+  // to finish on its own. On a serverless host the function is frozen once the
+  // response is sent, so whether the write landed depended on whether it beat
+  // the freeze. Views recorded sometimes and not others: opening one demo wrote
+  // a click, opening another wrote nothing at all, and the funnel that decides
+  // whether outreach works was quietly losing rows.
+  //
+  // after() hands the work to the platform to run once the response is flushed,
+  // which is exactly what this needs: the visitor waits for nothing, and the
+  // write is guaranteed to run.
+  //
   // Both slugs: demo_slug identifies the lead, publicSlug is the address a
   // human can actually open.
-  if (track) recordView(site.demo_slug, slug, request).catch(() => {});
+  if (track) {
+    after(async () => {
+      try {
+        await recordView(site.demo_slug, slug, request);
+      } catch {
+        // Tracking must never surface to the visitor, but it must be attempted.
+      }
+    });
+  }
   return new NextResponse(html, {
     headers: {
       "Content-Type": "text/html; charset=utf-8",
