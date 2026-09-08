@@ -253,6 +253,9 @@ async function sendOne(
     .select("*", { count: "exact", head: true })
     .eq("lead_id", lead.id)
     .eq("template_slug", slug)
+    // A rehearsal reached the operator, not the business, so it is not
+    // delivery. Counting it here would permanently block the real email.
+    .eq("was_test", false)
     .is("error", null);
 
   if ((already ?? 0) > 0) {
@@ -307,6 +310,16 @@ async function sendOne(
     to_email: res.actualTo, intended_to: lead.contact_email,
     was_test: res.redirected, subject: res.subject, provider_id: res.id,
   });
+  // A rehearsal must leave the lead exactly where it found them. The send is
+  // logged above, because it did happen — but nothing below this line is true
+  // of the business. Advancing the sequence here marked six of them as having
+  // had their introduction while the email sat in the operator's inbox; going
+  // live they would have skipped to "assume you never saw the first one"
+  // without ever receiving a first one.
+  if (settings.test_mode) {
+    return { ok: true, business: lead.business_name ?? "" };
+  }
+
   await supabase.from("outreach_events").insert({
     lead_id: lead.id, channel: "email", event_type: "sent",
   });
