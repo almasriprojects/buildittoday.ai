@@ -86,7 +86,10 @@ export type AlertKind =
   | "complaint"
   | "onboarding"
   | "sequencer_failed"
-  | "cap_reached";
+  | "cap_reached"
+  // Something scheduled has stopped running, or is running and failing.
+  // Silence from the watchdog is the success case, so this always means work.
+  | "agent_down";
 
 const ALERT_ICON: Record<AlertKind, string> = {
   payment: "💰",
@@ -95,6 +98,7 @@ const ALERT_ICON: Record<AlertKind, string> = {
   onboarding: "📋",
   sequencer_failed: "❌",
   cap_reached: "⏸",
+  agent_down: "🔴",
 };
 
 export async function alert(kind: AlertKind, title: string, detail?: string) {
