@@ -50,12 +50,23 @@ begin
   --    Ordered before the HTML loop below so that a lead which gets its media
   --    today is built tomorrow, rather than being attempted today and failing
   --    for want of pictures.
+  --
+  --    "Ready" is not enough on its own. The first leads through this function
+  --    were done when it made a single scene, so they carry a finished clip
+  --    and one photograph — and the HTML step needs three. Left as ready they
+  --    would be skipped here for having media and rejected there for not
+  --    having enough of it, which is a lead stuck forever rather than a lead
+  --    waiting. Ready means three photographs and a clip.
   for target in
     select l.id
     from public.leads l
     left join public.demo_media m on m.demo_slug = l.demo_slug
     where l.generated_content is not null
-      and (m.demo_slug is null or m.status = 'failed')
+      and (
+        m.demo_slug is null
+        or m.status = 'failed'
+        or jsonb_array_length(coalesce(m.scenes_json->'photos', '[]'::jsonb)) < 3
+      )
     order by l.updated_at
     limit cap
   loop
@@ -79,6 +90,7 @@ begin
     where l.generated_content is not null
       and m.status = 'ready'
       and m.hero_video_url is not null
+      and jsonb_array_length(coalesce(m.scenes_json->'photos', '[]'::jsonb)) >= 3
       and (d.demo_slug is null or d.status = 'failed')
     order by coalesce(d.updated_at, l.updated_at)
     limit cap
