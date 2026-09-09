@@ -128,6 +128,39 @@ async function upload(bytes: Uint8Array, path: string, contentType: string) {
   return `${SUPABASE_URL}/storage/v1/object/public/demo-media/${path}`;
 }
 
+/**
+ * Fetch the finished clip and prove it is one.
+ *
+ * The rendered video sits behind the same key that ordered it. Fetching it
+ * without the header returns a 67-byte JSON body — `{"error":{"message":"No
+ * cookie auth credentials found","code":401}}` — with a 401 that nothing was
+ * reading, so that JSON was uploaded as hero.mp4 and the row was marked ready.
+ * A site would then have passed the quality gate carrying a hero video that is
+ * not a video.
+ *
+ * So: send the key, check the status, and check the bytes. Every MP4 carries
+ * the ASCII "ftyp" at offset 4; a JSON error never will. Checking that the
+ * write succeeded is not the same as checking that what was written is real.
+ */
+async function fetchClip(url: string): Promise<Uint8Array> {
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${OR_KEY}` } });
+  const bytes = new Uint8Array(await res.arrayBuffer());
+
+  if (!res.ok) {
+    throw new Error(
+      `clip download ${res.status}: ${new TextDecoder().decode(bytes.slice(0, 200))}`,
+    );
+  }
+  const ftyp = new TextDecoder().decode(bytes.slice(4, 8));
+  if (ftyp !== "ftyp") {
+    throw new Error(
+      `clip is not an mp4 (${bytes.length} bytes, header "${ftyp}"): ` +
+        new TextDecoder().decode(bytes.slice(0, 200)),
+    );
+  }
+  return bytes;
+}
+
 // ---------------------------------------------------------------- submit ---
 
 async function submit(leadId: string) {
@@ -176,17 +209,32 @@ async function submit(leadId: string) {
     const raw = brief.choices[0].message.content as string;
     const scene = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
 
-    // 2. The still.
+    // 2. The still, asked for in 16:9 twice over.
+    //
+    // The pipeline asked only in the prompt text and mostly got 1024x576 —
+    // but "mostly" is not a shape. This lead's first still came back
+    // 1024x1024, and because the video model takes its framing from the first
+    // frame rather than from aspect_ratio, the clip came back 640x640 too. A
+    // square clip in a full-bleed hero loses the top and bottom of the frame
+    // to object-fit: cover, which is 44% of the picture the model composed.
     const img = await openrouter("chat/completions", {
       model: IMAGE_MODEL,
       messages: [{ role: "user", content: scene.image_prompt + STYLE_SUFFIX }],
       modalities: ["image", "text"],
+      image_config: { aspect_ratio: "16:9" },
     });
     cost += img?.usage?.cost ?? 0;
 
     const dataUrl = img.choices[0].message.images[0].image_url.url as string;
     const b64 = dataUrl.split(",", 2)[1];
     const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+    // PNG width and height live at bytes 16-24, big-endian. Recorded rather
+    // than enforced: a square hero is worse than a wide one, but far better
+    // than no hero, and a shape that is drifting should be visible before it
+    // becomes a wall of soft-looking sites.
+    const view = new DataView(bin.buffer);
+    const shape = { width: view.getUint32(16), height: view.getUint32(20) };
 
     // 3. Stored as scene1.png — the same name the existing sites use for their
     //    poster, so the HTML shape does not have to change.
@@ -211,14 +259,17 @@ async function submit(leadId: string) {
       "record polling url",
       (await db.from("demo_media").update({
         status: STATUS.awaitingVideo,
-        scenes_json: { scene, polling_url: pollingUrl, submitted_at: new Date().toISOString() },
+        scenes_json: {
+          scene, shape, polling_url: pollingUrl,
+          submitted_at: new Date().toISOString(),
+        },
         hero_poster_url: posterUrl,
         cost_usd: cost,
         updated_at: new Date().toISOString(),
       }).eq("demo_slug", slug)).error,
     );
 
-    return json({ ok: true, phase: "submitted", slug, poster: posterUrl, cost });
+    return json({ ok: true, phase: "submitted", slug, poster: posterUrl, shape, cost });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     await db.from("demo_media").update({
@@ -278,7 +329,7 @@ async function collect(limit = 10) {
         failed.push({ slug, error: "completed with no url" });
         continue;
       }
-      const clip = new Uint8Array(await (await fetch(url)).arrayBuffer());
+      const clip = await fetchClip(url);
       const heroUrl = await upload(clip, `${slug}/hero.mp4`, "video/mp4");
 
       await db.from("demo_media").update({
