@@ -189,7 +189,17 @@ export function offerLayer(opts: {
   }
   window.addEventListener('scroll',onScroll,{passive:true});
 
-  bar.querySelector('[data-bit-open]').addEventListener('click',openModal);
+  // Every [data-bit-open] in the document, not just the one in the bar.
+  //
+  // The generated page has its own "Claim This Website Now" button inside its
+  // claim modal, and it went nowhere — href="#", and an attribute that closed
+  // the modal instead of doing anything. The page cannot carry a real offer of
+  // its own: prices live in lib/pricing.ts and checkout is built here, at
+  // serve time. So the button hands over to this layer instead, and the one
+  // place a visitor is asked to buy actually opens the prices.
+  Array.prototype.forEach.call(document.querySelectorAll('[data-bit-open]'),function(el){
+    el.addEventListener('click',function(e){ e.preventDefault(); openModal(); });
+  });
   bar.querySelector('[data-bit-dismiss]').addEventListener('click',function(){
     dismissed=true; bar.removeAttribute('data-show');
     try{ sessionStorage.setItem(key,'1'); }catch(e){}

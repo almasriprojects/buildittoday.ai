@@ -17,6 +17,10 @@ const MOTION_RUNTIME = `// motion_runtime.js v2.4 — clean premium scroll-motio
 // scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
 // and claimModalInit (popup claim mechanism replacing the old embedded
 // claim section).
+// v2.4a: the custom cursor is raised above the claim modal (it was painted
+// underneath it, leaving no visible pointer at all inside the popup) and the
+// native cursor is restored on form fields, where a dot and ring cannot say
+// "you can type here".
 
 (function () {
   if (window.__motionRuntimeV2) return;
@@ -245,14 +249,29 @@ const MOTION_RUNTIME = `// motion_runtime.js v2.4 — clean premium scroll-motio
         ring.classList.remove("mrv2-cursor-hover");
       }
     });
+    // The cursor must sit above everything it replaces.
+    //
+    // At z-index 10000 it was painted UNDER the claim modal, which is at
+    // 20000 — and the real cursor is hidden by cursor:none. So the moment the
+    // popup opened, the visitor had no pointer at all: not the drawn one,
+    // which was behind the panel, and not the system one. On the one screen
+    // where a lead is asked to type their details, they could not see where
+    // they were pointing.
+    //
+    // Form fields keep the native cursor deliberately. A dot and a ring say
+    // "you can click here"; they cannot say "you can type here". The I-beam
+    // is the only thing that does, and hiding it inside a form the business
+    // owner is meant to fill in costs more than the effect is worth.
     injectCss(
       ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-custom-cursor input,.mrv2-custom-cursor textarea," +
+      ".mrv2-custom-cursor select,.mrv2-custom-cursor [contenteditable]{cursor:auto}" +
       ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
       "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
-      "z-index:10000;transition:transform .05s linear}" +
+      "z-index:30000;transition:transform .05s linear}" +
       ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
       "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
-      "pointer-events:none;z-index:10000;" +
+      "pointer-events:none;z-index:30000;" +
       "transition:width .2s ease,height .2s ease,margin .2s ease}" +
       ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
     );
@@ -497,10 +516,13 @@ STRICT REQUIREMENTS:
        <h2>Claim This Website</h2>
        <p>This professionally designed website was created specifically for [business name]. If you are the business owner, claim this site today.</p>
        <div class="claim-features">... 3-4 short feature bullets, e.g. "Award-winning design", "Fully responsive", "Optimized for conversions" ...</div>
-       <a href="#" class="btn btn-primary" data-claim-close>Claim This Website Now</a>
+       <a href="/pricing" class="btn btn-primary" data-bit-open>Claim This Website Now</a>
      </div>
    </div>
    The runtime injects the modal's positioning/overlay/backdrop CSS automatically (do not write competing CSS for [data-claim-modal] itself) — you only style .claim-modal-panel's inner content (background, padding, border-radius, typography) using this category's design tokens.
+   TWO RULES ABOUT THAT LAST BUTTON, both of which were previously got wrong on every site built:
+   - data-claim-close belongs ONLY on the × button. Putting it on the call-to-action makes the one button meant to convert a visitor dismiss the offer instead — and because the × needs position:absolute, your own [data-claim-close] rule then drags the call-to-action out of flow and paints it on top of the heading.
+   - data-bit-open is what the button carries instead. The prices are not part of this page; they are injected when the site is served. That attribute is the hand-off, and href="/pricing" is the no-JS fallback. Do not invent a price, a discount, or a "limited time" claim anywhere in this modal — you do not know what this costs.
 9. Footer must include the business name, city/state, and the same Home/About/Services/Contact anchor links as the header (a standard footer sitemap, same #about/#services/#contact anchors). Do NOT include any personal owner contact information (no personal phone/email/mailing address) and do not fabricate a business phone/email if none was provided in the content above. Do NOT include any "this is a preview" or "contact us to claim this site" language in the footer — that messaging now lives only in the claim modal (requirement #8).
 10. Do NOT include the motion runtime script in your output at all — no <script> tag containing it, and do not paraphrase or reimplement it either. The platform injects the real v2.4 runtime automatically after you respond. Your job is only to use the hooks (data-hero, data-media-sequence, data-split-text, data-reveal, data-progress, data-parallax-img, .ken-burns) correctly in your HTML/CSS — the runtime source below is shown so you understand exactly what each hook does, not so you reproduce it.
 11. No external libraries, CDNs, icon fonts, or web fonts — system font stacks only. This business's own photo and video URLs are the one exception to "no external resources" — they are real hosted files and should be referenced by their given https URL directly in <img src> and the hero <video>.
@@ -509,7 +531,7 @@ STRICT REQUIREMENTS:
 Here is the motion runtime script (v2.4) — FOR YOUR REFERENCE ONLY, to understand what each hook does. Per requirement #10, do NOT include this script (or anything like it) in your output:
 ${MOTION_RUNTIME}
 
-Before responding, self-check: (a) is all content real, nothing invented? (b) did you use ONLY the v2.4 hooks (data-hero with .hero-bg, data-media-sequence with .ms-track/.ms-item/.ms-caption, data-split-text, data-reveal, data-progress, data-menu-toggle/data-menu-target, data-claim-modal/data-claim-trigger/data-claim-close, and optionally data-parallax-img / .ken-burns) and NONE of the old v1 hooks (.reveal, data-parallax, header[data-sticky], .counter, .marquee)? (c) did you write the manual CSS required for data-hero/.hero-bg, data-media-sequence/.ms-track/.ms-item/.ms-caption, data-progress, data-menu-toggle/data-menu-target (including the mobile dropdown), and data-parallax-img's container, while NOT writing competing CSS for data-split-text, data-reveal, .ken-burns, or [data-claim-modal] itself (the runtime injects its own CSS for all four)? (d) does every media-sequence item have its own distinct, legible caption tied to real content? (e) did you avoid putting data-parallax-img or ken-burns on the hero-bg or any media-sequence item? (f) is the hero background the exact <video class="hero-bg" autoplay muted loop playsinline ...> element given above, and are all three of this business's own photo URLs actually placed as <img> tags, with no image URL you were not given? (g) is the given design token palette actually used throughout? (h) does the header have real Home/About/Services/Contact nav links with a working data-menu-toggle/data-menu-target mobile pattern — not hidden with no way to reach it? (i) is there exactly one data-claim-modal (hidden by default, no competing CSS on the modal itself), with NO standalone "Claim This Website" section anywhere else in the page? (j) does every .btn CTA carry data-claim-trigger with a real href fallback, while the nav links do NOT carry data-claim-trigger? (k) is the footer free of personal owner contact info, free of fabricated business contact info, and free of any "preview"/"claim this site" language (that only lives in the modal now), while including the same nav sitemap links as the header? (l) did you leave out the motion runtime script entirely, per requirement #10? Fix any gaps before responding.
+Before responding, self-check: (a) is all content real, nothing invented? (b) did you use ONLY the v2.4 hooks (data-hero with .hero-bg, data-media-sequence with .ms-track/.ms-item/.ms-caption, data-split-text, data-reveal, data-progress, data-menu-toggle/data-menu-target, data-claim-modal/data-claim-trigger/data-claim-close, and optionally data-parallax-img / .ken-burns) and NONE of the old v1 hooks (.reveal, data-parallax, header[data-sticky], .counter, .marquee)? (c) did you write the manual CSS required for data-hero/.hero-bg, data-media-sequence/.ms-track/.ms-item/.ms-caption, data-progress, data-menu-toggle/data-menu-target (including the mobile dropdown), and data-parallax-img's container, while NOT writing competing CSS for data-split-text, data-reveal, .ken-burns, or [data-claim-modal] itself (the runtime injects its own CSS for all four)? (d) does every media-sequence item have its own distinct, legible caption tied to real content? (e) did you avoid putting data-parallax-img or ken-burns on the hero-bg or any media-sequence item? (f) is the hero background the exact <video class="hero-bg" autoplay muted loop playsinline ...> element given above, and are all three of this business's own photo URLs actually placed as <img> tags, with no image URL you were not given? (g) is the given design token palette actually used throughout? (h) does the header have real Home/About/Services/Contact nav links with a working data-menu-toggle/data-menu-target mobile pattern — not hidden with no way to reach it? (i) is there exactly one data-claim-modal (hidden by default, no competing CSS on the modal itself), with NO standalone "Claim This Website" section anywhere else in the page, and does its call-to-action carry data-bit-open with href="/pricing" while data-claim-close appears ONLY on the × button? (j) does every .btn CTA carry data-claim-trigger with a real href fallback, while the nav links do NOT carry data-claim-trigger? (k) is the footer free of personal owner contact info, free of fabricated business contact info, and free of any "preview"/"claim this site" language (that only lives in the modal now), while including the same nav sitemap links as the header? (l) did you leave out the motion runtime script entirely, per requirement #10? Fix any gaps before responding.
 
 Return ONLY raw HTML. No markdown fences, no prose before or after.`;
 
@@ -628,6 +650,25 @@ function validateMotionHooks(html: string): { ok: boolean; failures: string[] } 
   }
   if (!/data-claim-trigger/i.test(html)) {
     failures.push("missing data-claim-trigger on at least one CTA button");
+  }
+
+  // The one button in the popup that is supposed to sell.
+  //
+  // The prompt's own example carried data-claim-close and href="#", so every
+  // site built to date shipped a "Claim This Website Now" that dismissed the
+  // popup and navigated nowhere — and, because the close control needs
+  // position:absolute, the page's own [data-claim-close] rule pulled it out of
+  // flow and printed it across the heading. Both faults are invisible from the
+  // build's point of view: valid HTML, correct hooks, a button that reads
+  // right and does nothing.
+  const closeCarriers = html.match(/<[^>]+data-claim-close[^>]*>/gi) ?? [];
+  for (const tag of closeCarriers) {
+    if (/class=["'][^"']*\bbtn\b[^"']*["']/i.test(tag)) {
+      failures.push("data-claim-close is on a .btn — it belongs only on the modal's × control, or the call-to-action closes the offer instead of opening it");
+    }
+  }
+  if (/data-claim-modal/i.test(html) && !/data-bit-open/i.test(html)) {
+    failures.push("the claim modal's call-to-action is missing data-bit-open (nothing on the page opens the real prices)");
   }
   if (/class=["'][^"']*\bclaim-section\b[^"']*["']/i.test(html)) {
     failures.push("standalone .claim-section still present -- claim content must be inside data-claim-modal only, not a visible page section");
