@@ -39,32 +39,57 @@ const STYLE_SUFFIX =
   "no watermarks, no readable signage, 16:9 composition.";
 
 /**
- * One scene, not three. The motion rules are the pipeline's, and they matter:
- * a generative video model asked for movement will invent content, warp faces
- * and drift away from the still. Ambient motion only, and a last frame close
- * to the first, is what makes a four-second clip loop without a visible seam.
+ * Three scenes, one clip.
+ *
+ * Three because a site needs more than a hero: the HTML builder places photos
+ * in the hero, in a scroll-scrubbed media sequence, and in a supporting block,
+ * and it was filling all of them from category_photos — the same stock shared
+ * by every business in the trade. Generating all three here is what lets the
+ * builder stop reaching for that.
+ *
+ * One clip because only the hero moves, and because each additional clip is
+ * $0.14 and eighty seconds. Scene 1 is both the hero still and the video's
+ * first frame, which is why it is the establishing shot.
+ *
+ * The motion rules are the pipeline's, and they matter: a generative video
+ * model asked for movement will invent content, warp faces and drift away from
+ * the still. Ambient motion only, and a last frame close to the first, is what
+ * makes a four-second clip loop without a visible seam.
  */
-const SCENE_SYSTEM = `You are a brand art director and cinematographer planning the hero of a
-website for a real small business.
+const SCENE_SYSTEM = `You are a brand art director and cinematographer planning the photography
+for a website for a real small business.
 
 HARD RULES:
 - The hero IS a video. Never a text-only or typography-only hero.
-- The scene must depict what this business ACTUALLY does, per the content given.
-  Never invent a different industry, offering, or location.
+- Every scene must depict what this business ACTUALLY does, per the content
+  given. Never invent a different industry, offering, or location.
+- Plan exactly THREE genuinely different shots that together tell the story of
+  this business: scene 1 establishing (this is what the business is), scene 2
+  people or craft in action, scene 3 a detail or finished result. Vary framing
+  and subject — three versions of the same shot is a failure.
+- Scene 1 is also the first frame of the hero video, so it must hold still
+  well: a clear subject, room around it, nothing that needs to move to read.
 - image_prompt: one photorealistic, editorial-quality still. Cinematic lighting,
   shallow depth of field where it suits, no text/logos/watermarks/signage, 16:9.
-  Be specific about subject, lighting, time of day and mood. Prefer an
-  establishing shot that says immediately what this business is.
-- video_motion_prompt: SUBTLE motion animating that still. Keep the camera
-  nearly locked off, or an extremely slow push. Do NOT reveal or invent content
-  that is not already in the still. Do NOT animate faces, hands or bodies with
-  distinct movement — only the faintest natural micro-motion. Never warp people.
-  Prefer ambient motion: drifting light, steam, water ripple, fabric sway, dust
-  motes, slow reflections. The last frame must be close to the first in framing
-  and light, because the clip loops.
+  Be specific about subject, lighting, time of day and mood.
+- video_motion_prompt (scene 1 only): SUBTLE motion animating that still. Keep
+  the camera nearly locked off, or an extremely slow push. Do NOT reveal or
+  invent content that is not already in the still. Do NOT animate faces, hands
+  or bodies with distinct movement — only the faintest natural micro-motion.
+  Never warp people. Prefer ambient motion: drifting light, steam, water ripple,
+  fabric sway, dust motes, slow reflections. The last frame must be close to the
+  first in framing and light, because the clip loops.
+- caption: for each scene, a heading of at most 6 words and one supporting
+  sentence, both drawn only from the real content given. These are shown over
+  the photo on the page, so they must be about this business, not the trade.
 
 Output strict JSON only, no prose outside it:
-{"scene_name":"...","image_prompt":"...","video_motion_prompt":"..."}`;
+{"scenes":[
+  {"scene_name":"...","image_prompt":"...","video_motion_prompt":"...",
+   "caption":{"heading":"...","body":"..."}},
+  {"scene_name":"...","image_prompt":"...","caption":{"heading":"...","body":"..."}},
+  {"scene_name":"...","image_prompt":"...","caption":{"heading":"...","body":"..."}}
+]}`;
 
 /**
  * The permitted values, from demo_media_status_check. Writing anything else is
@@ -207,43 +232,59 @@ async function submit(leadId: string) {
     cost += brief?.usage?.cost ?? 0;
 
     const raw = brief.choices[0].message.content as string;
-    const scene = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
+    const plan = JSON.parse(raw.slice(raw.indexOf("{"), raw.lastIndexOf("}") + 1));
+    const scenes = (plan.scenes ?? [plan]).slice(0, 3);
+    if (scenes.length === 0) throw new Error("brief returned no scenes");
 
-    // 2. The still, asked for in 16:9 twice over.
+    // 2. The stills, asked for in 16:9 twice over.
     //
     // The pipeline asked only in the prompt text and mostly got 1024x576 —
-    // but "mostly" is not a shape. This lead's first still came back
+    // but "mostly" is not a shape. The first still generated here came back
     // 1024x1024, and because the video model takes its framing from the first
     // frame rather than from aspect_ratio, the clip came back 640x640 too. A
     // square clip in a full-bleed hero loses the top and bottom of the frame
     // to object-fit: cover, which is 44% of the picture the model composed.
-    const img = await openrouter("chat/completions", {
-      model: IMAGE_MODEL,
-      messages: [{ role: "user", content: scene.image_prompt + STYLE_SUFFIX }],
-      modalities: ["image", "text"],
-      image_config: { aspect_ratio: "16:9" },
-    });
-    cost += img?.usage?.cost ?? 0;
+    //
+    // Sequentially, not in parallel: three concurrent image requests is the
+    // shape of a rate limit, and the function has time.
+    const photos: { url: string; width: number; height: number; caption: unknown }[] = [];
+    for (const [i, scene] of scenes.entries()) {
+      const img = await openrouter("chat/completions", {
+        model: IMAGE_MODEL,
+        messages: [{ role: "user", content: scene.image_prompt + STYLE_SUFFIX }],
+        modalities: ["image", "text"],
+        image_config: { aspect_ratio: "16:9" },
+      });
+      cost += img?.usage?.cost ?? 0;
 
-    const dataUrl = img.choices[0].message.images[0].image_url.url as string;
-    const b64 = dataUrl.split(",", 2)[1];
-    const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const dataUrl = img.choices[0].message.images[0].image_url.url as string;
+      const b64 = dataUrl.split(",", 2)[1];
+      const bin = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
 
-    // PNG width and height live at bytes 16-24, big-endian. Recorded rather
-    // than enforced: a square hero is worse than a wide one, but far better
-    // than no hero, and a shape that is drifting should be visible before it
-    // becomes a wall of soft-looking sites.
-    const view = new DataView(bin.buffer);
-    const shape = { width: view.getUint32(16), height: view.getUint32(20) };
+      // PNG width and height live at bytes 16-24, big-endian. Recorded rather
+      // than enforced: a square hero is worse than a wide one, but far better
+      // than no hero, and a shape that is drifting should be visible before it
+      // becomes a wall of soft-looking sites.
+      const view = new DataView(bin.buffer);
 
-    // 3. Stored as scene1.png — the same name the existing sites use for their
-    //    poster, so the HTML shape does not have to change.
-    const posterUrl = await upload(bin, `${slug}/scene1.png`, "image/png");
+      // scene1.png / scene2.png / scene3.png — the names the sites built in
+      // August already use, so nothing downstream has to learn a new shape.
+      const url = await upload(bin, `${slug}/scene${i + 1}.png`, "image/png");
+      photos.push({
+        url,
+        width: view.getUint32(16),
+        height: view.getUint32(20),
+        caption: scene.caption ?? null,
+      });
+    }
 
-    // 4. The clip, from that still as its first frame.
+    const posterUrl = photos[0].url;
+    const shape = { width: photos[0].width, height: photos[0].height };
+
+    // 3. The clip, from the establishing shot as its first frame.
     const job = await openrouter("videos", {
       model: VIDEO_MODEL,
-      prompt: scene.video_motion_prompt,
+      prompt: scenes[0].video_motion_prompt,
       duration: 4,
       resolution: "480p",
       aspect_ratio: "16:9",
@@ -260,7 +301,7 @@ async function submit(leadId: string) {
       (await db.from("demo_media").update({
         status: STATUS.awaitingVideo,
         scenes_json: {
-          scene, shape, polling_url: pollingUrl,
+          scenes, photos, polling_url: pollingUrl,
           submitted_at: new Date().toISOString(),
         },
         hero_poster_url: posterUrl,
@@ -269,7 +310,10 @@ async function submit(leadId: string) {
       }).eq("demo_slug", slug)).error,
     );
 
-    return json({ ok: true, phase: "submitted", slug, poster: posterUrl, shape, cost });
+    return json({
+      ok: true, phase: "submitted", slug, poster: posterUrl,
+      photos: photos.map((p) => `${p.width}x${p.height}`), shape, cost,
+    });
   } catch (e) {
     const msg = e instanceof Error ? e.message : String(e);
     await db.from("demo_media").update({

@@ -385,8 +385,10 @@ const BUILD_PROMPT_TEMPLATE = (opts: {
   designTokensJson: string;
   layoutAnalysisJson: string;
   motionNotesJson: string;
-  categoryPhotosJson: string;
-}) => `You are an elite senior front-end developer and motion designer (Awwwards/FWA level). You are given real, already-written honest content for ${opts.businessName}, a ${opts.category} business in ${opts.city}, ${opts.state} — plus a design token system, layout pattern language, and real professional photography researched from award-winning websites in this exact business category.
+  ownPhotosJson: string;
+  heroVideoUrl: string;
+  heroPosterUrl: string;
+}) => `You are an elite senior front-end developer and motion designer (Awwwards/FWA level). You are given real, already-written honest content for ${opts.businessName}, a ${opts.category} business in ${opts.city}, ${opts.state} — plus a design token system, layout pattern language, and photography and a hero video commissioned for this business specifically.
 
 Your job: generate a complete, polished, ORIGINAL single-file HTML page for this specific business, using this business's real content, styled according to the category's design language, with premium scroll-driven motion. This is NOT cloning an existing site — create an original design embodying the same professional quality and layout patterns as the reference category, populated with this business's own real content. The bar is: a lead who sees this page should feel like this business already looks like an established, premium brand, and want to claim it immediately.
 
@@ -407,8 +409,14 @@ ${opts.layoutAnalysisJson}
 MOTION NOTES for this category (what should move, translate this into the v2.4 hooks described below):
 ${opts.motionNotesJson}
 
-REAL CATEGORY PHOTOGRAPHY (use these actual image URLs directly as <img src="...">  — do NOT use placeholder boxes, gradients-as-images, emoji, or SVG illustrations anywhere a real photo is called for; these are professional photos representative of this business category):
-${opts.categoryPhotosJson}
+THIS BUSINESS'S OWN PHOTOGRAPHY (use these actual image URLs directly as <img src="..."> — do NOT use placeholder boxes, gradients-as-images, emoji, or SVG illustrations anywhere a real photo is called for, and do NOT reference any image URL that is not in this list):
+${opts.ownPhotosJson}
+
+These three photographs were commissioned for ${opts.businessName} specifically — they are not stock and not shared with any other site. They are ordered as a sequence: an establishing shot, work in progress, and a finished detail. Each carries a caption written from this business's own content; use those captions where a caption is called for, editing only for length.
+
+THIS BUSINESS'S HERO VIDEO — a four-second clip that loops, animating the first photograph:
+video: ${opts.heroVideoUrl}
+poster: ${opts.heroPosterUrl}
 
 THE HEADLINE (read before writing the h1):
 The h1 is the only sentence most visitors read. Earn it from what makes THIS
@@ -444,8 +452,11 @@ STRICT REQUIREMENTS:
 4. Follow the category's layout patterns for structure and section order, adapted sensibly to fit only the real content available.
 5. Semantic HTML5: header, nav, main, section, footer, in that structural order.
 6. MOTION — this page will run against motion runtime v2.4 (shown below for context ONLY — see requirement #10, you must NOT output this script yourself). It ONLY understands these exact hooks. Do NOT use any other motion hooks (no ".reveal" class, no "data-parallax" attribute — note this is different from "data-parallax-img", see below —, no "header[data-sticky]", no ".counter", no ".marquee" — those belonged to an older runtime and do nothing in v2.4; using them produces dead, static markup). Build the page using exactly these v2.4 hooks:
-   - data-hero: put this attribute on the hero <section>. Inside it, include a full-bleed background element with class="hero-bg" (an <img> or a div with a background-image using one of the provided category photo URLs, position:absolute, inset:0, object-fit:cover, z-index behind the text) and the main heading as an <h1> (or class="hero-title"). The runtime will scale/fade the heading and parallax the .hero-bg automatically as the user scrolls past — you must give .hero-bg the CSS (position:absolute;inset:0;object-fit:cover;z-index:0) and give the hero section position:relative;overflow:hidden so the parallax doesn't break layout.
-   - data-media-sequence: build ONE pinned scroll-scrubbed section using 3-4 of the provided category photos. Each item MUST pair its image with a short caption written specifically for this business — do NOT ship bare images with no text. Structure exactly:
+   - data-hero: put this attribute on the hero <section>. The full-bleed background MUST be the business's own hero video, written EXACTLY like this — not an <img>, not a CSS background-image, not a poster on its own:
+     <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="${opts.heroPosterUrl}"><source src="${opts.heroVideoUrl}" type="video/mp4"></video>
+     Every attribute there is load-bearing: muted is what allows autoplay at all in Chrome and Safari, playsinline stops iOS taking the video fullscreen, loop is what makes four seconds enough, and the poster is what fills the hero during the moment before the clip is decoded — so a visitor on a slow phone still sees the photograph immediately rather than a black rectangle. Do not drop or reorder them, and do not add controls.
+     The main heading goes in the same section as an <h1> (or class="hero-title"). The runtime will scale/fade the heading and parallax the .hero-bg automatically as the user scrolls past — you must give .hero-bg the CSS (position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0) and give the hero section position:relative;overflow:hidden so the parallax doesn't break layout. Put a scrim over the video (a gradient or tinted overlay between it and the text, e.g. .hero-bg::after or a dedicated overlay div at z-index:1) so the heading stays legible over moving footage — text that is readable over a still frame can become unreadable four seconds later.
+   - data-media-sequence: build ONE pinned scroll-scrubbed section using all three of this business's photographs, in the order given. Each item MUST pair its image with its caption — do NOT ship bare images with no text. Structure exactly:
      <section data-media-sequence><div class="ms-track">
        <div class="ms-item"><img src="..." style="width:100%;height:100%;object-fit:cover"><div class="ms-caption"><h3>Short business-specific line (≤6 words)</h3><p>One supporting sentence using only the real content given above</p></div></div>
        ...repeat for each photo, each with its own distinct caption tied to a different real detail (a service, a value prop, a location detail) — never reuse the same caption text twice...
@@ -463,7 +474,7 @@ STRICT REQUIREMENTS:
    - data-progress: include one empty element, e.g. <div data-progress></div>, fixed to the very top of the viewport (position:fixed;top:0;left:0;height:3px;width:0;z-index:9999). Style its background color yourself using the category's accent color — the runtime only updates its width on scroll.
    - data-parallax-img (NEW, optional): put this attribute on ONE supporting/detail image elsewhere in the page (e.g. in an about or features section) — NOT the hero-bg, NOT a media-sequence item — with a value between 0.1 and 0.3 (e.g. data-parallax-img="0.2") controlling how fast it drifts relative to scroll. The runtime applies a scroll-linked translateY to it automatically. You MUST give its container overflow:hidden and make the image itself taller than its container (e.g. height:130%; the container clips it) so the drift never reveals empty space at the edges.
    - .ken-burns (NEW, optional): add this class to AT MOST ONE supporting/detail image (not the hero-bg, not a media-sequence item, not the same image as data-parallax-img) for a slow, subtle, automatic zoom that plays continuously while it's in view — a purely decorative "this photo feels alive" touch. No JS attribute needed, just the class; the runtime injects the CSS animation automatically (and it already respects reduced-motion on its own via a CSS media query, don't add your own competing animation).
-   - Use the provided category photos for the hero background, the media-sequence section, and at least one supporting/detail image elsewhere in the page (e.g. in an about or features section) — do not describe a photo you don't actually place as an <img>. Use data-parallax-img and/or .ken-burns tastefully on at most one image each — this is a restrained accent, not something to apply everywhere.
+   - The hero background is the video. Use the three photographs for the media-sequence section, and reuse one of them as a supporting/detail image elsewhere in the page (e.g. in an about or features section) — do not describe a photo you don't actually place as an <img>, and never reference an image URL that was not given to you. Use data-parallax-img and/or .ken-burns tastefully on at most one image each — this is a restrained accent, not something to apply everywhere.
 7. Responsive: mobile-first, with media queries for tablet and desktop breakpoints. On narrow viewports the media-sequence section should remain usable (photos and captions still visible, just less dramatic pin distance is fine).
    HEADER NAV: the header must include real navigation — Home (logo, scrolls to top or the hero), About, Services, Contact — as anchor links (<a href="#about">, <a href="#services">, <a href="#contact">) to sections that actually exist on the page (give the About content block id="about"; Services and Contact sections already need id="services" / id="contact" per your own section structure), plus the existing primary CTA button. This must work correctly on mobile using data-menu-toggle / data-menu-target — do NOT just hide the nav on mobile with no way to reach it (that is a real bug, not a design choice):
    <header><div class="header-inner"><div class="logo">...</div>
@@ -492,13 +503,13 @@ STRICT REQUIREMENTS:
    The runtime injects the modal's positioning/overlay/backdrop CSS automatically (do not write competing CSS for [data-claim-modal] itself) — you only style .claim-modal-panel's inner content (background, padding, border-radius, typography) using this category's design tokens.
 9. Footer must include the business name, city/state, and the same Home/About/Services/Contact anchor links as the header (a standard footer sitemap, same #about/#services/#contact anchors). Do NOT include any personal owner contact information (no personal phone/email/mailing address) and do not fabricate a business phone/email if none was provided in the content above. Do NOT include any "this is a preview" or "contact us to claim this site" language in the footer — that messaging now lives only in the claim modal (requirement #8).
 10. Do NOT include the motion runtime script in your output at all — no <script> tag containing it, and do not paraphrase or reimplement it either. The platform injects the real v2.4 runtime automatically after you respond. Your job is only to use the hooks (data-hero, data-media-sequence, data-split-text, data-reveal, data-progress, data-parallax-img, .ken-burns) correctly in your HTML/CSS — the runtime source below is shown so you understand exactly what each hook does, not so you reproduce it.
-11. No external libraries, CDNs, icon fonts, or web fonts — system font stacks only. The provided category photo URLs are the one exception to "no external resources" — they are real hosted images and should be referenced by their given https URL directly in <img src>.
+11. No external libraries, CDNs, icon fonts, or web fonts — system font stacks only. This business's own photo and video URLs are the one exception to "no external resources" — they are real hosted files and should be referenced by their given https URL directly in <img src> and the hero <video>.
 12. BUTTONS: define exactly ONE reusable button system in your CSS — a base .btn class plus .btn-primary/.btn-secondary variants (or your own consistently-named equivalent) — and reuse that SAME system for every clickable CTA on the page (header, hero, section CTAs). Do not invent a new one-off button class per section (e.g. do not create separate .nav-cta, .hero-cta, .contact-cta-btn classes that each redefine their own padding/radius/hover treatment — that produces visual inconsistency across one page). Every CTA button (.btn) must ALSO carry data-claim-trigger and keep a real href="#contact" (or another real section id) as a no-JS fallback — clicking it opens the claim modal via JS, but if JS fails it still gracefully scrolls to a real section instead of doing nothing. Do NOT put data-claim-trigger on the Home/About/Services/Contact navigation links themselves — those must remain plain anchor links that scroll to their section, not modal triggers.
 
 Here is the motion runtime script (v2.4) — FOR YOUR REFERENCE ONLY, to understand what each hook does. Per requirement #10, do NOT include this script (or anything like it) in your output:
 ${MOTION_RUNTIME}
 
-Before responding, self-check: (a) is all content real, nothing invented? (b) did you use ONLY the v2.4 hooks (data-hero with .hero-bg, data-media-sequence with .ms-track/.ms-item/.ms-caption, data-split-text, data-reveal, data-progress, data-menu-toggle/data-menu-target, data-claim-modal/data-claim-trigger/data-claim-close, and optionally data-parallax-img / .ken-burns) and NONE of the old v1 hooks (.reveal, data-parallax, header[data-sticky], .counter, .marquee)? (c) did you write the manual CSS required for data-hero/.hero-bg, data-media-sequence/.ms-track/.ms-item/.ms-caption, data-progress, data-menu-toggle/data-menu-target (including the mobile dropdown), and data-parallax-img's container, while NOT writing competing CSS for data-split-text, data-reveal, .ken-burns, or [data-claim-modal] itself (the runtime injects its own CSS for all four)? (d) does every media-sequence item have its own distinct, legible caption tied to real content? (e) did you avoid putting data-parallax-img or ken-burns on the hero-bg or any media-sequence item? (f) are the real category photo URLs actually placed as <img> tags in the hero background, the media sequence, and at least one more spot? (g) is the given design token palette actually used throughout? (h) does the header have real Home/About/Services/Contact nav links with a working data-menu-toggle/data-menu-target mobile pattern — not hidden with no way to reach it? (i) is there exactly one data-claim-modal (hidden by default, no competing CSS on the modal itself), with NO standalone "Claim This Website" section anywhere else in the page? (j) does every .btn CTA carry data-claim-trigger with a real href fallback, while the nav links do NOT carry data-claim-trigger? (k) is the footer free of personal owner contact info, free of fabricated business contact info, and free of any "preview"/"claim this site" language (that only lives in the modal now), while including the same nav sitemap links as the header? (l) did you leave out the motion runtime script entirely, per requirement #10? Fix any gaps before responding.
+Before responding, self-check: (a) is all content real, nothing invented? (b) did you use ONLY the v2.4 hooks (data-hero with .hero-bg, data-media-sequence with .ms-track/.ms-item/.ms-caption, data-split-text, data-reveal, data-progress, data-menu-toggle/data-menu-target, data-claim-modal/data-claim-trigger/data-claim-close, and optionally data-parallax-img / .ken-burns) and NONE of the old v1 hooks (.reveal, data-parallax, header[data-sticky], .counter, .marquee)? (c) did you write the manual CSS required for data-hero/.hero-bg, data-media-sequence/.ms-track/.ms-item/.ms-caption, data-progress, data-menu-toggle/data-menu-target (including the mobile dropdown), and data-parallax-img's container, while NOT writing competing CSS for data-split-text, data-reveal, .ken-burns, or [data-claim-modal] itself (the runtime injects its own CSS for all four)? (d) does every media-sequence item have its own distinct, legible caption tied to real content? (e) did you avoid putting data-parallax-img or ken-burns on the hero-bg or any media-sequence item? (f) is the hero background the exact <video class="hero-bg" autoplay muted loop playsinline ...> element given above, and are all three of this business's own photo URLs actually placed as <img> tags, with no image URL you were not given? (g) is the given design token palette actually used throughout? (h) does the header have real Home/About/Services/Contact nav links with a working data-menu-toggle/data-menu-target mobile pattern — not hidden with no way to reach it? (i) is there exactly one data-claim-modal (hidden by default, no competing CSS on the modal itself), with NO standalone "Claim This Website" section anywhere else in the page? (j) does every .btn CTA carry data-claim-trigger with a real href fallback, while the nav links do NOT carry data-claim-trigger? (k) is the footer free of personal owner contact info, free of fabricated business contact info, and free of any "preview"/"claim this site" language (that only lives in the modal now), while including the same nav sitemap links as the header? (l) did you leave out the motion runtime script entirely, per requirement #10? Fix any gaps before responding.
 
 Return ONLY raw HTML. No markdown fences, no prose before or after.`;
 
@@ -509,6 +520,39 @@ function validateMotionHooks(html: string): { ok: boolean; failures: string[] } 
     failures.push("missing data-hero attribute");
   } else if (!/class=["'][^"']*\bhero-bg\b[^"']*["']/i.test(html)) {
     failures.push("data-hero section is missing a .hero-bg element");
+  }
+
+  // The hero must actually be the video, and must actually be able to play it.
+  //
+  // This is the whole reason the quality gate was rejecting every automated
+  // site: the hero was a still, or shared stock, and never a clip. Checked
+  // here rather than left to the gate because the builder gets a free retry
+  // and the gate does not — catching it here costs one rebuild, catching it
+  // later costs the lead.
+  //
+  // Each attribute is checked separately because each fails differently and
+  // silently: without muted, Chrome and Safari refuse to autoplay at all;
+  // without playsinline, iOS Safari throws the clip into a fullscreen player
+  // the moment it starts; without loop, the hero freezes on a black frame
+  // after four seconds; without a poster, the hero is empty until the video
+  // decodes, which on a phone on mobile data is the first thing the owner
+  // sees.
+  const heroVideo = html.match(/<video[^>]*class=["'][^"']*\bhero-bg\b[^"']*["'][^>]*>/i);
+  if (!heroVideo) {
+    failures.push("hero-bg must be a <video> element carrying this business's own hero clip, not an <img> or a CSS background");
+  } else {
+    const tag = heroVideo[0];
+    for (const attr of ["autoplay", "muted", "loop", "playsinline"]) {
+      if (!new RegExp(`\\b${attr}\\b`, "i").test(tag)) {
+        failures.push(`hero video is missing the ${attr} attribute`);
+      }
+    }
+    if (!/\bposter=/i.test(tag)) {
+      failures.push("hero video has no poster (the hero is blank until the clip decodes)");
+    }
+    if (!/hero\.mp4/i.test(html)) {
+      failures.push("hero video does not reference this business's hero.mp4");
+    }
   }
 
   if (!/data-progress/i.test(html)) {
@@ -688,7 +732,10 @@ Deno.serve(async (req: Request) => {
   const t1 = Date.now();
   const { data: designRef, error: designRefError } = await supabase
     .from("category_design_references")
-    .select("design_tokens, layout_analysis, motion_notes, category_photos")
+    // category_photos is deliberately not read any more — the photography now
+    // comes from demo_media, commissioned per business. The column stays for
+    // the 43 sites built before that.
+    .select("design_tokens, layout_analysis, motion_notes")
     .eq("business_category", lead.business_category)
     .maybeSingle();
   timings.designRefFetchMs = Date.now() - t1;
@@ -705,6 +752,54 @@ Deno.serve(async (req: Request) => {
   if (!demoSlug) {
     console.error(`[${runId}] lead ${leadId} has no demo_slug or document_number`);
     return new Response(JSON.stringify({ ok: false, error: "Lead has no demo_slug or document_number" }), { status: 400 });
+  }
+
+  // This business's own photography and hero clip, from generate-hero-media.
+  //
+  // Until now every site was dressed in category_photos — the same stock
+  // shared by every business in the trade — and had no hero video at all, so
+  // the quality gate rejected each one for "no hero video" and was right to.
+  // The standard is that a lead gets its own photographs and its own hero,
+  // never something shared.
+  //
+  // A hard stop rather than a fallback: falling back to the shared stock is
+  // exactly the outcome this is meant to end, and it would be invisible —
+  // the page would build, look plausible, and be wrong. The chain orders
+  // media before HTML, so reaching here without it means something upstream
+  // did not run, which is worth seeing.
+  const { data: media } = await supabase
+    .from("demo_media")
+    .select("status, hero_poster_url, hero_video_url, scenes_json")
+    .eq("demo_slug", demoSlug)
+    .maybeSingle();
+
+  const photos = (media?.scenes_json?.photos ?? []) as
+    { url: string; caption?: { heading?: string; body?: string } }[];
+
+  if (media?.status !== "ready" || !media.hero_video_url || photos.length === 0) {
+    const state = media?.status ?? "none";
+    console.error(`[${runId}] media not ready for ${demoSlug} (status=${state})`);
+    // Upsert, not update: on a first build there is no demo_sites row yet, and
+    // an update would record the reason nowhere. Written as failed so the
+    // builder picks it up again once the media lands.
+    await supabase.from("demo_sites").upsert({
+      lead_id: lead.id,
+      demo_slug: demoSlug,
+      business_name: lead.business_name,
+      city: lead.city,
+      state: lead.state,
+      business_category: lead.business_category,
+      status: "failed",
+      error: `Media not ready (status=${state}). Run generate-hero-media for this lead first.`,
+      updated_at: new Date().toISOString(),
+    }, { onConflict: "demo_slug" });
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: `Media not ready for ${demoSlug} (status=${state}). Run generate-hero-media first.`,
+      }),
+      { status: 400 },
+    );
   }
 
   const t2 = Date.now();
@@ -738,7 +833,9 @@ Deno.serve(async (req: Request) => {
     designTokensJson: JSON.stringify(designRef.design_tokens, null, 2),
     layoutAnalysisJson: JSON.stringify(designRef.layout_analysis, null, 2),
     motionNotesJson: JSON.stringify(designRef.motion_notes, null, 2),
-    categoryPhotosJson: JSON.stringify(designRef.category_photos || [], null, 2),
+    ownPhotosJson: JSON.stringify(photos, null, 2),
+    heroVideoUrl: media.hero_video_url as string,
+    heroPosterUrl: (media.hero_poster_url as string) ?? photos[0].url,
   });
 
   console.log(`[${runId}] calling OpenRouter build model...`);
