@@ -160,15 +160,33 @@ export function offerLayer(opts: {
   }
 
   function showBar(){ if(dismissed) return; bar.setAttribute('data-show',''); }
+  // Give the real mouse pointer back while the prices are open.
+  //
+  // The generated page hides the system cursor and draws its own dot and ring.
+  // This modal sits at the top of the stacking order on purpose — it has to
+  // survive inside a page whose CSS we do not control — so the drawn cursor is
+  // always painted underneath it, and the visitor has no pointer at all on the
+  // one screen where they are asked to pay. Raising the drawn cursor above
+  // 2147483600 would be a race against a number that cannot go much higher.
+  //
+  // Taking the class off the root element restores the native cursor for as
+  // long as the modal is open, and does nothing if the page has no such
+  // runtime. The demo's own effect resumes on close.
+  var CURSOR_CLASS='mrv2-custom-cursor';
+  var hadCustomCursor=false;
+
   function openModal(){
     if(modal.hasAttribute('data-show')) return;
     modal.setAttribute('data-show','');
     document.body.style.overflow='hidden';
+    hadCustomCursor=document.documentElement.classList.contains(CURSOR_CLASS);
+    if(hadCustomCursor) document.documentElement.classList.remove(CURSOR_CLASS);
     if(!shown){ shown=true; track('offer_shown'); }
   }
   function closeModal(){
     modal.removeAttribute('data-show');
     document.body.style.overflow='';
+    if(hadCustomCursor) document.documentElement.classList.add(CURSOR_CLASS);
     try{ sessionStorage.setItem(key,'1'); }catch(e){}
   }
 
