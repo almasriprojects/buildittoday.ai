@@ -8,6 +8,7 @@ import { SiteCopy, type GeneratedContent } from "./site-copy";
 import { SiteCode } from "./site-code";
 import { SiteNav, neighbourHref, type NavContext } from "./site-nav";
 import { Code2, Eye } from "lucide-react";
+import type { SceneRow } from "@/lib/demo-media";
 
 type Device = "desktop" | "tablet" | "mobile";
 
@@ -53,16 +54,26 @@ export function SitePreview({
     clip_count: number | null;
     has_video: boolean;
     palette: Record<string, string> | null;
-    scenes: { idx: number; scene_name: string; video_ok: boolean; text_detected?: boolean | null; text_severity?: string | null }[];
+    // Every field optional: scenes written by generate-hero-media carry a name
+    // and nothing else. The August pipeline validated each clip separately and
+    // recorded idx / video_ok / text_severity per scene; the current one
+    // renders a single hero clip, so a per-scene verdict no longer exists.
+    scenes: SceneRow[];
   };
 }) {
   // Everything that would make this embarrassing to send, computed once so it
   // sits above the fold rather than being discovered by scrolling.
   const flags: { tone: "warn" | "mid"; text: string }[] = [];
+  // A missing hero is the only fault here now.
+  //
+  // This used to warn whenever fewer than three clips existed, because the
+  // Python pipeline rendered three and joined them with ffmpeg into a
+  // twelve-second montage. generate-hero-media renders one four-second clip
+  // that loops — the montage was the only step that needed a laptop — so a
+  // clip_count of 1 is the current standard, not a shortfall. Left as it was,
+  // every new site would arrive here flagged.
   if (!build.has_video) {
     flags.push({ tone: "warn", text: "No video hero — built on an older pipeline" });
-  } else if (build.clip_count !== null && build.clip_count < 3) {
-    flags.push({ tone: "mid", text: `Only ${build.clip_count} of 3 hero scenes rendered` });
   }
   const badText = build.scenes.filter((s) => s.text_severity === "bad");
   if (badText.length) {
@@ -298,19 +309,24 @@ export function SitePreview({
           {build.scenes.length > 0 && (
             <Panel title="Hero scenes">
               <ul className="space-y-2">
-                {build.scenes.map((s) => (
-                  <li key={s.idx} className="flex items-start gap-2 text-xs">
+                {build.scenes.map((s, i) => {
+                  // Only an explicit false is a failure. A scene with no
+                  // verdict has not been judged — striking it through would
+                  // report every new site as broken.
+                  const failed = s.video_ok === false;
+                  return (
+                  <li key={s.idx ?? i} className="flex items-start gap-2 text-xs">
                     <span
                       className={`mt-1 h-1.5 w-1.5 shrink-0 rounded-full ${
-                        s.video_ok ? "bg-emerald-500" : "bg-red-400"
+                        failed ? "bg-red-400" : "bg-emerald-500"
                       }`}
                     />
                     <span className="min-w-0 flex-1">
-                      <span className={s.video_ok ? "" : "text-muted-foreground line-through"}>
+                      <span className={failed ? "text-muted-foreground line-through" : ""}>
                         {s.scene_name}
                       </span>
                       <span className="mt-1 flex flex-wrap gap-1">
-                        {!s.video_ok && <Pill tone="warn">video blocked</Pill>}
+                        {failed && <Pill tone="warn">video blocked</Pill>}
                         {s.text_severity === "bad" && <Pill tone="warn">garbled text</Pill>}
                         {s.text_severity === "minor" && (
                           <Pill tone="muted">minor text</Pill>
@@ -318,7 +334,8 @@ export function SitePreview({
                       </span>
                     </span>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
             </Panel>
           )}

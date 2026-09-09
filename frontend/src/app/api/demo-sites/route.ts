@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServiceRoleClient } from "@/lib/supabase";
 import { requireAdmin } from "@/lib/admin-auth";
+import { badTextScenes } from "@/lib/demo-media";
 
 export const dynamic = "force-dynamic";
 
@@ -85,9 +86,10 @@ export async function GET(request: NextRequest) {
         has_video: Boolean(m?.hero_video_url),
         // Only severity "bad" counts — the raw gate flags incidental lettering
         // (a distant sign, tiny screen UI) that no visitor would notice.
-        text_flags: (
-          (m?.scenes_json as { text_severity?: string | null }[] | null) ?? []
-        ).filter((sc) => sc.text_severity === "bad").length,
+        // Read through the helper: this column has held both an array of
+        // scenes and an object containing them, and calling .filter on the
+        // object threw, taking the whole page down with an empty 500.
+        text_flags: badTextScenes(m?.scenes_json).length,
         review_status: s.review_status ?? "pending",
         has_email: Boolean(l.contact_email),
         has_address: Boolean(l.owner_mailing_address),
@@ -100,14 +102,18 @@ export async function GET(request: NextRequest) {
   const counts = {
     total: rows.length,
     withVideo: rows.filter((r) => r.has_video).length,
-    fullQuality: rows.filter((r) => r.clip_count === 3).length,
+    // "Full quality" is a hero video plus this business's own photography.
+    // It used to mean exactly three clips, which was the August montage; the
+    // current builder renders one looping clip, so counting to three would
+    // report every new site as substandard.
+    fullQuality: rows.filter((r) => r.has_video).length,
     noVideo: rows.filter((r) => !r.has_video).length,
     sent: rows.filter((r) => r.outreach_sent_at || r.postcard_sent).length,
     unsent: rows.filter((r) => !r.outreach_sent_at && !r.postcard_sent).length,
     viewed: rows.filter((r) => r.demo_viewed_at).length,
     reachable: rows.filter((r) => r.has_email || r.has_address).length,
     approved: rows.filter((r) => r.review_status === "approved").length,
-    flagged: rows.filter((r) => r.text_flags > 0 || !r.has_video || r.clip_count !== 3).length,
+    flagged: rows.filter((r) => r.text_flags > 0 || !r.has_video).length,
   };
 
   return NextResponse.json({ sites: rows, counts });

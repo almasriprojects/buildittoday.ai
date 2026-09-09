@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { createServiceRoleClient } from "@/lib/supabase";
+import { readScenes } from "@/lib/demo-media";
 import { SitePreview } from "@/components/admin/site-preview";
 import type { GeneratedContent } from "@/components/admin/site-copy";
 import type { ReviewStatus } from "@/components/admin/site-review";
@@ -49,8 +50,10 @@ export default async function SitePreviewPage({
   if (!site || site.status !== "ready" || !lead) notFound();
 
   const palette = (media?.brief_json as { palette?: Record<string, string> } | null)?.palette ?? null;
-  const scenes =
-    (media?.scenes_json as { idx: number; scene_name: string; video_ok: boolean }[] | null) ?? [];
+  // Same column, same trap as /api/demo-sites: it has held an array of scenes
+  // and an object containing them, and the cast below used to assume the
+  // array. site-preview then called .filter on an object and this page threw.
+  const scenes = readScenes(media?.scenes_json);
 
   return (
     <SitePreview

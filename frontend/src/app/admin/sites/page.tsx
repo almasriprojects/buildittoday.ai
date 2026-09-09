@@ -71,11 +71,14 @@ export default function GeneratedSitesPage() {
         const isSent = Boolean(s.outreach_sent_at || s.postcard_sent);
         if (sent === "unsent" && isSent) return false;
         if (sent === "sent" && !isSent) return false;
-        if (quality === "full" && s.clip_count !== 3) return false;
-        if (quality === "partial" && !(s.has_video && s.clip_count !== 3)) return false;
+        // Quality is "does it have its own hero video", not "does it have
+        // three clips". Three was the August montage; the current builder
+        // renders one looping clip, so a clip_count test would put every new
+        // site in the wrong bucket.
+        if (quality === "full" && !s.has_video) return false;
+        if (quality === "partial" && !(s.has_video && (s.clip_count ?? 0) > 1)) return false;
         if (quality === "none" && s.has_video) return false;
-        if (quality === "flagged" && !(s.text_flags > 0 || !s.has_video || s.clip_count !== 3))
-          return false;
+        if (quality === "flagged" && !(s.text_flags > 0 || !s.has_video)) return false;
         if (review !== "all" && s.review_status !== review) return false;
         return true;
       }),
@@ -237,10 +240,8 @@ export default function GeneratedSitesPage() {
                         <div className="flex flex-wrap gap-1">
                           {!s.has_video ? (
                             <Pill tone="warn">no video</Pill>
-                          ) : s.clip_count === 3 ? (
-                            <Pill tone="good">3-clip</Pill>
                           ) : (
-                            <Pill tone="mid">{s.clip_count}-clip</Pill>
+                            <Pill tone="good">video</Pill>
                           )}
                           {s.text_flags > 0 && <Pill tone="warn">{s.text_flags}× text</Pill>}
                         </div>
