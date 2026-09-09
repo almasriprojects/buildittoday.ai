@@ -175,8 +175,27 @@ export function offerLayer(opts: {
   var CURSOR_CLASS='mrv2-custom-cursor';
   var hadCustomCursor=false;
 
+  // The generated page has a claim popup of its own, and the two never knew
+  // about each other. Three things followed: the timer below could open the
+  // prices on top of a popup someone was reading; closing the prices restored
+  // page scrolling while that popup was still up; and after the hand-off the
+  // visitor was dropped back onto the popup they had already acted on, needing
+  // a second dismissal to reach the site.
+  function pageModal(){ return document.querySelector('[data-claim-modal]'); }
+  function pageModalOpen(){
+    var m=pageModal();
+    return !!m && m.classList.contains('modal-open');
+  }
+  function closePageModal(){
+    var m=pageModal();
+    if(m) m.classList.remove('modal-open');
+  }
+
   function openModal(){
     if(modal.hasAttribute('data-show')) return;
+    // One popup on screen at a time. The claim popup's only job is to lead
+    // here, so once it has, it is done.
+    closePageModal();
     modal.setAttribute('data-show','');
     document.body.style.overflow='hidden';
     hadCustomCursor=document.documentElement.classList.contains(CURSOR_CLASS);
@@ -185,7 +204,9 @@ export function offerLayer(opts: {
   }
   function closeModal(){
     modal.removeAttribute('data-show');
-    document.body.style.overflow='';
+    // Only give scrolling back if nothing else is holding it. Both popups set
+    // this, and whichever closed last used to win.
+    if(!pageModalOpen()) document.body.style.overflow='';
     if(hadCustomCursor) document.documentElement.classList.add(CURSOR_CLASS);
     try{ sessionStorage.setItem(key,'1'); }catch(e){}
   }
@@ -195,14 +216,24 @@ export function offerLayer(opts: {
 
   // Reaching the bottom is the closest thing to intent we can measure without
   // asking. The timer is only a fallback for someone who skims and stops.
-  var auto=setTimeout(function(){ if(!dismissed) openModal(); }, 45000);
+  //
+  // Neither fires over the page's own claim popup. Interrupting someone who is
+  // already reading about claiming the site is the one moment where opening
+  // the prices unprompted makes things worse, not better — so it waits and
+  // tries again shortly.
+  function offerWhenFree(){
+    if(dismissed) return;
+    if(pageModalOpen()){ setTimeout(offerWhenFree, 5000); return; }
+    openModal();
+  }
+  var auto=setTimeout(offerWhenFree, 45000);
   function onScroll(){
     var d=document.documentElement, sc=window.scrollY||d.scrollTop;
     var pct=(sc+window.innerHeight)/Math.max(d.scrollHeight,1);
     if(pct>0.92){
       window.removeEventListener('scroll',onScroll);
       clearTimeout(auto);
-      if(!dismissed) openModal();
+      offerWhenFree();
     }
   }
   window.addEventListener('scroll',onScroll,{passive:true});
