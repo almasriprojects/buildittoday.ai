@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omar Construction Naples INC | Quality Construction Services in Naples</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:'Inter',sans-serif;color:#1A365D;background:#F8F6F3;line-height:1.6;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")}
+img{max-width:100%;display:block}
+a{text-decoration:none;color:inherit}
+h1,h2,h3,h4{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;line-height:1.15;color:#1A365D}
+h1{font-size:clamp(2.5rem,5vw,4rem);font-weight:800}
+h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1.5rem}
+h3{font-size:clamp(1.5rem,3vw,2rem);margin-bottom:1rem}
+p{margin-bottom:1rem;font-size:1.0625rem}
+section{position:relative;z-index:2}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.btn,.btn-secondary{display:inline-block;padding:.875rem 2rem;border-radius:4px;font-weight:600;font-size:1rem;transition:all .3s ease;border:2px solid transparent;cursor:pointer;font-family:'Inter',sans-serif}
+.btn{background:#D4A574;color:#1A365D;border-color:#D4A574}
+.btn:hover{background:#E8B887;border-color:#E8B887;transform:translateY(-2px)}
+.btn-secondary{background:transparent;color:#FFFFFF;border-color:#FFFFFF}
+.btn-secondary:hover{background:#FFFFFF;color:#1A365D}
+[data-progress]{position:fixed;top:0;left:0;width:0;height:3px;background:#D4A574;z-index:9999;transition:width .1s ease}
+header{position:sticky;top:0;z-index:1000;background:rgba(248,246,243,.97);backdrop-filter:blur(10px);border-bottom:1px solid rgba(26,54,93,.1);padding:1rem 0}
+header .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Bricolage Grotesque',sans-serif;font-size:1.35rem;font-weight:800;color:#1A365D}
+nav{display:flex;align-items:center;gap:2.5rem}
+nav a{font-weight:500;color:#1A365D;transition:color .3s ease;font-size:.9375rem}
+nav a:hover{color:#D4A574}
+[data-menu-toggle]{display:none;background:none;border:none;flex-direction:column;gap:5px;cursor:pointer;padding:.5rem}
+[data-menu-toggle] span{display:block;width:26px;height:2px;background:#1A365D;transition:all .3s ease}
+@media(max-width:767px){
+[data-menu-toggle]{display:flex}
+nav[data-menu-target]{position:absolute;top:100%;left:0;right:0;background:rgba(248,246,243,.98);backdrop-filter:blur(10px);flex-direction:column;padding:2rem 1.5rem;gap:1.5rem;border-bottom:1px solid rgba(26,54,93,.1);display:none}
+nav[data-menu-target].menu-open{display:flex}
+}
+[data-hero]{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(26,54,93,.87),rgba(26,54,93,.64))}
+.hero-content{position:relative;z-index:2;color:#FFFFFF;max-width:900px;padding:2rem 1.5rem}
+.hero-content h1,.hero-content p{text-shadow:0 2px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4)}
+.hero-content h1{margin-bottom:1.5rem}
+.hero-content p{font-size:1.25rem;margin-bottom:2.5rem;max-width:700px}
+#about{padding:8rem 0;background:#FFFFFF}
+#about .container{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+#about .about-text h2{margin-bottom:2rem}
+.parallax-wrap{position:relative;overflow:hidden;border-radius:8px;box-shadow:0 20px 60px rgba(26,54,93,.15)}
+.parallax-wrap img{width:100%;height:auto;display:block}
+@media(max-width:1023px){
+#about .container{grid-template-columns:1fr;gap:3rem}
+}
+[data-media-sequence]{position:relative;height:250vh}
+[data-media-sequence] .ms-track{position:sticky;top:0;height:100vh;overflow:hidden}
+[data-media-sequence] .ms-item{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+[data-media-sequence] .ms-item.ms-active{opacity:1;z-index:2}
+[data-media-sequence] .ms-item img{width:100%;height:100%;object-fit:cover}
+.ms-caption{position:absolute;bottom:0;left:0;right:0;padding:4rem 1.5rem 3rem;z-index:3;color:#FFFFFF;background:linear-gradient(to top,rgba(26,54,93,.87),rgba(26,54,93,.62) 60%,transparent)}
+.ms-caption h3{color:#FFFFFF;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.ms-caption p{color:#FFFFFF;opacity:.95;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+#services{padding:8rem 0;background:#F8F6F3}
+#services h2{text-align:center;margin-bottom:4rem}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2rem}
+.service-card{background:#FFFFFF;padding:2.5rem;border-radius:8px;box-shadow:0 4px 20px rgba(26,54,93,.08);transition:all .4s ease}
+.service-card:hover{transform:translateY(-6px);box-shadow:0 12px 40px rgba(26,54,93,.15)}
+.service-card h3{color:#1A365D;margin-bottom:1rem}
+.service-card p{color:#1A365D;opacity:.8}
+#why-choose{padding:8rem 0;background:#1A365D;color:#FFFFFF}
+#why-choose h2{color:#FFFFFF;text-align:center;margin-bottom:4rem}
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem;max-width:1100px;margin:0 auto}
+.why-item{padding:2rem;background:rgba(255,255,255,.08);border-radius:8px;border-left:4px solid #D4A574}
+.why-item p{margin:0;color:#FFFFFF;opacity:.95}
+#contact{padding:8rem 0;background:#FFFFFF;text-align:center}
+#contact h2{margin-bottom:1.5rem}
+#contact p{max-width:700px;margin:0 auto 2.5rem;font-size:1.125rem}
+footer{background:#1A365D;color:#FFFFFF;padding:4rem 0 2rem}
+footer .container{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:3rem}
+.footer-col h4{font-size:1.125rem;margin-bottom:1.25rem;color:#E8B887}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:.75rem}
+.footer-col ul li a{color:#FFFFFF;opacity:.85;transition:opacity .3s ease}
+.footer-col ul li a:hover{opacity:1;color:#E8B887}
+.footer-bottom{margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.15);text-align:center;opacity:.8;font-size:.9375rem}
+[data-claim-modal]{display:none;position:fixed;inset:0;z-index:10000;align-items:center;justify-content:center;background:rgba(26,54,93,.92);backdrop-filter:blur(8px);padding:1.5rem}
+[data-claim-modal].modal-open{display:flex}
+.claim-modal-panel{background:#FFFFFF;border-radius:12px;max-width:560px;width:100%;padding:3rem;position:relative;box-shadow:0 20px 80px rgba(0,0,0,.3)}
+[data-claim-close]{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:2rem;line-height:1;cursor:pointer;color:#1A365D;opacity:.6;transition:opacity .3s ease;width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+[data-claim-close]:hover{opacity:1}
+.claim-modal-panel h2{margin-bottom:1.5rem;color:#1A365D}
+.claim-modal-panel ul{list-style:none;margin:2rem 0;text-align:left}
+.claim-modal-panel ul li{padding:.75rem 0;border-bottom:1px solid rgba(26,54,93,.1);color:#1A365D}
+.claim-modal-panel ul li:last-child{border-bottom:none}
+.claim-modal-panel ul li::before{content:'✓';color:#D4A574;font-weight:700;margin-right:.75rem}
+@media(max-width:767px){
+section{padding:4rem 0!important}
+#about,#services,#why-choose,#contact{padding:4rem 0!important}
+.claim-modal-panel{padding:2rem}
+}
+</style>
+</head>
+<body>
+<div data-progress></div>
+
+<header>
+<div class="container">
+<div class="logo">Omar Construction Naples INC</div>
+<button data-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<nav data-menu-target>
+<a href="#hero">Home</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#contact">Contact</a>
+<a href="#contact" class="btn" data-claim-trigger>Get a Free Estimate</a>
+</nav>
+</div>
+</header>
+
+<section data-hero id="hero">
+<video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/P26000040131/scene1.png">
+<source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/P26000040131/hero.mp4" type="video/mp4">
+</video>
+<div class="hero-scrim"></div>
+<div class="hero-content">
+<div class="container">
+<h1>Professional Construction Solutions for Naples Homes and Businesses</h1>
+<p>From renovations to new builds, we deliver skilled craftsmanship and reliable service throughout Collier County.</p>
+<a href="#contact" class="btn-secondary" data-claim-trigger>Get a Free Estimate</a>
+</div>
+</div>
+</section>
+
+<section id="about">
+<div class="container" data-reveal>
+<div class="about-text">
+<h2 data-split-text>Building Excellence in Naples</h2>
+<p>Omar Construction Naples INC serves residential and commercial clients throughout the Naples area with comprehensive construction services. We focus on clear communication, quality workmanship, and bringing your vision to life on time and within budget.</p>
+<a href="#contact" class="btn" data-claim-trigger>Start Your Project</a>
+</div>
+<div class="parallax-wrap">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/P26000040131/scene2.png" alt="Craftsman at Work Detail" data-parallax-img="0.15">
+</div>
+</div>
+</section>
+
+<section data-media-sequence>
+<div class="ms-track">
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/P26000040131/scene2.png" alt="Craftsman at Work Detail">
+<div class="ms-caption">
+<h3>Expert Craftsmanship in Every Detail</h3>
+<p>Our skilled team brings precision and care to every renovation, remodel, and new construction project throughout Naples and Collier County.</p>
+</div>
+</div>
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/P26000040131/scene3.png" alt="Material Detail Close-Up">
+<div class="ms-caption">
+<h3>Premium Materials, Lasting Results</h3>
+<p>From custom home builds to commercial tenant improvements, we use quality materials and proven techniques to ensure your investment stands the test of time.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<h2>Comprehensive Construction Services</h2>
+<div class="services-grid">
+<div class="service-card" data-reveal>
+<h3>Home Renovations & Remodeling</h3>
+<p>Complete kitchen and bathroom remodels, room additions, and whole-home renovations tailored to your lifestyle.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>New Construction</h3>
+<p>Custom home building and commercial construction projects managed from foundation to final walkthrough.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Interior & Exterior Improvements</h3>
+<p>Flooring installation, drywall work, painting, siding, and exterior upgrades to enhance your property.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Commercial Construction Services</h3>
+<p>Tenant improvements, office build-outs, and commercial renovation projects for Naples businesses.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Repairs & Maintenance</h3>
+<p>Storm damage repairs, structural fixes, and ongoing maintenance to protect your investment.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="why-choose">
+<div class="container">
+<h2>Why Choose Omar Construction Naples INC</h2>
+<div class="why-grid">
+<div class="why-item" data-reveal>
+<p>Detailed project planning and transparent pricing with no hidden fees</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Direct communication throughout every phase of your project</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Local Naples team familiar with Florida building requirements and climate considerations</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Commitment to job site cleanliness and respecting your property</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container" data-reveal>
+<h2>Ready to Start Your Project?</h2>
+<p>Contact us today to discuss your construction needs and receive a detailed estimate for your Naples property.</p>
+<a href="#contact" class="btn" data-claim-trigger>Request Your Free Quote</a>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-col">
+<h4>Quick Links</h4>
+<ul>
+<li><a href="#hero">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Our Services</h4>
+<ul>
+<li><a href="#services">Home Renovations & Remodeling</a></li>
+<li><a href="#services">New Construction</a></li>
+<li><a href="#services">Interior & Exterior Improvements</a></li>
+<li><a href="#services">Commercial Construction</a></li>
+<li><a href="#services">Repairs & Maintenance</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Omar Construction Naples INC</h4>
+<p>Naples, FL</p>
+<p>Quality Construction Services in Naples</p>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="container">
+<p>&copy; <span data-current-year></span> Omar Construction Naples INC. All rights reserved.</p>
+</div>
+</div>
+</footer>
+
+<div data-claim-modal>
+<div class="claim-modal-panel">
+<button data-claim-close aria-label="Close modal">&times;</button>
+<h2>Transform Your Property with Professional Construction</h2>
+<ul>
+<li>Free detailed project estimates with transparent pricing</li>
+<li>Experienced Naples team with local building expertise</li>
+<li>Quality craftsmanship on every residential and commercial project</li>
+<li>Clear communication from planning through completion</li>
+</ul>
+<a href="#contact" class="btn">Get Your Free Estimate Today</a>
+</div>
+</div>
+
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

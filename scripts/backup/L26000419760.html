@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Jvc Cleaners LLC | Professional Cleaning Services for Your Space</title>
+<meta name="description" content="The Jvc Cleaners LLC serves Fort Lauderdale with comprehensive cleaning solutions tailored to your needs. Thorough, reliable service that keeps your property looking its best.">
+<style>
+:root {
+  --color-text: #1A1A1A;
+  --color-text-muted: #4A4A4A;
+  --color-background: #FFFFFF;
+  --color-border: #111111;
+  --color-accent-primary: #F26B21;
+  --color-accent-secondary: #002E54;
+  --color-trust-bar: #0B2A4A;
+  --font-heading: Poppins, system-ui, -apple-system, sans-serif;
+  --font-body: Poppins, system-ui, -apple-system, sans-serif;
+  --h1-size: 52px;
+  --h2-size: 36px;
+  --h3-size: 24px;
+  --body-size: 16px;
+  --body-line-height: 24px;
+  --heading-weight: 700;
+  --radius-card: 16px;
+  --radius-button: 16px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 24px;
+  --spacing-lg: 48px;
+  --spacing-xl: 96px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--body-size);
+  line-height: var(--body-line-height);
+  color: var(--color-text);
+  background: var(--color-background);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: var(--heading-weight);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--h1-size);
+}
+
+h2 {
+  font-size: var(--h2-size);
+}
+
+h3 {
+  font-size: var(--h3-size);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+[data-progress] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--color-accent-primary);
+  z-index: 9999;
+}
+
+/* HEADER */
+header {
+  position: sticky;
+  top: 0;
+  background: var(--color-background);
+  border-bottom: 1px solid rgba(17, 17, 17, 0.1);
+  z-index: 1000;
+  padding: 16px 24px;
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: var(--heading-weight);
+  color: var(--color-accent-secondary);
+  white-space: nowrap;
+}
+
+[data-menu-target] {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+[data-menu-target] a {
+  font-size: 15px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+[data-menu-target] a:hover {
+  color: var(--color-accent-primary);
+}
+
+[data-menu-toggle] {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--color-text);
+  padding: 4px;
+}
+
+/* BUTTONS */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: var(--radius-button);
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--color-accent-primary);
+  color: #FFFFFF;
+  border-color: var(--color-accent-primary);
+}
+
+.btn-primary:hover {
+  background: #d85b1a;
+  border-color: #d85b1a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(242, 107, 33, 0.3);
+}
+
+.btn-secondary {
+  background: #FFFFFF;
+  color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--color-accent-primary);
+  color: #FFFFFF;
+}
+
+/* HERO */
+[data-hero] {
+  position: relative;
+  height: 90vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #FFFFFF;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.5));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  text-align: center;
+}
+
+.hero-content h1 {
+  margin-bottom: 24px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+.hero-content .subheadline {
+  font-size: 20px;
+  line-height: 1.5;
+  margin-bottom: 32px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* SECTIONS */
+section {
+  padding: var(--spacing-xl) 24px;
+}
+
+.section-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--spacing-lg);
+}
+
+.section-header h2 {
+  margin-bottom: 16px;
+  color: var(--color-accent-secondary);
+}
+
+.section-header p {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* ABOUT */
+.about-section {
+  background: #F9FAFB;
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
+.about-text h2 {
+  margin-bottom: 24px;
+  color: var(--color-accent-secondary);
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.about-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-card);
+  height: 500px;
+}
+
+.about-image-wrapper img {
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+}
+
+/* WHY CHOOSE US */
+.why-section {
+  background: var(--color-accent-secondary);
+  color: #FFFFFF;
+}
+
+.why-section h2 {
+  color: #FFFFFF;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.why-item {
+  text-align: center;
+  padding: 24px;
+}
+
+.why-item::before {
+  content: '✓';
+  display: block;
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  background: var(--color-accent-primary);
+  border-radius: 50%;
+  line-height: 56px;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.why-item p {
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* SERVICES GRID */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 32px;
+}
+
+.service-card {
+  background: #FFFFFF;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  transition: all 0.3s ease;
+}
+
+.service-card:nth-child(even) {
+  background: #FEF7F3;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.service-card h3 {
+  margin-bottom: 16px;
+  color: var(--color-accent-secondary);
+}
+
+.service-card p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* MEDIA SEQUENCE */
+[data-media-sequence] {
+  position: relative;
+  height: 300vh;
+  background: #F9FAFB;
+}
+
+[data-media-sequence] .ms-track {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+[data-media-sequence] .ms-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+[data-media-sequence] .ms-item.ms-active {
+  opacity: 1;
+  z-index: 2;
+}
+
+[data-media-sequence] .ms-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ms-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 48px 32px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+  color: #FFFFFF;
+}
+
+.ms-caption h3 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: #FFFFFF;
+}
+
+.ms-caption p {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 800px;
+}
+
+/* CONTACT CTA */
+.contact-cta {
+  background: linear-gradient(135deg, var(--color-accent-secondary) 0%, #003d6e 100%);
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.contact-cta h2 {
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.contact-cta p {
+  font-size: 18px;
+  margin-bottom: 32px;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* CLAIM MODAL */
+.claim-modal-panel {
+  background: var(--color-background);
+  border-radius: var(--radius-card);
+  padding: 48px;
+  position: relative;
+}
+
+[data-claim-close] {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 32px;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+[data-claim-close]:hover {
+  background: #F3F4F6;
+  color: var(--color-text);
+}
+
+.claim-modal-panel h2 {
+  color: var(--color-accent-secondary);
+  margin-bottom: 16px;
+}
+
+.claim-modal-panel > p {
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: 32px;
+}
+
+.claim-features {
+  margin-bottom: 32px;
+  padding: 24px;
+  background: #F9FAFB;
+  border-radius: 12px;
+}
+
+.claim-features p {
+  font-size: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.claim-features p:last-child {
+  border-bottom: none;
+}
+
+.claim-features p::before {
+  content: '✓ ';
+  color: var(--color-accent-primary);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+/* FOOTER */
+footer {
+  background: var(--color-accent-secondary);
+  color: #FFFFFF;
+  padding: 64px 24px 24px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 48px;
+  margin-bottom: 48px;
+}
+
+.footer-col h4 {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #FFFFFF;
+}
+
+.footer-col p {
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  color: var(--color-accent-primary);
+}
+
+.footer-bottom {
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 767px) {
+  :root {
+    --h1-size: 36px;
+    --h2-size: 28px;
+    --h3-size: 20px;
+    --spacing-lg: 32px;
+    --spacing-xl: 64px;
+  }
+
+  [data-menu-toggle] {
+    display: block;
+  }
+
+  [data-menu-target] {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--color-background);
+    padding: 24px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    gap: 16px;
+  }
+
+  [data-menu-target].menu-open {
+    display: flex;
+  }
+
+  [data-menu-target] a {
+    padding: 8px 0;
+  }
+
+  .about-content {
+    grid-template-columns: 1fr;
+  }
+
+  .about-image-wrapper {
+    height: 350px;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+  }
+
+  .ms-caption {
+    padding: 32px 20px;
+  }
+
+  .ms-caption h3 {
+    font-size: 24px;
+  }
+
+  .ms-caption p {
+    font-size: 16px;
+  }
+
+  .claim-modal-panel {
+    padding: 32px 24px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  :root {
+    --h1-size: 44px;
+    --h2-size: 32px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div data-progress></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">The Jvc Cleaners LLC</div>
+    <button data-menu-toggle aria-label="Menu" aria-expanded="false">☰</button>
+    <nav data-menu-target>
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Get a Free Quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="hero" data-hero>
+    <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/scene1.png">
+      <source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <h1>Spotless Results for Fort Lauderdale Homes and Businesses</h1>
+      <p class="subheadline">From routine maintenance to deep cleaning projects, we deliver thorough, reliable service that keeps your property looking its best.</p>
+      <div class="hero-ctas">
+        <a href="#contact" class="btn btn-primary" data-claim-trigger>Get a Free Quote</a>
+        <a href="#services" class="btn btn-secondary">Our Services</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about" class="about-section">
+    <div class="section-inner">
+      <div class="about-content" data-reveal>
+        <div class="about-text">
+          <h2 data-split-text>Dedicated to Quality Cleaning</h2>
+          <p>The Jvc Cleaners LLC serves Fort Lauderdale with comprehensive cleaning solutions tailored to your needs. We focus on attention to detail, consistent communication, and delivering the clean, fresh environment you deserve every time.</p>
+        </div>
+        <div class="about-image-wrapper">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/scene2.png" alt="Attention to detail in every cleaning" data-parallax-img="0.2" class="ken-burns">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 data-split-text>Why Choose The Jvc Cleaners</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-item" data-reveal>
+          <p>Thorough, detail-oriented approach to every cleaning project</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Flexible scheduling to accommodate your residential or commercial needs</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Responsive communication and dependable service</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Locally serving Fort Lauderdale and surrounding areas</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2 data-split-text>Professional Cleaning Services</h2>
+        <p>Comprehensive solutions for every space and cleaning need</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card" data-reveal>
+          <h3>Residential Cleaning</h3>
+          <p>Complete home cleaning services including kitchens, bathrooms, living areas, and bedrooms for a fresh, comfortable space.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Commercial Cleaning</h3>
+          <p>Professional office and retail cleaning to maintain a welcoming, productive environment for employees and customers.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Deep Cleaning</h3>
+          <p>Intensive cleaning for move-ins, move-outs, or seasonal refreshes that tackle every corner and surface.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Post-Construction Cleanup</h3>
+          <p>Remove dust, debris, and residue after renovations or building projects to reveal your finished space.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-media-sequence>
+    <div class="ms-track">
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/scene1.png" alt="Spotless results for your home">
+        <div class="ms-caption">
+          <h3>Spotless Results for Your Home</h3>
+          <p>From routine maintenance to deep cleaning projects, we deliver thorough, reliable service that keeps your property looking its best.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/scene2.png" alt="Attention to detail every time">
+        <div class="ms-caption">
+          <h3>Attention to Detail Every Time</h3>
+          <p>We focus on thorough, detail-oriented service and consistent communication to deliver the clean, fresh environment you deserve.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419760/scene3.png" alt="Complete residential cleaning services">
+        <div class="ms-caption">
+          <h3>Complete Residential Cleaning Services</h3>
+          <p>Professional cleaning for kitchens, bathrooms, living areas, and bedrooms creates a fresh, comfortable space you'll love.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact-cta">
+    <div class="section-inner">
+      <h2 data-split-text>Ready for a Cleaner Space?</h2>
+      <p>Contact The Jvc Cleaners LLC today to discuss your cleaning needs and receive a free, no-obligation quote.</p>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Schedule Your Service</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>The Jvc Cleaners LLC</h4>
+        <p>Professional Cleaning Services for Your Space</p>
+        <p style="margin-top: 16px;">Fort Lauderdale, FL</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul class="footer-links">
+          <li><a href="#hero">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul class="footer-links">
+          <li><a href="#services">Residential Cleaning</a></li>
+          <li><a href="#services">Commercial Cleaning</a></li>
+          <li><a href="#services">Deep Cleaning</a></li>
+          <li><a href="#services">Post-Construction Cleanup</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 The Jvc Cleaners LLC. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<div data-claim-modal>
+  <div class="claim-modal-panel">
+    <button data-claim-close aria-label="Close">&times;</button>
+    <h2>Claim This Website</h2>
+    <p>This professionally designed website was created specifically for The Jvc Cleaners LLC. If you are the business owner, claim this site today.</p>
+    <div class="claim-features">
+      <p>Award-winning design quality tailored to your business</p>
+      <p>Fully responsive across all devices</p>
+      <p>Optimized for conversions and lead generation</p>
+      <p>Custom photography and video included</p>
+    </div>
+    <a href="#contact" class="btn btn-primary" data-claim-close>Claim This Website Now</a>
+  </div>
+</div>
+
+
+<script>// motion_runtime.js v2.4 — clean premium scroll-motion for cloned sites.
+// Zero fighting with native scroll. Adds: smooth native parallax/hero,
+// split-text reveals, magnetic feel, media sequences (img->video->img),
+// scroll progress, generalized image parallax, Ken-Burns idle motion.
+// v2.2: fixes reduced-motion coverage (was hero-only), adds
+// data-parallax-img + .ken-burns as opt-in single-image motion hooks.
+// v2.3: adds custom cursor + magnetic buttons (desktop, pointer:fine only,
+// no new HTML hooks needed -- works automatically off the existing .btn
+// class every generated page already uses).
+// v2.4: heroInit rewritten to combine continuous idle zoom with the
+// existing scroll parallax in one loop (hero now moves even with zero
+// scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
+// and claimModalInit (popup claim mechanism replacing the old embedded
+// claim section).
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  // ---------- HERO (continuous idle zoom + scroll parallax, unified) ----------
+  // Previously this only updated on scroll, so a hero with zero scroll was
+  // completely static. Now runs its own rAF loop that combines a slow
+  // continuous idle zoom (time-driven) with the existing scroll-driven
+  // parallax into ONE transform, from one function -- no separate CSS
+  // animation, so there is no collision risk with the scroll transform.
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) +
+          ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".ms-item:not(.ms-ui)")
+      );
+      if (!items.length) return;
+      if (prefersReduced) {
+        // No scroll-scrubbing for reduced-motion users — just show the
+        // first item statically instead of leaving everything at opacity:0.
+        items[0].classList.add("ms-active");
+        return;
+      }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) {
+          it.classList.toggle("ms-active", i === idx);
+        });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) {
+          activeVid.play().catch(function () {});
+        }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  // ---------- SPLIT-TEXT ----------
+  function splitInit() {
+    if (prefersReduced) return; // leave headings as plain, fully visible text
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) {
+          c.style.transitionDelay = (30 + i * 18) + "ms";
+        });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  // ---------- DIAGONAL/CLIP REVEAL ----------
+  function revealInit() {
+    if (prefersReduced) return; // elements stay at natural full visibility —
+    // the [data-reveal] CSS below (which starts them at opacity:0) is only
+    // injected inside this function, so skipping it entirely is the fix.
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  // ---------- SCROLL PROGRESS ----------
+  // Not gated behind prefersReduced: a slim width-indicator bar is not the
+  // kind of parallax/scaling motion prefers-reduced-motion is meant to
+  // suppress, and leaving it un-animated would look like a rendering bug
+  // (permanently 0-width) rather than a graceful degradation.
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  // ---------- GENERALIZED IMAGE PARALLAX (any image, not just the hero) ----------
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  // ---------- KEN-BURNS (idle zoom/pan on a single static image) ----------
+  // Pure CSS animation, gated by its own prefers-reduced-motion media query
+  // rather than a JS check, so it degrades correctly even without JS.
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  // ---------- CUSTOM CURSOR (desktop, pointer:fine only) ----------
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.add("mrv2-cursor-hover");
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.remove("mrv2-cursor-hover");
+      }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  // ---------- MAGNETIC BUTTONS ----------
+  // Targets the .btn class every generated page already uses (enforced by
+  // the build prompt's button-system requirement) -- no new HTML hook
+  // needed. Does not touch any element heroInit/mediaInit/parallaxImgInit
+  // already animate, so there is no transform-collision risk with Phase A1.
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ---------- MOBILE MENU TOGGLE ----------
+  // Real hamburger toggle for multi-link nav -- this is the piece that was
+  // deliberately deferred earlier (nav was simplified away instead of
+  // building this) because nav links then became unreachable on mobile.
+  // Not gated by prefersReduced: opening/closing a menu is a UI state
+  // change, not the kind of motion that preference is meant to suppress.
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // ---------- CLAIM MODAL ----------
+  // Replaces the old embedded "Claim This Website" page section. Every
+  // [data-claim-trigger] (the page's real CTA buttons) opens this modal
+  // instead of just scrolling to a section. Structural/positioning CSS is
+  // injected here (like reveal/split-text) so it is guaranteed correct;
+  // the page's own CSS only needs to style the modal's inner content.
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("modal-open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", openModal);
+    });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) {
+      c.addEventListener("click", closeModal);
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("modal-open")) closeModal();
+    });
+    injectCss(
+      "[data-claim-modal]{position:fixed;inset:0;z-index:20000;display:flex;" +
+      "align-items:center;justify-content:center;padding:24px;" +
+      "background:rgba(0,0,0,.6);opacity:0;visibility:hidden;" +
+      "transition:opacity .3s ease}" +
+      "[data-claim-modal].modal-open{opacity:1;visibility:visible}" +
+      "[data-claim-modal] .claim-modal-panel{max-width:560px;width:100%;" +
+      "max-height:85vh;overflow-y:auto;transform:translateY(20px);" +
+      "transition:transform .3s ease}" +
+      "[data-claim-modal].modal-open .claim-modal-panel{transform:translateY(0)}"
+    );
+  }
+
+  // ---------- HELPERS ----------
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) {
+      existing.textContent += css;
+      return;
+    }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();</script>
+</body>
+</html>

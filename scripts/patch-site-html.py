@@ -36,26 +36,43 @@ REPLACEMENTS = [
 
 
 def fix_claim_cta(html):
-    """Make the popup's call-to-action open the prices instead of closing.
+    """Make the popup's call-to-action open the prices.
 
-    Every site shipped `<a href="#" class="btn btn-primary" data-claim-close>`
-    inside the claim modal, straight from the build prompt's example. It closed
-    the popup, went nowhere, and matched the page's own [data-claim-close]
-    rule — which is position:absolute for the × — so it was also painted on top
-    of the heading. Swapping the attribute fixes the behaviour and the layout
-    together, because both came from the same attribute.
+    Across 55 built sites the button inside the "Claim This Website" modal came
+    in three flavours, and not one of them reached a price:
+
+      12  data-claim-close    closed the offer, and — because that selector is
+                              position:absolute for the × — was also dragged
+                              out of flow and printed over the heading
+       6  data-claim-trigger  re-opened the modal it was already inside
+      37  a plain anchor      scrolled to #contact behind a modal still
+                              covering the page
+
+    All three read as a working button and do nothing. They now carry
+    data-bit-open, which the serve-time offer layer binds: the prices live in
+    lib/pricing.ts, not in the page, so handing over is the only way this
+    button can lead to money.
+
+    Scoped to the modal so the page's own CTAs, which correctly open the modal
+    via data-claim-trigger, are left alone.
     """
-    pattern = re.compile(
-        r'(<a\b[^>]*\bclass=["\'][^"\']*\bbtn\b[^"\']*["\'][^>]*?)\s+data-claim-close(=["\'][^"\']*["\'])?',
-        re.I,
-    )
+    modal = re.search(r'<div\b[^>]*data-claim-modal.*?(?=</body>)', html, re.S | re.I)
+    if not modal:
+        return html
+    block = modal.group(0)
 
-    def swap(m):
-        tag = m.group(1)
-        tag = re.sub(r'href=["\']#["\']', 'href="/pricing"', tag, flags=re.I)
-        return tag + ' data-bit-open'
+    cta = re.search(r'<a\b[^>]*\bclass=["\'][^"\']*\bbtn\b[^"\']*["\'][^>]*>', block, re.I)
+    if not cta or "data-bit-open" in cta.group(0):
+        return html
 
-    return pattern.sub(swap, html)
+    tag = cta.group(0)
+    new = re.sub(r'\s+data-claim-(?:close|trigger)(=["\'][^"\']*["\'])?', '', tag, flags=re.I)
+    # href="#" is not a fallback. Anything else the model chose is a real
+    # section on the page, so it is left as the no-JS behaviour.
+    new = re.sub(r'href=["\']#["\']', 'href="/pricing"', new, flags=re.I)
+    new = new[:-1].rstrip() + ' data-bit-open>'
+
+    return html.replace(block, block.replace(tag, new, 1), 1)
 
 
 def key():
@@ -120,8 +137,13 @@ def main():
             skipped += 1
             continue
 
-        with open(os.path.join(BACKUP, f"{slug}.html"), "w") as f:
-            f.write(html)
+        # Never overwrite an existing backup. A second run would otherwise
+        # replace the true original with the output of the first one, and the
+        # thing worth keeping is the state before anything was touched.
+        dest = os.path.join(BACKUP, f"{slug}.html")
+        if not os.path.exists(dest):
+            with open(dest, "w") as f:
+                f.write(html)
 
         api(path + "?upsert=true", new.encode(), method="PUT",
             ctype="text/html", raw=True)

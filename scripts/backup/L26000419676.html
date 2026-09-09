@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loca Preowned Automotive LLC | Quality Preowned Vehicles in Crystal River</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:'Inter',sans-serif;font-size:1.0625rem;line-height:1.7;color:#1a2332;background:#f5f3f0;overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:'Outfit',sans-serif;font-weight:700;line-height:1.15;margin-bottom:1rem}
+h1{font-size:clamp(2.5rem,6vw,5rem);font-weight:800}
+h2{font-size:clamp(2rem,4.5vw,3.5rem);font-weight:700}
+h3{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:600}
+p{margin-bottom:1.25rem}
+a{text-decoration:none;color:inherit}
+img,video{max-width:100%;display:block}
+section{padding:6rem 1.5rem}
+@media(min-width:768px){section{padding:8rem 2rem}}
+.container{max-width:1200px;margin:0 auto}
+
+[data-progress]{position:fixed;top:0;left:0;width:0%;height:4px;background:linear-gradient(90deg,#c8986b,#e8b88f);z-index:9999;transition:width .1s linear}
+
+header{position:sticky;top:0;z-index:1000;background:rgba(26,35,50,.96);backdrop-filter:blur(12px);padding:1rem 1.5rem;box-shadow:0 2px 16px rgba(0,0,0,.1)}
+header .container{display:flex;align-items:center;justify-content:space-between;max-width:1400px}
+.logo{font-family:'Outfit',sans-serif;font-size:1.35rem;font-weight:700;color:#f5f3f0;letter-spacing:-0.02em}
+nav{display:none;gap:2.5rem;align-items:center}
+nav a{color:#f5f3f0;font-weight:500;font-size:0.9375rem;transition:color .3s ease;position:relative}
+nav a:hover{color:#e8b88f}
+nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:#c8986b;transition:width .3s ease}
+nav a:hover::after{width:100%}
+@media(min-width:768px){nav{display:flex}[data-menu-toggle]{display:none!important}}
+[data-menu-toggle]{background:none;border:none;color:#f5f3f0;font-size:1.75rem;cursor:pointer;padding:0.5rem;line-height:1;display:block}
+[data-menu-target]{position:absolute;top:100%;left:0;right:0;background:rgba(26,35,50,.98);backdrop-filter:blur(12px);padding:2rem 1.5rem;display:none;flex-direction:column;gap:1.5rem;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+[data-menu-target].menu-open{display:flex}
+[data-menu-target] a{color:#f5f3f0;font-weight:500;font-size:1.0625rem;padding:0.75rem 0;border-bottom:1px solid rgba(245,243,240,.1)}
+[data-menu-target] a:last-of-type{border-bottom:none}
+[data-menu-target] .btn{margin-top:1rem;text-align:center}
+
+.btn,.btn-secondary{display:inline-block;padding:0.95rem 2.25rem;font-weight:600;font-size:0.9375rem;border-radius:4px;transition:all .3s ease;cursor:pointer;border:2px solid transparent;font-family:'Inter',sans-serif;letter-spacing:0.02em}
+.btn{background:#c8986b;color:#1a2332;border-color:#c8986b}
+.btn:hover{background:#e8b88f;border-color:#e8b88f;transform:translateY(-2px);box-shadow:0 8px 20px rgba(200,152,107,.3)}
+.btn-secondary{background:transparent;color:#f5f3f0;border-color:#f5f3f0}
+.btn-secondary:hover{background:#f5f3f0;color:#1a2332;transform:translateY(-2px)}
+
+[data-hero]{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden;padding:0}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(26,35,50,.85),rgba(26,35,50,.62))}
+.hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 1.5rem;color:#f5f3f0}
+.hero-content h1{margin-bottom:1.5rem;text-shadow:0 2px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4)}
+.hero-content p{font-size:clamp(1.125rem,2.5vw,1.5rem);margin-bottom:2.5rem;max-width:700px;line-height:1.6;text-shadow:0 2px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4)}
+
+[data-media-sequence]{position:relative;height:250vh}
+[data-media-sequence] .ms-track{position:sticky;top:0;height:100vh;overflow:hidden}
+[data-media-sequence] .ms-item{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+[data-media-sequence] .ms-item.ms-active{opacity:1;z-index:2}
+[data-media-sequence] .ms-item img{width:100%;height:100%;object-fit:cover}
+.ms-caption{position:absolute;bottom:0;left:0;right:0;padding:4rem 1.5rem 3rem;z-index:3;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,.6) 60%,transparent)}
+.ms-caption h3{color:#e8b88f;margin-bottom:0.75rem;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.ms-caption p{margin-bottom:0;font-size:1.0625rem;line-height:1.6;max-width:700px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+
+#about{background:#fff}
+.about-grid{display:grid;gap:3rem;align-items:center}
+@media(min-width:768px){.about-grid{grid-template-columns:1fr 1fr;gap:4rem}}
+.about-text h2{margin-bottom:1.5rem;color:#1a2332}
+.about-text p{font-size:1.0625rem;line-height:1.75;color:#1a2332}
+.about-image{position:relative;overflow:hidden;border-radius:8px;box-shadow:0 12px 40px rgba(0,0,0,.12)}
+.about-image img{width:100%;height:auto;display:block}
+
+#services{background:#f5f3f0}
+#services h2{text-align:center;margin-bottom:3.5rem;color:#1a2332}
+.services-grid{display:grid;gap:2rem;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.service-card{background:#fff;padding:2.5rem 2rem;border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.06);transition:all .4s ease;border-top:4px solid #c8986b}
+.service-card:hover{transform:translateY(-8px);box-shadow:0 12px 40px rgba(0,0,0,.12)}
+.service-card h3{color:#1a2332;margin-bottom:1rem;font-size:1.5rem}
+.service-card p{color:#1a2332;margin-bottom:0;font-size:1rem;line-height:1.7}
+
+#why-choose{background:#1a2332;color:#f5f3f0}
+#why-choose h2{text-align:center;margin-bottom:3.5rem;color:#f5f3f0}
+.why-grid{display:grid;gap:2rem;max-width:900px;margin:0 auto}
+@media(min-width:768px){.why-grid{grid-template-columns:1fr 1fr;gap:2.5rem}}
+.why-item{padding:2rem;background:rgba(245,243,240,.05);border-radius:8px;border-left:4px solid #c8986b;transition:all .3s ease}
+.why-item:hover{background:rgba(245,243,240,.08);transform:translateX(8px)}
+.why-item p{margin-bottom:0;font-size:1.0625rem;line-height:1.7}
+
+#contact{background:#fff;text-align:center}
+#contact h2{margin-bottom:1.5rem;color:#1a2332}
+#contact p{font-size:1.125rem;margin-bottom:2.5rem;max-width:700px;margin-left:auto;margin-right:auto;color:#1a2332}
+
+footer{background:#1a2332;color:#f5f3f0;padding:4rem 1.5rem 2rem}
+.footer-grid{display:grid;gap:3rem;max-width:1200px;margin:0 auto 3rem;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.footer-col h4{font-size:1.125rem;margin-bottom:1.25rem;color:#e8b88f;font-weight:600}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.75rem}
+.footer-col ul li a{color:#f5f3f0;font-size:0.9375rem;transition:color .3s ease}
+.footer-col ul li a:hover{color:#e8b88f}
+.footer-col p{font-size:0.9375rem;line-height:1.7;margin-bottom:0.5rem}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid rgba(245,243,240,.15);font-size:0.875rem;color:rgba(245,243,240,.7);max-width:1200px;margin:0 auto}
+
+[data-claim-modal]{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(26,35,50,.92);backdrop-filter:blur(8px);padding:1.5rem}
+[data-claim-modal].claim-modal-open{display:flex}
+.claim-modal-panel{background:#fff;border-radius:12px;max-width:560px;width:100%;padding:3rem 2.5rem;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+[data-claim-close]{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:2rem;line-height:1;cursor:pointer;color:#1a2332;opacity:.5;transition:opacity .3s ease;padding:0.5rem}
+[data-claim-close]:hover{opacity:1}
+.claim-modal-panel h2{color:#1a2332;margin-bottom:1.5rem;font-size:2rem}
+.claim-modal-panel ul{list-style:none;margin:2rem 0}
+.claim-modal-panel ul li{padding:0.875rem 0;border-bottom:1px solid rgba(26,35,50,.1);font-size:1rem;color:#1a2332;line-height:1.6}
+.claim-modal-panel ul li:last-child{border-bottom:none}
+.claim-modal-panel ul li::before{content:'✓';color:#c8986b;font-weight:700;margin-right:0.75rem;font-size:1.125rem}
+.claim-modal-panel .btn{width:100%;text-align:center;margin-top:1.5rem}
+
+@media(max-width:767px){
+h1{font-size:clamp(2rem,8vw,2.5rem)}
+h2{font-size:clamp(1.75rem,6vw,2rem)}
+section{padding:4rem 1.5rem}
+.hero-content p{font-size:1.125rem}
+.services-grid{grid-template-columns:1fr}
+.why-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div data-progress></div>
+
+<header>
+  <div class="container">
+    <div class="logo">Loca Preowned Automotive</div>
+    <nav>
+      <a href="#hero">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn" data-claim-trigger>View Inventory</a>
+    </nav>
+    <button data-menu-toggle aria-label="Toggle menu">☰</button>
+  </div>
+  <nav data-menu-target>
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+    <a href="#contact" class="btn" data-claim-trigger>View Inventory</a>
+  </nav>
+</header>
+
+<section data-hero id="hero">
+  <video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419676/scene1.png">
+    <source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419676/hero.mp4" type="video/mp4">
+  </video>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <h1 data-split-text>Find Your Next Vehicle at Loca Preowned Automotive</h1>
+    <p>Browse our selection of quality used cars, trucks, and SUVs. We make buying a preowned vehicle straightforward and hassle-free.</p>
+    <a href="#contact" class="btn" data-claim-trigger>View Inventory</a>
+  </div>
+</section>
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-text" data-reveal>
+        <h2 data-split-text>Your Local Source for Preowned Vehicles</h2>
+        <p>Loca Preowned Automotive serves Crystal River and the surrounding communities with a curated selection of used vehicles. We focus on quality, transparency, and helping you find the right vehicle that fits your needs and budget.</p>
+      </div>
+      <div class="about-image" data-parallax-img="0.15">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419676/scene2.png" alt="Quality vehicle inspection at Loca Preowned Automotive" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-media-sequence>
+  <div class="ms-track">
+    <div class="ms-item">
+      <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419676/scene2.png" alt="Interior Detail—Quality Inspection" loading="lazy">
+      <div class="ms-caption">
+        <h3>Thorough Vehicle Inspections</h3>
+        <p>Every vehicle on our lot undergoes a comprehensive inspection to ensure quality and reliability. We check mechanical systems, safety features, and overall condition so you can buy with confidence.</p>
+      </div>
+    </div>
+    <div class="ms-item">
+      <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419676/scene3.png" alt="Handshake Moment—Trust and Transparency" loading="lazy">
+      <div class="ms-caption">
+        <h3>Transparent, Straightforward Process</h3>
+        <p>No hidden fees, no pressure tactics. We believe in honest pricing and clear communication. Our team works with you to find the right vehicle and explore financing options that fit your budget.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="container">
+    <h2 data-split-text>Our Services</h2>
+    <div class="services-grid">
+      <div class="service-card" data-reveal>
+        <h3>Preowned Vehicle Sales</h3>
+        <p>Quality used cars, trucks, and SUVs inspected and ready for the road.</p>
+      </div>
+      <div class="service-card" data-reveal>
+        <h3>Vehicle Sourcing</h3>
+        <p>Looking for something specific? We can help locate the right vehicle for you.</p>
+      </div>
+      <div class="service-card" data-reveal>
+        <h3>Trade-In Assistance</h3>
+        <p>Fair evaluations on your current vehicle to help with your next purchase.</p>
+      </div>
+      <div class="service-card" data-reveal>
+        <h3>Financing Guidance</h3>
+        <p>We work with local lenders to help you explore financing options.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="why-choose">
+  <div class="container">
+    <h2 data-split-text>Why Choose Loca Preowned Automotive</h2>
+    <div class="why-grid">
+      <div class="why-item" data-reveal>
+        <p>Transparent pricing with no hidden fees or pressure tactics</p>
+      </div>
+      <div class="why-item" data-reveal>
+        <p>Each vehicle inspected to ensure quality and reliability</p>
+      </div>
+      <div class="why-item" data-reveal>
+        <p>Straightforward buying process focused on your needs</p>
+      </div>
+      <div class="why-item" data-reveal>
+        <p>Local Crystal River business that values community relationships</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="container">
+    <h2 data-split-text>Ready to Find Your Next Vehicle?</h2>
+    <p>Stop by our lot in Crystal River or reach out to learn more about our current inventory.</p>
+    <a href="#contact" class="btn" data-claim-trigger>Contact Us Today</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Preowned Vehicle Sales</a></li>
+        <li><a href="#services">Vehicle Sourcing</a></li>
+        <li><a href="#services">Trade-In Assistance</a></li>
+        <li><a href="#services">Financing Guidance</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Loca Preowned Automotive LLC</h4>
+      <p>Crystal River, FL</p>
+      <p>Quality Preowned Vehicles in Crystal River</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; <span data-current-year></span> Loca Preowned Automotive LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<div data-claim-modal>
+  <div class="claim-modal-panel">
+    <button data-claim-close aria-label="Close modal">&times;</button>
+    <h2>Upgrade Your Online Presence</h2>
+    <ul>
+      <li>Custom domain and professional email</li>
+      <li>Advanced inventory management system</li>
+      <li>Lead capture and customer follow-up tools</li>
+      <li>Mobile-optimized contact forms and scheduling</li>
+    </ul>
+    <a href="#contact" class="btn">Get Started Today</a>
+  </div>
+</div>
+
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

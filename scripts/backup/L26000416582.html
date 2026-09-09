@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A & D Rivar Construction LLC | Quality Construction Services in Largo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #1a3a52;
+            background: #f8f6f3;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #1a3a52;
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+        }
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+        }
+
+        h3 {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        [data-progress] {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, #d4a574, #e8c9a0);
+            z-index: 9999;
+            transition: width 0.1s linear;
+        }
+
+        /* Grain Texture Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='2.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Header */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(248, 246, 243, 0.97);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(26, 58, 82, 0.08);
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1.25rem;
+            padding-bottom: 1.25rem;
+        }
+
+        .logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: #1a3a52;
+            letter-spacing: -0.02em;
+        }
+
+        nav[data-menu-target] {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        nav a {
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #1a3a52;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav a:not(.btn):hover {
+            color: #d4a574;
+        }
+
+        button[data-menu-toggle] {
+            display: none;
+            background: none;
+            border: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        button[data-menu-toggle] span {
+            width: 26px;
+            height: 2px;
+            background: #1a3a52;
+            transition: all 0.3s ease;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.875rem 2rem;
+            background: #d4a574;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: 2px solid #d4a574;
+        }
+
+        .btn:hover {
+            background: #c49565;
+            border-color: #c49565;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 165, 116, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #1a3a52;
+            border: 2px solid #1a3a52;
+        }
+
+        .btn-secondary:hover {
+            background: #1a3a52;
+            color: #ffffff;
+            border-color: #1a3a52;
+        }
+
+        /* Hero Section */
+        [data-hero] {
+            position: relative;
+            min-height: 88vh;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .hero-scrim {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(135deg, rgba(26, 58, 82, 0.85) 0%, rgba(26, 58, 82, 0.62) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: #ffffff;
+            max-width: 800px;
+        }
+
+        .hero-content h1 {
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-content p {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+            color: #ffffff;
+            text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+        }
+
+        /* About Section */
+        #about {
+            padding: 8rem 0;
+            background: #ffffff;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            margin-bottom: 2rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            color: #1a3a52;
+            opacity: 0.9;
+        }
+
+        .about-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 20px 60px rgba(26, 58, 82, 0.15);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Media Sequence */
+        [data-media-sequence] {
+            position: relative;
+            height: 250vh;
+        }
+
+        [data-media-sequence] .ms-track {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        [data-media-sequence] .ms-item {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        [data-media-sequence] .ms-item.ms-active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        [data-media-sequence] .ms-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .ms-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 4rem 1.5rem 3rem;
+            z-index: 3;
+            color: #ffffff;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.6) 60%, transparent);
+        }
+
+        .ms-caption h3 {
+            color: #ffffff;
+            margin-bottom: 0.75rem;
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+        }
+
+        .ms-caption p {
+            font-size: 1.1rem;
+            margin: 0;
+            max-width: 700px;
+        }
+
+        /* Services Section */
+        #services {
+            padding: 8rem 0;
+            background: #f8f6f3;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem;
+        }
+
+        .section-header h2 {
+            margin-bottom: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: #ffffff;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(26, 58, 82, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(26, 58, 82, 0.15);
+        }
+
+        .service-card h3 {
+            color: #1a3a52;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .service-card p {
+            color: #1a3a52;
+            opacity: 0.85;
+            margin: 0;
+            line-height: 1.7;
+        }
+
+        /* Why Choose Section */
+        #why-choose {
+            padding: 8rem 0;
+            background: #1a3a52;
+            color: #ffffff;
+        }
+
+        #why-choose h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .why-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .why-item::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #d4a574;
+            color: #ffffff;
+            border-radius: 50%;
+            flex-shrink: 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .why-item p {
+            margin: 0;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        #contact {
+            padding: 8rem 0;
+            background: #ffffff;
+        }
+
+        .contact-content {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-content h2 {
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-content p {
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            color: #1a3a52;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a3a52;
+            color: #ffffff;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            color: #e8c9a0;
+            font-size: 1.1rem;
+            margin-bottom: 1.25rem;
+            font-weight: 600;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: color 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .footer-col a:hover {
+            color: #e8c9a0;
+        }
+
+        .footer-col p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        /* Claim Modal */
+        [data-claim-modal] {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(26, 58, 82, 0.92);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            backdrop-filter: blur(8px);
+        }
+
+        [data-claim-modal].modal-open {
+            display: flex;
+        }
+
+        .claim-modal-panel {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        button[data-claim-close] {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #1a3a52;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        button[data-claim-close]:hover {
+            opacity: 1;
+        }
+
+        .claim-modal-panel h2 {
+            margin-bottom: 1.5rem;
+            color: #1a3a52;
+        }
+
+        .claim-features {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .claim-features li {
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(26, 58, 82, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .claim-features li:last-child {
+            border-bottom: none;
+        }
+
+        .claim-features li::before {
+            content: '✓';
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background: #d4a574;
+            color: #ffffff;
+            border-radius: 50%;
+            flex-shrink: 0;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 1023px) {
+            .about-grid {
+                gap: 3rem;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            }
+        }
+
+        @media (max-width: 767px) {
+            button[data-menu-toggle] {
+                display: flex;
+            }
+
+            nav[data-menu-target] {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(248, 246, 243, 0.98);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0;
+                padding: 1rem 0;
+                border-bottom: 1px solid rgba(26, 58, 82, 0.08);
+                display: none;
+                box-shadow: 0 10px 30px rgba(26, 58, 82, 0.1);
+            }
+
+            nav[data-menu-target].menu-open {
+                display: flex;
+            }
+
+            nav[data-menu-target] a {
+                padding: 1rem 1.5rem;
+                border-bottom: 1px solid rgba(26, 58, 82, 0.05);
+            }
+
+            nav[data-menu-target] a.btn {
+                margin: 1rem 1.5rem 0.5rem;
+                text-align: center;
+                border-bottom: none;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+
+            .ms-caption {
+                padding: 3rem 1.5rem 2rem;
+            }
+
+            .why-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .claim-modal-panel {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 8vw, 2.5rem);
+            }
+
+            #about,
+            #services,
+            #why-choose,
+            #contact {
+                padding: 6rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div data-progress></div>
+
+    <header>
+        <div class="container">
+            <div class="logo">A & D Rivar Construction</div>
+            <button data-menu-toggle aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <nav data-menu-target>
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#services">Services</a>
+                <a href="#contact">Contact</a>
+                <a href="#contact" class="btn" data-claim-trigger>Get a Free Estimate</a>
+            </nav>
+        </div>
+    </header>
+
+    <section data-hero id="hero">
+        <video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000416582/scene1.png">
+            <source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000416582/hero.mp4" type="video/mp4">
+        </video>
+        <div class="hero-scrim"></div>
+        <div class="hero-content container">
+            <h1>Professional Construction Services for Your Home or Business</h1>
+            <p>A & D Rivar Construction delivers reliable craftsmanship and attention to detail for residential and commercial projects throughout Largo and the surrounding Tampa Bay area.</p>
+            <a href="#contact" class="btn" data-claim-trigger>Get a Free Estimate</a>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content" data-reveal>
+                    <h2 data-split-text>Building Quality Projects in Largo</h2>
+                    <p>A & D Rivar Construction LLC serves homeowners and businesses throughout Largo with comprehensive construction services. We focus on clear communication, quality workmanship, and treating every project with the care and professionalism it deserves.</p>
+                </div>
+                <div class="about-image" data-parallax-img="0.15">
+                    <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000416582/scene2.png" alt="Quality construction craftsmanship">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section data-media-sequence>
+        <div class="ms-track">
+            <div class="ms-item">
+                <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000416582/scene2.png" alt="Craftsmanship in Action">
+                <div class="ms-caption">
+                    <div class="container">
+                        <h3>Craftsmanship in Action</h3>
+                        <p>Every project receives meticulous attention to detail, from initial planning through final completion. Our skilled team brings years of experience to residential remodeling, room additions, and commercial build-outs throughout the Tampa Bay area.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="ms-item">
+                <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000416582/scene3.png" alt="Finished Detail">
+                <div class="ms-caption">
+                    <div class="container">
+                        <h3>Finished Detail</h3>
+                        <p>From custom carpentry and finish work to structural renovations, we deliver lasting results that enhance the value and functionality of your property. Quality materials and expert execution define every A & D Rivar Construction project.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Construction Services</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card" data-reveal>
+                    <h3>Home Remodeling</h3>
+                    <p>Transform your living spaces with kitchen renovations, bathroom updates, and whole-home remodeling projects tailored to your vision.</p>
+                </div>
+                <div class="service-card" data-reveal>
+                    <h3>Room Additions</h3>
+                    <p>Expand your home with expertly constructed additions that blend seamlessly with your existing structure.</p>
+                </div>
+                <div class="service-card" data-reveal>
+                    <h3>Commercial Construction</h3>
+                    <p>Professional build-outs and renovations for retail spaces, offices, and commercial properties.</p>
+                </div>
+                <div class="service-card" data-reveal>
+                    <h3>General Repairs & Maintenance</h3>
+                    <p>From drywall and flooring to structural repairs, we handle the construction needs that keep your property in top condition.</p>
+                </div>
+                <div class="service-card" data-reveal>
+                    <h3>Custom Carpentry</h3>
+                    <p>Skilled carpentry work including custom built-ins, trim installation, and finish carpentry for residential and commercial spaces.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="why-choose">
+        <div class="container">
+            <h2>Why Choose A & D Rivar Construction</h2>
+            <div class="why-grid">
+                <div class="why-item" data-reveal>
+                    <p>Transparent pricing and detailed estimates before work begins</p>
+                </div>
+                <div class="why-item" data-reveal>
+                    <p>Responsive communication throughout every phase of your project</p>
+                </div>
+                <div class="why-item" data-reveal>
+                    <p>Commitment to clean, organized job sites and timely completion</p>
+                </div>
+                <div class="why-item" data-reveal>
+                    <p>Focus on quality materials and lasting craftsmanship</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <div class="contact-content" data-reveal>
+                <h2>Ready to Start Your Construction Project?</h2>
+                <p>Contact A & D Rivar Construction today to discuss your project needs and receive a detailed estimate.</p>
+                <a href="#contact" class="btn" data-claim-trigger>Request Your Free Estimate</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#services">Home Remodeling</a></li>
+                        <li><a href="#services">Room Additions</a></li>
+                        <li><a href="#services">Commercial Construction</a></li>
+                        <li><a href="#services">General Repairs</a></li>
+                        <li><a href="#services">Custom Carpentry</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>A & D Rivar Construction LLC</h4>
+                    <p>Largo, FL</p>
+                    <p>Quality Construction Services in Largo</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span data-current-year></span> A & D Rivar Construction LLC. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <div data-claim-modal>
+        <div class="claim-modal-panel">
+            <button data-claim-close aria-label="Close modal">&times;</button>
+            <h2>Transform Your Vision Into Reality</h2>
+            <p>Partner with A & D Rivar Construction for your next project and experience:</p>
+            <ul class="claim-features">
+                <li>Detailed project estimates with transparent pricing</li>
+                <li>Professional craftsmanship on every job</li>
+                <li>Clear communication from start to finish</li>
+                <li>Timely completion with quality results</li>
+            </ul>
+            <a href="#contact" class="btn" data-claim-trigger>Get Your Free Estimate Today</a>
+        </div>
+    </div>
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

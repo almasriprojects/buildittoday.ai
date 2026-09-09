@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chess Comic Academy LLC | Strategic storytelling through comics and illustration</title>
+  <meta name="description" content="Jacksonville's creative studio specializing in comic illustration, branded content, and visual storytelling. We combine the compelling power of comic-style illustration with marketing strategy to create visual content that resonates.">
+  <style>
+    :root {
+      --color-text: #000000;
+      --color-background: #FFFFFF;
+      --color-text-on-dark: #FFFFFF;
+      --color-accent-primary: #000000;
+      --color-accent-secondary: #D94C4C;
+      --color-accent-tertiary: #C9A227;
+      --color-background-dark: #1A1A1A;
+      --font-heading: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-size-h1: clamp(40px, 7vw, 60px);
+      --font-size-h2: clamp(32px, 5vw, 48px);
+      --font-size-h3: clamp(24px, 4vw, 32px);
+      --font-size-body: 16px;
+      --line-height-body: 1.5;
+      --spacing-xs: 8px;
+      --spacing-sm: 16px;
+      --spacing-md: 24px;
+      --spacing-lg: 48px;
+      --spacing-xl: 80px;
+      --spacing-xxl: 120px;
+      --radius-card: 8px;
+      --radius-pill: 9999px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--font-size-body);
+      line-height: var(--line-height-body);
+      color: var(--color-text);
+      background: var(--color-background);
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      line-height: 1.1;
+    }
+
+    h1 {
+      font-size: var(--font-size-h1);
+    }
+
+    h2 {
+      font-size: var(--font-size-h2);
+    }
+
+    h3 {
+      font-size: var(--font-size-h3);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--color-accent-primary);
+      background: transparent;
+      color: var(--color-text);
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--color-accent-primary);
+      color: var(--color-background);
+    }
+
+    .btn-primary {
+      border-color: var(--color-accent-primary);
+    }
+
+    .btn-secondary {
+      border-color: var(--color-accent-secondary);
+      color: var(--color-accent-secondary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-accent-secondary);
+      color: var(--color-background);
+    }
+
+    .btn-on-dark {
+      border-color: var(--color-text-on-dark);
+      color: var(--color-text-on-dark);
+    }
+
+    .btn-on-dark:hover {
+      background: var(--color-text-on-dark);
+      color: var(--color-background-dark);
+    }
+
+    /* SCROLL PROGRESS */
+    [data-progress] {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: var(--color-accent-secondary);
+      z-index: 9999;
+      transition: width 0.1s linear;
+    }
+
+    /* HEADER */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .header-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: var(--spacing-md) var(--spacing-lg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    [data-menu-target] {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    [data-menu-target] a {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      transition: color 0.3s ease;
+    }
+
+    [data-menu-target] a:hover {
+      color: var(--color-accent-secondary);
+    }
+
+    [data-menu-toggle] {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 767px) {
+      [data-menu-toggle] {
+        display: block;
+      }
+
+      [data-menu-target] {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        align-items: stretch;
+        background: var(--color-background);
+        padding: var(--spacing-sm);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      }
+
+      [data-menu-target].menu-open {
+        display: flex;
+      }
+
+      [data-menu-target] a {
+        padding: var(--spacing-sm);
+        text-align: center;
+      }
+
+      [data-menu-target] .btn {
+        width: 100%;
+      }
+    }
+
+    /* HERO */
+    [data-hero] {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: var(--color-text-on-dark);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
+      z-index: 1;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1000px;
+      padding: var(--spacing-lg);
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      margin-bottom: var(--spacing-md);
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-content p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      margin-bottom: var(--spacing-lg);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ABOUT */
+    #about {
+      padding: var(--spacing-xxl) var(--spacing-lg);
+      background: var(--color-background);
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+
+    .about-content h2 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .about-content p {
+      font-size: 18px;
+      line-height: 1.7;
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    .about-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-card);
+      height: 500px;
+    }
+
+    .about-image img {
+      width: 100%;
+      height: 130%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    @media (max-width: 991px) {
+      .about-inner {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+      }
+
+      .about-image {
+        height: 400px;
+      }
+    }
+
+    /* MEDIA SEQUENCE */
+    [data-media-sequence] {
+      position: relative;
+      height: 300vh;
+    }
+
+    [data-media-sequence] .ms-track {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    [data-media-sequence] .ms-item {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    [data-media-sequence] .ms-item.ms-active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    [data-media-sequence] .ms-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ms-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-lg);
+      background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.85));
+      color: var(--color-text-on-dark);
+      z-index: 3;
+    }
+
+    .ms-caption h3 {
+      margin-bottom: var(--spacing-sm);
+      font-size: clamp(24px, 4vw, 36px);
+    }
+
+    .ms-caption p {
+      font-size: clamp(14px, 2vw, 18px);
+      max-width: 600px;
+      opacity: 0.9;
+    }
+
+    @media (max-width: 767px) {
+      .ms-caption {
+        padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+      }
+    }
+
+    /* SERVICES */
+    #services {
+      padding: var(--spacing-xxl) var(--spacing-lg);
+      background: var(--color-background-dark);
+      color: var(--color-text-on-dark);
+    }
+
+    .services-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .services-header h2 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .service-card {
+      padding: var(--spacing-lg);
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .service-card h3 {
+      margin-bottom: var(--spacing-sm);
+      font-size: 24px;
+    }
+
+    .service-card p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    @media (max-width: 767px) {
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card {
+        border-right: none;
+      }
+    }
+
+    /* WHY CHOOSE US */
+    .why-choose {
+      padding: var(--spacing-xxl) var(--spacing-lg);
+      background: var(--color-accent-tertiary);
+      color: var(--color-text);
+    }
+
+    .why-choose-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .why-choose h2 {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .why-item {
+      padding: var(--spacing-md);
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius-card);
+    }
+
+    .why-item::before {
+      content: '✓';
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
+      text-align: center;
+      background: var(--color-accent-primary);
+      color: var(--color-background);
+      border-radius: 50%;
+      margin-bottom: var(--spacing-sm);
+      font-weight: 700;
+    }
+
+    .why-item p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* CONTACT CTA */
+    #contact {
+      padding: var(--spacing-xxl) var(--spacing-lg);
+      background: var(--color-background);
+    }
+
+    .contact-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-inner h2 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .contact-inner p {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: var(--spacing-lg);
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    /* FOOTER */
+    footer {
+      padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
+      background: var(--color-background-dark);
+      color: var(--color-text-on-dark);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .footer-col h3 {
+      font-size: 18px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .footer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .footer-nav a {
+      font-size: 14px;
+      opacity: 0.8;
+      transition: opacity 0.3s ease;
+    }
+
+    .footer-nav a:hover {
+      opacity: 1;
+    }
+
+    .footer-bottom {
+      margin-top: var(--spacing-lg);
+      padding-top: var(--spacing-lg);
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    /* CLAIM MODAL */
+    .claim-modal-panel {
+      background: var(--color-background);
+      border-radius: var(--radius-card);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-claim-close] {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: none;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      color: var(--color-text);
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: background 0.3s ease;
+    }
+
+    [data-claim-close]:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .claim-modal-panel h2 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .claim-modal-panel > p {
+      margin-bottom: var(--spacing-lg);
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(0, 0, 0, 0.8);
+    }
+
+    .claim-features {
+      margin-bottom: var(--spacing-lg);
+      padding: var(--spacing-md);
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: var(--radius-card);
+    }
+
+    .claim-features ul {
+      list-style: none;
+    }
+
+    .claim-features li {
+      padding: var(--spacing-xs) 0;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .claim-features li::before {
+      content: '→';
+      margin-right: var(--spacing-sm);
+      color: var(--color-accent-secondary);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 767px) {
+      :root {
+        --spacing-lg: 32px;
+        --spacing-xl: 60px;
+        --spacing-xxl: 80px;
+      }
+
+      .header-inner {
+        padding: var(--spacing-sm) var(--spacing-md);
+      }
+
+      #about,
+      #services,
+      .why-choose,
+      #contact {
+        padding: var(--spacing-xl) var(--spacing-md);
+      }
+
+      .claim-modal-panel {
+        padding: var(--spacing-lg) var(--spacing-md);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div data-progress></div>
+
+  <header>
+    <div class="header-inner">
+      <div class="logo">Chess Comic Academy</div>
+      <button data-menu-toggle aria-label="Menu" aria-expanded="false">☰</button>
+      <nav data-menu-target>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="btn btn-primary" data-claim-trigger>Start Your Project</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section data-hero>
+      <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/hero.png" alt="Creative workspace" class="hero-bg">
+      <div class="hero-content">
+        <h1>Visual narratives that capture attention and drive engagement</h1>
+        <p>Jacksonville's creative studio specializing in comic illustration, branded content, and visual storytelling that helps your message break through the noise.</p>
+        <a href="#contact" class="btn btn-on-dark" data-claim-trigger>Start Your Project</a>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="about-inner">
+        <div class="about-content" data-reveal>
+          <h2 data-split-text>Where strategy meets sequential art</h2>
+          <p>Chess Comic Academy LLC combines the compelling power of comic-style illustration with marketing strategy to create visual content that resonates. We help Jacksonville businesses and organizations translate complex ideas into engaging visual stories that audiences actually want to consume.</p>
+        </div>
+        <div class="about-image" data-reveal>
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/people.png" alt="Creative team at work" data-parallax-img="0.2">
+        </div>
+      </div>
+    </section>
+
+    <section data-media-sequence>
+      <div class="ms-track">
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/detail.png" alt="Branded comic content">
+          <div class="ms-caption">
+            <h3>Branded Comic Content</h3>
+            <p>Custom comic strips and graphic narratives designed to explain your product, tell your brand story, or engage your audience in memorable ways.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/workspace.png" alt="Educational illustration">
+          <div class="ms-caption">
+            <h3>Educational Illustration</h3>
+            <p>Sequential art and infographic comics that transform training materials, tutorials, and complex concepts into digestible visual learning experiences.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/closeup2.png" alt="Character design">
+          <div class="ms-caption">
+            <h3>Character Design & Development</h3>
+            <p>Original character creation and mascot design that gives your brand a distinctive visual voice and personality.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/creative-marketing/result.png" alt="Social media campaigns">
+          <div class="ms-caption">
+            <h3>Social Media Visual Campaigns</h3>
+            <p>Illustrated content series optimized for social platforms, designed to stop scrollers and increase shareability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="services-inner">
+        <div class="services-header" data-reveal>
+          <h2>Services</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card" data-reveal>
+            <h3>Branded Comic Content</h3>
+            <p>Custom comic strips and graphic narratives designed to explain your product, tell your brand story, or engage your audience in memorable ways.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Educational Illustration</h3>
+            <p>Sequential art and infographic comics that transform training materials, tutorials, and complex concepts into digestible visual learning experiences.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Character Design & Development</h3>
+            <p>Original character creation and mascot design that gives your brand a distinctive visual voice and personality.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Social Media Visual Campaigns</h3>
+            <p>Illustrated content series optimized for social platforms, designed to stop scrollers and increase shareability.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Storyboarding & Concept Art</h3>
+            <p>Visual planning and conceptual illustration for video projects, campaigns, and creative initiatives before full production.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="why-choose">
+      <div class="why-choose-inner">
+        <h2 data-reveal>Why Choose Us</h2>
+        <div class="why-grid">
+          <div class="why-item" data-reveal>
+            <p>Strategic approach that aligns visual storytelling with your marketing goals</p>
+          </div>
+          <div class="why-item" data-reveal>
+            <p>Distinctive illustration style that stands out in crowded digital spaces</p>
+          </div>
+          <div class="why-item" data-reveal>
+            <p>Collaborative process with clear milestones and feedback loops</p>
+          </div>
+          <div class="why-item" data-reveal>
+            <p>Fast turnaround without compromising on creative quality</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="contact-inner" data-reveal>
+        <h2>Ready to tell your story visually?</h2>
+        <p>Let's discuss how comic-style illustration can amplify your message and connect with your Jacksonville audience.</p>
+        <a href="#contact" class="btn btn-primary" data-claim-trigger>Book a Creative Call</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3>Chess Comic Academy LLC</h3>
+        <p>Strategic storytelling through comics and illustration</p>
+        <p style="margin-top: var(--spacing-sm); opacity: 0.8;">Jacksonville, FL</p>
+      </div>
+      <div class="footer-col">
+        <h3>Navigation</h3>
+        <nav class="footer-nav">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Chess Comic Academy LLC. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <div data-claim-modal>
+    <div class="claim-modal-panel">
+      <button data-claim-close aria-label="Close">&times;</button>
+      <h2>Claim This Website</h2>
+      <p>This professionally designed website was created specifically for Chess Comic Academy LLC. If you are the business owner, claim this site today.</p>
+      <div class="claim-features">
+        <ul>
+          <li>Award-winning design tailored to your brand</li>
+          <li>Fully responsive across all devices</li>
+          <li>Optimized for engagement and conversions</li>
+          <li>Premium scroll-driven motion effects</li>
+        </ul>
+      </div>
+      <a href="#contact" class="btn btn-primary" data-claim-close>Claim This Website Now</a>
+    </div>
+  </div>
+
+<script>// motion_runtime.js v2.4 — clean premium scroll-motion for cloned sites.
+// Zero fighting with native scroll. Adds: smooth native parallax/hero,
+// split-text reveals, magnetic feel, media sequences (img->video->img),
+// scroll progress, generalized image parallax, Ken-Burns idle motion.
+// v2.2: fixes reduced-motion coverage (was hero-only), adds
+// data-parallax-img + .ken-burns as opt-in single-image motion hooks.
+// v2.3: adds custom cursor + magnetic buttons (desktop, pointer:fine only,
+// no new HTML hooks needed -- works automatically off the existing .btn
+// class every generated page already uses).
+// v2.4: heroInit rewritten to combine continuous idle zoom with the
+// existing scroll parallax in one loop (hero now moves even with zero
+// scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
+// and claimModalInit (popup claim mechanism replacing the old embedded
+// claim section).
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  // ---------- HERO (continuous idle zoom + scroll parallax, unified) ----------
+  // Previously this only updated on scroll, so a hero with zero scroll was
+  // completely static. Now runs its own rAF loop that combines a slow
+  // continuous idle zoom (time-driven) with the existing scroll-driven
+  // parallax into ONE transform, from one function -- no separate CSS
+  // animation, so there is no collision risk with the scroll transform.
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) +
+          ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".ms-item:not(.ms-ui)")
+      );
+      if (!items.length) return;
+      if (prefersReduced) {
+        // No scroll-scrubbing for reduced-motion users — just show the
+        // first item statically instead of leaving everything at opacity:0.
+        items[0].classList.add("ms-active");
+        return;
+      }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) {
+          it.classList.toggle("ms-active", i === idx);
+        });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) {
+          activeVid.play().catch(function () {});
+        }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  // ---------- SPLIT-TEXT ----------
+  function splitInit() {
+    if (prefersReduced) return; // leave headings as plain, fully visible text
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) {
+          c.style.transitionDelay = (30 + i * 18) + "ms";
+        });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  // ---------- DIAGONAL/CLIP REVEAL ----------
+  function revealInit() {
+    if (prefersReduced) return; // elements stay at natural full visibility —
+    // the [data-reveal] CSS below (which starts them at opacity:0) is only
+    // injected inside this function, so skipping it entirely is the fix.
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  // ---------- SCROLL PROGRESS ----------
+  // Not gated behind prefersReduced: a slim width-indicator bar is not the
+  // kind of parallax/scaling motion prefers-reduced-motion is meant to
+  // suppress, and leaving it un-animated would look like a rendering bug
+  // (permanently 0-width) rather than a graceful degradation.
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  // ---------- GENERALIZED IMAGE PARALLAX (any image, not just the hero) ----------
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  // ---------- KEN-BURNS (idle zoom/pan on a single static image) ----------
+  // Pure CSS animation, gated by its own prefers-reduced-motion media query
+  // rather than a JS check, so it degrades correctly even without JS.
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  // ---------- CUSTOM CURSOR (desktop, pointer:fine only) ----------
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.add("mrv2-cursor-hover");
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.remove("mrv2-cursor-hover");
+      }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  // ---------- MAGNETIC BUTTONS ----------
+  // Targets the .btn class every generated page already uses (enforced by
+  // the build prompt's button-system requirement) -- no new HTML hook
+  // needed. Does not touch any element heroInit/mediaInit/parallaxImgInit
+  // already animate, so there is no transform-collision risk with Phase A1.
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ---------- MOBILE MENU TOGGLE ----------
+  // Real hamburger toggle for multi-link nav -- this is the piece that was
+  // deliberately deferred earlier (nav was simplified away instead of
+  // building this) because nav links then became unreachable on mobile.
+  // Not gated by prefersReduced: opening/closing a menu is a UI state
+  // change, not the kind of motion that preference is meant to suppress.
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // ---------- CLAIM MODAL ----------
+  // Replaces the old embedded "Claim This Website" page section. Every
+  // [data-claim-trigger] (the page's real CTA buttons) opens this modal
+  // instead of just scrolling to a section. Structural/positioning CSS is
+  // injected here (like reveal/split-text) so it is guaranteed correct;
+  // the page's own CSS only needs to style the modal's inner content.
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("modal-open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", openModal);
+    });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) {
+      c.addEventListener("click", closeModal);
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("modal-open")) closeModal();
+    });
+    injectCss(
+      "[data-claim-modal]{position:fixed;inset:0;z-index:20000;display:flex;" +
+      "align-items:center;justify-content:center;padding:24px;" +
+      "background:rgba(0,0,0,.6);opacity:0;visibility:hidden;" +
+      "transition:opacity .3s ease}" +
+      "[data-claim-modal].modal-open{opacity:1;visibility:visible}" +
+      "[data-claim-modal] .claim-modal-panel{max-width:560px;width:100%;" +
+      "max-height:85vh;overflow-y:auto;transform:translateY(20px);" +
+      "transition:transform .3s ease}" +
+      "[data-claim-modal].modal-open .claim-modal-panel{transform:translateY(0)}"
+    );
+  }
+
+  // ---------- HELPERS ----------
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) {
+      existing.textContent += css;
+      return;
+    }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();</script>
+</body>
+</html>

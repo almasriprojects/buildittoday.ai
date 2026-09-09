@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mundo Auditivo, LLC - Your Hearing Health Partner in Miami</title>
+  <meta name="description" content="Professional audiology services in Miami. Comprehensive hearing care for the whole family in a welcoming, bilingual environment.">
+  <style>
+    :root {
+      --color-text: #1A1A1A;
+      --color-background: #D9CFC1;
+      --color-text-muted: #4A4A4A;
+      --color-accent-primary: #1A1A1A;
+      --color-background-alt: #FFFFFF;
+      --color-accent-secondary: #C4975F;
+      --font-heading: 'Georgia', 'Times New Roman', serif;
+      --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      --h1-size: 48px;
+      --h2-size: 36px;
+      --h3-size: 24px;
+      --body-size: 16px;
+      --body-line-height: 24px;
+      --spacing-xs: 8px;
+      --spacing-sm: 16px;
+      --spacing-md: 24px;
+      --spacing-lg: 48px;
+      --spacing-xl: 80px;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: var(--body-line-height);
+      color: var(--color-text);
+      background: var(--color-background);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    h1 {
+      font-size: var(--h1-size);
+    }
+
+    h2 {
+      font-size: var(--h2-size);
+    }
+
+    h3 {
+      font-size: var(--h3-size);
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    section {
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+    }
+
+    /* ========== PROGRESS BAR ========== */
+    [data-progress] {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      background: var(--color-accent-secondary);
+      z-index: 9999;
+    }
+
+    /* ========== HEADER ========== */
+    header {
+      position: sticky;
+      top: 0;
+      background: var(--color-background-alt);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      z-index: 1000;
+      padding: var(--spacing-sm) 0;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 var(--spacing-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: var(--font-heading);
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--color-text);
+      text-decoration: none;
+    }
+
+    [data-menu-toggle] {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      color: var(--color-text);
+      padding: var(--spacing-xs);
+    }
+
+    [data-menu-target] {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    [data-menu-target] a {
+      color: var(--color-text);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.3s ease;
+    }
+
+    [data-menu-target] a:hover {
+      color: var(--color-accent-secondary);
+    }
+
+    /* ========== BUTTONS ========== */
+    .btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: var(--color-accent-primary);
+      color: var(--color-background-alt);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-accent-secondary);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--color-accent-secondary);
+      color: var(--color-background-alt);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-accent-primary);
+    }
+
+    /* ========== HERO ========== */
+    [data-hero] {
+      position: relative;
+      height: 90vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      color: var(--color-background-alt);
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 0;
+    }
+
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+      padding: 0 var(--spacing-md);
+    }
+
+    .hero-content h1 {
+      font-size: 54px;
+      margin-bottom: var(--spacing-md);
+      text-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .hero-content p {
+      font-size: 20px;
+      line-height: 1.6;
+      margin-bottom: var(--spacing-lg);
+      opacity: 0.95;
+    }
+
+    /* ========== ABOUT ========== */
+    #about {
+      padding: var(--spacing-xl) 0;
+      background: var(--color-background-alt);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+
+    .about-content h2 {
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text);
+    }
+
+    .about-content p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.7;
+    }
+
+    .about-image-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      height: 500px;
+    }
+
+    .about-image-wrapper img {
+      width: 100%;
+      height: 130%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ========== MEDIA SEQUENCE ========== */
+    [data-media-sequence] {
+      position: relative;
+      height: 300vh;
+    }
+
+    [data-media-sequence] .ms-track {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    [data-media-sequence] .ms-item {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+    }
+
+    [data-media-sequence] .ms-item.ms-active {
+      opacity: 1;
+      z-index: 2;
+    }
+
+    [data-media-sequence] .ms-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .ms-caption {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+      background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+      color: var(--color-background-alt);
+    }
+
+    .ms-caption h3 {
+      font-size: 32px;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .ms-caption p {
+      font-size: 18px;
+      opacity: 0.9;
+      max-width: 600px;
+    }
+
+    /* ========== SERVICES ========== */
+    #services {
+      padding: var(--spacing-xl) 0;
+      background: var(--color-background);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto var(--spacing-xl);
+    }
+
+    .section-header h2 {
+      margin-bottom: var(--spacing-md);
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--spacing-md);
+    }
+
+    .service-card {
+      background: var(--color-background-alt);
+      padding: var(--spacing-lg);
+      border-radius: var(--radius-md);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .service-card h3 {
+      color: var(--color-text);
+      margin-bottom: var(--spacing-sm);
+      font-size: 22px;
+    }
+
+    .service-card p {
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+
+    /* ========== WHY CHOOSE US ========== */
+    #why-choose {
+      padding: var(--spacing-xl) 0;
+      background: var(--color-background-alt);
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-xl);
+      align-items: center;
+    }
+
+    .why-image {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-md);
+      height: 500px;
+    }
+
+    .why-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .why-content h2 {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .why-list {
+      list-style: none;
+    }
+
+    .why-list li {
+      padding: var(--spacing-sm) 0 var(--spacing-sm) var(--spacing-lg);
+      position: relative;
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .why-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--color-accent-secondary);
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    /* ========== CONTACT CTA ========== */
+    #contact {
+      padding: var(--spacing-xl) 0;
+      background: var(--color-accent-primary);
+      color: var(--color-background-alt);
+      text-align: center;
+    }
+
+    #contact .container {
+      max-width: 800px;
+    }
+
+    #contact h2 {
+      margin-bottom: var(--spacing-md);
+      color: var(--color-background-alt);
+    }
+
+    #contact p {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: var(--spacing-lg);
+      opacity: 0.9;
+    }
+
+    /* ========== CLAIM MODAL ========== */
+    .claim-modal-panel {
+      background: var(--color-background-alt);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xl);
+      position: relative;
+    }
+
+    [data-claim-close] {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: none;
+      border: none;
+      font-size: 32px;
+      cursor: pointer;
+      color: var(--color-text-muted);
+      line-height: 1;
+      transition: color 0.3s ease;
+    }
+
+    [data-claim-close]:hover {
+      color: var(--color-text);
+    }
+
+    .claim-modal-panel h2 {
+      margin-bottom: var(--spacing-md);
+      color: var(--color-text);
+    }
+
+    .claim-modal-panel > p {
+      color: var(--color-text-muted);
+      margin-bottom: var(--spacing-lg);
+      line-height: 1.7;
+    }
+
+    .claim-features {
+      background: var(--color-background);
+      border-radius: var(--radius-sm);
+      padding: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .claim-features ul {
+      list-style: none;
+    }
+
+    .claim-features li {
+      padding: var(--spacing-xs) 0 var(--spacing-xs) var(--spacing-md);
+      position: relative;
+      color: var(--color-text);
+    }
+
+    .claim-features li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--color-accent-secondary);
+      font-weight: bold;
+    }
+
+    /* ========== FOOTER ========== */
+    footer {
+      background: var(--color-text);
+      color: var(--color-background-alt);
+      padding: var(--spacing-lg) 0 var(--spacing-md);
+    }
+
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .footer-section h3 {
+      font-size: 18px;
+      margin-bottom: var(--spacing-sm);
+      color: var(--color-background-alt);
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: rgba(255,255,255,0.7);
+      text-decoration: none;
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      transition: color 0.3s ease;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-accent-secondary);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: var(--spacing-md);
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      font-size: 14px;
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 767px) {
+      [data-menu-toggle] {
+        display: block;
+      }
+
+      [data-menu-target] {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: var(--color-background-alt);
+        padding: var(--spacing-md);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+      }
+
+      [data-menu-target].menu-open {
+        display: flex;
+      }
+
+      [data-menu-target] a {
+        width: 100%;
+        padding: var(--spacing-sm) 0;
+      }
+
+      .hero-content h1 {
+        font-size: 36px;
+      }
+
+      .hero-content p {
+        font-size: 16px;
+      }
+
+      .about-grid,
+      .why-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-image-wrapper,
+      .why-image {
+        height: 300px;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ms-caption h3 {
+        font-size: 24px;
+      }
+
+      .ms-caption p {
+        font-size: 16px;
+      }
+
+      h1 {
+        font-size: 36px;
+      }
+
+      h2 {
+        font-size: 28px;
+      }
+
+      h3 {
+        font-size: 20px;
+      }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+      .hero-content h1 {
+        font-size: 44px;
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div data-progress></div>
+
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">Mundo Auditivo</a>
+      <button data-menu-toggle aria-label="Menu" aria-expanded="false">☰</button>
+      <nav data-menu-target>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+        <a href="#contact" class="btn btn-primary" data-claim-trigger>Schedule Your Appointment</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section data-hero>
+      <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/hero.png" alt="Hearing care professional" class="hero-bg">
+      <div class="hero-content">
+        <h1>Comprehensive Hearing Care for the Whole Family</h1>
+        <p>Professional audiology services in a welcoming environment. We're here to help you hear better and live better.</p>
+        <a href="#contact" class="btn btn-primary" data-claim-trigger>Schedule Your Appointment</a>
+      </div>
+    </section>
+
+    <section id="about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-content" data-reveal>
+            <h2 data-split-text>Dedicated to Your Hearing Wellness</h2>
+            <p>Mundo Auditivo serves the Miami community with compassionate, patient-centered hearing care. We understand that healthy hearing is essential to your quality of life, and we're committed to providing thorough evaluations and personalized solutions in a comfortable, bilingual setting.</p>
+            <a href="#contact" class="btn btn-secondary" data-claim-trigger>Book Your Visit</a>
+          </div>
+          <div class="about-image-wrapper">
+            <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/people.png" alt="Compassionate care environment" data-parallax-img="0.2">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section data-media-sequence>
+      <div class="ms-track">
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/detail.png" alt="Hearing evaluation equipment">
+          <div class="ms-caption">
+            <h3>Thorough Hearing Evaluations</h3>
+            <p>Comprehensive testing to assess your hearing health and identify any concerns with precision and care.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/interaction.png" alt="Patient consultation">
+          <div class="ms-caption">
+            <h3>Personalized Consultations</h3>
+            <p>Bilingual service for English and Spanish-speaking patients in a comfortable, welcoming atmosphere.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/workspace.png" alt="Modern audiology workspace">
+          <div class="ms-caption">
+            <h3>Convenient Miami Location</h3>
+            <p>Flexible appointment scheduling designed for your ease and convenience in the heart of Miami.</p>
+          </div>
+        </div>
+        <div class="ms-item">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/result.png" alt="Happy patient result">
+          <div class="ms-caption">
+            <h3>Better Hearing, Better Life</h3>
+            <p>Ongoing support and maintenance to keep your hearing devices functioning optimally for years to come.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="container">
+        <div class="section-header" data-reveal>
+          <h2 data-split-text>Our Services</h2>
+        </div>
+        <div class="services-grid">
+          <div class="service-card" data-reveal>
+            <h3>Comprehensive Hearing Evaluations</h3>
+            <p>Thorough testing to assess your hearing health and identify any concerns.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Hearing Aid Consultations & Fittings</h3>
+            <p>Personalized guidance to find the right hearing solutions for your lifestyle.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Hearing Aid Maintenance & Repairs</h3>
+            <p>Ongoing support to keep your hearing devices functioning optimally.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Tinnitus Management</h3>
+            <p>Strategies and support for managing ringing or buzzing in the ears.</p>
+          </div>
+          <div class="service-card" data-reveal>
+            <h3>Pediatric Hearing Services</h3>
+            <p>Gentle, specialized care for children's hearing health needs.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-choose">
+      <div class="container">
+        <div class="why-grid">
+          <div class="why-image">
+            <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/category-photography/health-wellness/closeup2.png" alt="Professional hearing care" class="ken-burns">
+          </div>
+          <div class="why-content" data-reveal>
+            <h2>Why Choose Mundo Auditivo</h2>
+            <ul class="why-list">
+              <li>Bilingual service for English and Spanish-speaking patients</li>
+              <li>Patient-focused approach with thorough explanations and education</li>
+              <li>Comfortable, welcoming atmosphere designed for your ease</li>
+              <li>Convenient Miami location with flexible appointment scheduling</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container">
+        <h2 data-reveal>Ready to Take the First Step?</h2>
+        <p data-reveal>Contact us today to schedule your hearing evaluation and discover how better hearing can improve your life.</p>
+        <a href="#contact" class="btn btn-secondary" data-claim-trigger>Book Your Visit</a>
+      </div>
+    </section>
+  </main>
+
+  <div data-claim-modal>
+    <div class="claim-modal-panel">
+      <button data-claim-close aria-label="Close">×</button>
+      <h2>Claim This Website</h2>
+      <p>This professionally designed website was created specifically for Mundo Auditivo, LLC. If you are the business owner, claim this site today.</p>
+      <div class="claim-features">
+        <ul>
+          <li>Award-winning professional design</li>
+          <li>Fully responsive and mobile-optimized</li>
+          <li>Premium scroll-driven animations</li>
+          <li>Optimized for conversions and engagement</li>
+        </ul>
+      </div>
+      <a href="#contact" class="btn btn-primary" data-claim-close>Claim This Website Now</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h3>Mundo Auditivo, LLC</h3>
+          <p>Your Hearing Health Partner in Miami</p>
+          <p>Miami, FL</p>
+        </div>
+        <div class="footer-section">
+          <h3>Quick Links</h3>
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+        </div>
+        <div class="footer-section">
+          <h3>Services</h3>
+          <a href="#services">Hearing Evaluations</a>
+          <a href="#services">Hearing Aid Fittings</a>
+          <a href="#services">Tinnitus Management</a>
+          <a href="#services">Pediatric Services</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2024 Mundo Auditivo, LLC. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+<script>// motion_runtime.js v2.4 — clean premium scroll-motion for cloned sites.
+// Zero fighting with native scroll. Adds: smooth native parallax/hero,
+// split-text reveals, magnetic feel, media sequences (img->video->img),
+// scroll progress, generalized image parallax, Ken-Burns idle motion.
+// v2.2: fixes reduced-motion coverage (was hero-only), adds
+// data-parallax-img + .ken-burns as opt-in single-image motion hooks.
+// v2.3: adds custom cursor + magnetic buttons (desktop, pointer:fine only,
+// no new HTML hooks needed -- works automatically off the existing .btn
+// class every generated page already uses).
+// v2.4: heroInit rewritten to combine continuous idle zoom with the
+// existing scroll parallax in one loop (hero now moves even with zero
+// scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
+// and claimModalInit (popup claim mechanism replacing the old embedded
+// claim section).
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  // ---------- HERO (continuous idle zoom + scroll parallax, unified) ----------
+  // Previously this only updated on scroll, so a hero with zero scroll was
+  // completely static. Now runs its own rAF loop that combines a slow
+  // continuous idle zoom (time-driven) with the existing scroll-driven
+  // parallax into ONE transform, from one function -- no separate CSS
+  // animation, so there is no collision risk with the scroll transform.
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) +
+          ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".ms-item:not(.ms-ui)")
+      );
+      if (!items.length) return;
+      if (prefersReduced) {
+        // No scroll-scrubbing for reduced-motion users — just show the
+        // first item statically instead of leaving everything at opacity:0.
+        items[0].classList.add("ms-active");
+        return;
+      }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) {
+          it.classList.toggle("ms-active", i === idx);
+        });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) {
+          activeVid.play().catch(function () {});
+        }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  // ---------- SPLIT-TEXT ----------
+  function splitInit() {
+    if (prefersReduced) return; // leave headings as plain, fully visible text
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) {
+          c.style.transitionDelay = (30 + i * 18) + "ms";
+        });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  // ---------- DIAGONAL/CLIP REVEAL ----------
+  function revealInit() {
+    if (prefersReduced) return; // elements stay at natural full visibility —
+    // the [data-reveal] CSS below (which starts them at opacity:0) is only
+    // injected inside this function, so skipping it entirely is the fix.
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  // ---------- SCROLL PROGRESS ----------
+  // Not gated behind prefersReduced: a slim width-indicator bar is not the
+  // kind of parallax/scaling motion prefers-reduced-motion is meant to
+  // suppress, and leaving it un-animated would look like a rendering bug
+  // (permanently 0-width) rather than a graceful degradation.
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  // ---------- GENERALIZED IMAGE PARALLAX (any image, not just the hero) ----------
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  // ---------- KEN-BURNS (idle zoom/pan on a single static image) ----------
+  // Pure CSS animation, gated by its own prefers-reduced-motion media query
+  // rather than a JS check, so it degrades correctly even without JS.
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  // ---------- CUSTOM CURSOR (desktop, pointer:fine only) ----------
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.add("mrv2-cursor-hover");
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.remove("mrv2-cursor-hover");
+      }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  // ---------- MAGNETIC BUTTONS ----------
+  // Targets the .btn class every generated page already uses (enforced by
+  // the build prompt's button-system requirement) -- no new HTML hook
+  // needed. Does not touch any element heroInit/mediaInit/parallaxImgInit
+  // already animate, so there is no transform-collision risk with Phase A1.
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ---------- MOBILE MENU TOGGLE ----------
+  // Real hamburger toggle for multi-link nav -- this is the piece that was
+  // deliberately deferred earlier (nav was simplified away instead of
+  // building this) because nav links then became unreachable on mobile.
+  // Not gated by prefersReduced: opening/closing a menu is a UI state
+  // change, not the kind of motion that preference is meant to suppress.
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // ---------- CLAIM MODAL ----------
+  // Replaces the old embedded "Claim This Website" page section. Every
+  // [data-claim-trigger] (the page's real CTA buttons) opens this modal
+  // instead of just scrolling to a section. Structural/positioning CSS is
+  // injected here (like reveal/split-text) so it is guaranteed correct;
+  // the page's own CSS only needs to style the modal's inner content.
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("modal-open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", openModal);
+    });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) {
+      c.addEventListener("click", closeModal);
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("modal-open")) closeModal();
+    });
+    injectCss(
+      "[data-claim-modal]{position:fixed;inset:0;z-index:20000;display:flex;" +
+      "align-items:center;justify-content:center;padding:24px;" +
+      "background:rgba(0,0,0,.6);opacity:0;visibility:hidden;" +
+      "transition:opacity .3s ease}" +
+      "[data-claim-modal].modal-open{opacity:1;visibility:visible}" +
+      "[data-claim-modal] .claim-modal-panel{max-width:560px;width:100%;" +
+      "max-height:85vh;overflow-y:auto;transform:translateY(20px);" +
+      "transition:transform .3s ease}" +
+      "[data-claim-modal].modal-open .claim-modal-panel{transform:translateY(0)}"
+    );
+  }
+
+  // ---------- HELPERS ----------
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) {
+      existing.textContent += css;
+      return;
+    }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();</script>
+</body>
+</html>

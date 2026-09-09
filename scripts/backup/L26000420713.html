@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayiti Prestij Exotic Rentals LLC | Luxury Exotic Rentals in South Florida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:'Outfit',sans-serif;font-weight:300;line-height:1.7;color:#f5f5f5;background:#0a0a0a;overflow-x:hidden}
+h1,h2,h3,h4,h5,h6{font-family:'Cormorant Garamond',serif;font-weight:700;line-height:1.2;margin-bottom:1rem}
+h1{font-size:clamp(2.5rem,6vw,5rem);letter-spacing:-0.02em}
+h2{font-size:clamp(2rem,5vw,4rem);letter-spacing:-0.01em}
+h3{font-size:clamp(1.5rem,3vw,2.5rem)}
+p{margin-bottom:1.25rem}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+section{position:relative;padding:6rem 1.5rem}
+@media(min-width:768px){section{padding:8rem 2rem}}
+.container{max-width:1200px;margin:0 auto}
+[data-progress]{position:fixed;top:0;left:0;width:0;height:3px;background:linear-gradient(90deg,#d4af37,#8b0000);z-index:9999;transition:width 0.1s linear}
+header{position:sticky;top:0;z-index:1000;background:rgba(10,10,10,0.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,175,55,0.15)}
+header .container{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem}
+.logo{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#d4af37;letter-spacing:0.02em}
+nav{display:flex;align-items:center;gap:2.5rem}
+nav a{font-size:0.95rem;font-weight:400;letter-spacing:0.03em;transition:color 0.3s ease;position:relative}
+nav a:hover{color:#d4af37}
+nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:#d4af37;transition:width 0.3s ease}
+nav a:hover::after{width:100%}
+[data-menu-toggle]{display:none;background:none;border:none;color:#f5f5f5;font-size:1.5rem;cursor:pointer;padding:0.5rem}
+@media(max-width:767px){
+nav{position:fixed;top:0;right:-100%;width:280px;height:100vh;background:rgba(10,10,10,0.98);flex-direction:column;align-items:flex-start;padding:5rem 2rem;gap:1.5rem;transition:right 0.4s ease;border-left:1px solid rgba(212,175,55,0.2)}
+nav.menu-open{right:0}
+[data-menu-toggle]{display:block}
+}
+.btn,.btn-secondary{display:inline-block;padding:0.9rem 2rem;font-size:0.95rem;font-weight:500;letter-spacing:0.05em;text-transform:uppercase;border-radius:2px;transition:all 0.3s ease;cursor:pointer;border:none;text-align:center}
+.btn{background:#d4af37;color:#0a0a0a}
+.btn:hover{background:#c29d2f;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
+.btn-secondary{background:transparent;color:#d4af37;border:1px solid #d4af37}
+.btn-secondary:hover{background:#d4af37;color:#0a0a0a;transform:translateY(-2px)}
+[data-hero]{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(10,10,10,0.85),rgba(10,10,10,0.62))}
+.hero-content{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 1.5rem;text-align:center}
+.hero-content h1,.hero-content p{text-shadow:0 2px 16px rgba(0,0,0,0.5),0 1px 3px rgba(0,0,0,0.4)}
+.hero-content h1{margin-bottom:1.5rem;color:#f5f5f5}
+.hero-content p{font-size:clamp(1.1rem,2vw,1.35rem);max-width:700px;margin:0 auto 2.5rem;color:#f5f5f5;font-weight:300}
+#about{background:#1a1a1a}
+#about .container{max-width:900px}
+#about h2{color:#d4af37;margin-bottom:2rem}
+#about p{font-size:1.15rem;line-height:1.8;margin-bottom:2rem}
+.parallax-wrapper{position:relative;height:500px;overflow:hidden;margin-top:3rem;border-radius:4px}
+.parallax-wrapper img{position:absolute;top:0;left:0;width:100%;height:120%;object-fit:cover;will-change:transform}
+[data-media-sequence]{position:relative;height:250vh}
+[data-media-sequence] .ms-track{position:sticky;top:0;height:100vh;overflow:hidden}
+[data-media-sequence] .ms-item{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease}
+[data-media-sequence] .ms-item.ms-active{opacity:1;z-index:2}
+[data-media-sequence] .ms-item img{width:100%;height:100%;object-fit:cover}
+.ms-caption{position:absolute;bottom:0;left:0;right:0;padding:4rem 1.5rem 3rem;z-index:3;color:#fff;background:linear-gradient(to top,rgba(0,0,0,0.85),rgba(0,0,0,0.6) 60%,transparent)}
+.ms-caption h3{color:#d4af37;margin-bottom:0.75rem}
+.ms-caption p{margin-bottom:0;font-size:1.05rem}
+#services{background:#0a0a0a}
+#services h2{text-align:center;color:#d4af37;margin-bottom:4rem}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2rem}
+.service-card{background:#1a1a1a;padding:2.5rem 2rem;border:1px solid rgba(212,175,55,0.2);border-radius:4px;transition:all 0.4s ease}
+.service-card:hover{border-color:#d4af37;transform:translateY(-4px);box-shadow:0 12px 32px rgba(212,175,55,0.15)}
+.service-card h3{color:#d4af37;margin-bottom:1rem;font-size:1.75rem}
+.service-card p{font-size:1rem;line-height:1.7;margin-bottom:0}
+#why-choose{background:#1a1a1a;text-align:center}
+#why-choose h2{color:#d4af37;margin-bottom:3rem}
+.why-list{max-width:800px;margin:0 auto;display:grid;gap:1.5rem}
+.why-item{background:#0a0a0a;padding:1.75rem 2rem;border-left:3px solid #d4af37;text-align:left;font-size:1.05rem;line-height:1.7;transition:all 0.3s ease}
+.why-item:hover{border-left-color:#8b0000;transform:translateX(8px)}
+#contact{background:#0a0a0a;text-align:center}
+#contact h2{color:#d4af37;margin-bottom:1.5rem}
+#contact p{font-size:1.15rem;max-width:700px;margin:0 auto 2.5rem}
+footer{background:#1a1a1a;padding:4rem 1.5rem 2rem;border-top:1px solid rgba(212,175,55,0.2)}
+footer .container{max-width:1200px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:3rem}
+.footer-col h4{font-family:'Cormorant Garamond',serif;color:#d4af37;margin-bottom:1.25rem;font-size:1.25rem}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.75rem}
+.footer-col ul li a{font-size:0.95rem;transition:color 0.3s ease}
+.footer-col ul li a:hover{color:#d4af37}
+.footer-bottom{text-align:center;margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(212,175,55,0.15);font-size:0.9rem;color:rgba(245,245,245,0.7)}
+[data-claim-modal]{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);padding:1.5rem}
+[data-claim-modal].modal-open{display:flex}
+.claim-modal-panel{background:#1a1a1a;border:1px solid rgba(212,175,55,0.3);border-radius:4px;max-width:520px;width:100%;padding:3rem 2.5rem;position:relative}
+[data-claim-close]{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#f5f5f5;font-size:1.75rem;cursor:pointer;padding:0.5rem;line-height:1;transition:color 0.3s ease}
+[data-claim-close]:hover{color:#d4af37}
+.claim-modal-panel h3{color:#d4af37;margin-bottom:1.5rem;font-size:2rem}
+.claim-modal-panel ul{list-style:none;margin-bottom:2rem}
+.claim-modal-panel ul li{padding:0.75rem 0;border-bottom:1px solid rgba(212,175,55,0.15);font-size:1rem}
+.claim-modal-panel ul li:last-child{border-bottom:none}
+.claim-modal-panel ul li::before{content:'✓';color:#d4af37;margin-right:0.75rem;font-weight:600}
+[data-grain-overlay]{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:0.035;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");background-repeat:repeat}
+@media(max-width:767px){
+h1{font-size:2.5rem}
+h2{font-size:2rem}
+section{padding:4rem 1.5rem}
+.services-grid{grid-template-columns:1fr}
+footer .container{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div data-progress></div>
+<div data-grain-overlay></div>
+
+<header>
+<div class="container">
+<div class="logo">Ayiti Prestij</div>
+<button data-menu-toggle aria-label="Toggle menu">☰</button>
+<nav data-menu-target>
+<a href="#hero">Home</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#contact">Contact</a>
+<a href="#contact" class="btn" data-claim-trigger>Browse Available Rentals</a>
+</nav>
+</div>
+</header>
+
+<section data-hero id="hero">
+<video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene1.png">
+<source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/hero.mp4" type="video/mp4">
+</video>
+<div class="hero-scrim"></div>
+<div class="hero-content">
+<h1>Experience Prestige with Premium Exotic Rentals</h1>
+<p>Elevate your special occasion or business event with our curated selection of luxury exotic rentals in Deerfield Beach and throughout South Florida.</p>
+<a href="#contact" class="btn" data-claim-trigger>Browse Available Rentals</a>
+</div>
+</section>
+
+<section id="about" data-reveal>
+<div class="container">
+<h2 data-split-text>Bringing Prestige to Your Event</h2>
+<p>Ayiti Prestij Exotic Rentals specializes in providing premium exotic rental options for discerning clients in the Deerfield Beach area. We understand that exceptional moments deserve exceptional choices, and we're dedicated to delivering a seamless rental experience with personalized attention to detail.</p>
+<div class="parallax-wrapper">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene2.png" alt="Luxury exotic vehicle detail" data-parallax-img="0.15">
+</div>
+</div>
+</section>
+
+<section data-media-sequence>
+<div class="ms-track">
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene2.png" alt="Crafted Detail">
+<div class="ms-caption">
+<h3>Exceptional Vehicles for Exceptional Moments</h3>
+<p>Our curated fleet of premium exotic vehicles is maintained to the highest standards, ensuring every rental delivers an unforgettable experience for weddings, corporate events, and milestone celebrations.</p>
+</div>
+</div>
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420713/scene3.png" alt="Florida Presence">
+<div class="ms-caption">
+<h3>Serving South Florida with Prestige</h3>
+<p>From our convenient Deerfield Beach location, we provide flexible rental terms and personalized concierge service throughout South Florida, making luxury accessible for your special occasion.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<h2>Our Services</h2>
+<div class="services-grid">
+<div class="service-card" data-reveal>
+<h3>Exotic Vehicle Rentals</h3>
+<p>Access to premium exotic vehicles for special occasions, photo shoots, and unforgettable experiences.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Event Rental Solutions</h3>
+<p>Curated luxury rentals perfect for weddings, corporate events, and milestone celebrations.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Flexible Rental Terms</h3>
+<p>Hourly, daily, and weekend rental options designed to fit your schedule and budget.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Concierge Service</h3>
+<p>Personalized assistance with selection, scheduling, and delivery coordination for a stress-free experience.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="why-choose">
+<div class="container">
+<h2>Why Choose Ayiti Prestij</h2>
+<div class="why-list">
+<div class="why-item" data-reveal>Premium selection of exotic rentals maintained to the highest standards</div>
+<div class="why-item" data-reveal>Transparent pricing with no hidden fees or surprises</div>
+<div class="why-item" data-reveal>Convenient Deerfield Beach location serving all of South Florida</div>
+<div class="why-item" data-reveal>Responsive customer service focused on making your experience memorable</div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<h2>Ready to Make Your Event Extraordinary?</h2>
+<p>Contact us today to check availability and reserve your premium exotic rental.</p>
+<a href="#contact" class="btn" data-claim-trigger>Check Availability</a>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-col">
+<h4>Navigation</h4>
+<ul>
+<li><a href="#hero">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Services</h4>
+<ul>
+<li>Exotic Vehicle Rentals</li>
+<li>Event Rental Solutions</li>
+<li>Flexible Rental Terms</li>
+<li>Concierge Service</li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Ayiti Prestij Exotic Rentals LLC</h4>
+<p>Deerfield Beach, FL</p>
+<p>Luxury Exotic Rentals in South Florida</p>
+</div>
+</div>
+<div class="footer-bottom">
+&copy; <span data-current-year></span> Ayiti Prestij Exotic Rentals LLC. All rights reserved.
+</div>
+</footer>
+
+<div data-claim-modal>
+<div class="claim-modal-panel">
+<button data-claim-close aria-label="Close">&times;</button>
+<h3>Reserve Your Luxury Experience</h3>
+<ul>
+<li>Premium exotic vehicle selection</li>
+<li>Flexible rental terms available</li>
+<li>Personalized concierge service</li>
+<li>Transparent pricing guaranteed</li>
+</ul>
+<a href="#contact" class="btn">Check Availability Now</a>
+</div>
+</div>
+
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gulf Shield Board-up, LLC. | Emergency Property Protection in Milton, FL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:'Inter',sans-serif;font-size:1.0625rem;line-height:1.7;color:#e8f1f5;background:#0d1b2a;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");opacity:0.15;pointer-events:none;z-index:1}
+h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1.15;letter-spacing:-0.02em}
+h1{font-size:clamp(2.5rem,6vw,5rem);margin-bottom:1.25rem}
+h2{font-size:clamp(2rem,4.5vw,3.75rem);margin-bottom:1rem}
+h3{font-size:clamp(1.5rem,3vw,2.25rem);margin-bottom:0.75rem}
+p{margin-bottom:1.25rem}
+a{color:inherit;text-decoration:none}
+img,video{display:block;max-width:100%;height:auto}
+section{position:relative;z-index:2}
+.container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
+[data-progress]{position:fixed;top:0;left:0;width:0;height:4px;background:linear-gradient(90deg,#d4af37,#ff6b35);z-index:9999;transition:width 0.1s linear}
+header{position:sticky;top:0;z-index:1000;background:rgba(13,27,42,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,175,55,0.15)}
+header .container{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;padding-bottom:1rem}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.375rem;font-weight:700;color:#d4af37;letter-spacing:-0.01em}
+nav{display:flex;align-items:center;gap:2.5rem}
+nav a{font-size:0.9375rem;font-weight:500;letter-spacing:0.01em;transition:color 0.3s ease;position:relative}
+nav a:hover{color:#d4af37}
+nav a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:#d4af37;transition:width 0.3s ease}
+nav a:hover::after{width:100%}
+[data-menu-toggle]{display:none;background:none;border:none;cursor:pointer;padding:0.5rem;color:#e8f1f5}
+[data-menu-toggle] svg{width:28px;height:28px}
+.btn{display:inline-block;padding:0.875rem 2rem;font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;letter-spacing:0.01em;border-radius:4px;transition:all 0.3s ease;cursor:pointer;border:none;text-align:center}
+.btn{background:#d4af37;color:#0d1b2a}
+.btn:hover{background:#e8c04e;transform:translateY(-2px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
+.btn-secondary{background:transparent;color:#e8f1f5;border:2px solid #d4af37}
+.btn-secondary:hover{background:#d4af37;color:#0d1b2a}
+[data-hero]{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(13,27,42,0.85),rgba(26,58,82,0.62))}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:960px;margin:0 auto;padding:0 1.5rem}
+.hero-content h1{color:#e8f1f5;text-shadow:0 2px 16px rgba(0,0,0,0.5),0 1px 3px rgba(0,0,0,0.4)}
+.hero-content p{font-size:clamp(1.125rem,2vw,1.375rem);margin-bottom:2.5rem;color:#e8f1f5;text-shadow:0 2px 16px rgba(0,0,0,0.5),0 1px 3px rgba(0,0,0,0.4);max-width:720px;margin-left:auto;margin-right:auto}
+.hero-content .btn{background:#ff6b35;color:#fff;font-size:1.125rem;padding:1.125rem 2.75rem}
+.hero-content .btn:hover{background:#ff8254;box-shadow:0 12px 32px rgba(255,107,53,0.4)}
+[data-reveal]{opacity:0}
+#about{padding:8rem 0;background:linear-gradient(180deg,#0d1b2a 0%,#1a3a52 100%)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-text h2{margin-bottom:1.5rem;color:#d4af37}
+.about-text p{font-size:1.125rem;line-height:1.8;color:#e8f1f5}
+.about-image{position:relative;overflow:hidden;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,0.4)}
+.about-image img{width:100%;height:100%;object-fit:cover;display:block}
+[data-media-sequence]{position:relative;height:250vh}
+[data-media-sequence] .ms-track{position:sticky;top:0;height:100vh;overflow:hidden}
+[data-media-sequence] .ms-item{position:absolute;inset:0;opacity:0;transition:opacity 0.8s ease}
+[data-media-sequence] .ms-item.ms-active{opacity:1;z-index:2}
+[data-media-sequence] .ms-item img{width:100%;height:100%;object-fit:cover}
+.ms-caption{position:absolute;bottom:0;left:0;right:0;padding:4rem 1.5rem 3rem;z-index:3;color:#fff;background:linear-gradient(to top,rgba(0,0,0,0.85),rgba(0,0,0,0.6) 60%,transparent)}
+.ms-caption h3{color:#d4af37;margin-bottom:0.75rem}
+.ms-caption p{font-size:1.125rem;margin-bottom:0;max-width:720px}
+#services{padding:8rem 0;background:#0d1b2a}
+#services h2{text-align:center;color:#d4af37;margin-bottom:4rem}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem}
+.service-card{background:rgba(26,58,82,0.4);border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:2.5rem;transition:all 0.4s ease}
+.service-card:hover{background:rgba(26,58,82,0.6);border-color:rgba(212,175,55,0.5);transform:translateY(-8px);box-shadow:0 16px 48px rgba(0,0,0,0.3)}
+.service-card h3{color:#d4af37;margin-bottom:1rem}
+.service-card p{color:#e8f1f5;line-height:1.7;margin-bottom:0}
+#why-choose{padding:8rem 0;background:linear-gradient(180deg,#0d1b2a 0%,#1a3a52 100%)}
+#why-choose h2{text-align:center;color:#d4af37;margin-bottom:3rem}
+.why-list{max-width:860px;margin:0 auto;display:grid;gap:2rem}
+.why-item{display:flex;align-items:flex-start;gap:1.5rem;padding:2rem;background:rgba(13,27,42,0.5);border-left:4px solid #d4af37;border-radius:4px}
+.why-item::before{content:'✓';font-size:1.75rem;font-weight:700;color:#d4af37;flex-shrink:0}
+.why-item p{margin-bottom:0;font-size:1.125rem;line-height:1.7}
+#contact{padding:8rem 0;background:#0d1b2a;text-align:center}
+#contact h2{color:#d4af37;margin-bottom:1.5rem}
+#contact p{font-size:1.25rem;max-width:680px;margin:0 auto 2.5rem;color:#e8f1f5}
+#contact .btn{background:#ff6b35;color:#fff;font-size:1.125rem;padding:1.125rem 2.75rem}
+#contact .btn:hover{background:#ff8254;box-shadow:0 12px 32px rgba(255,107,53,0.4)}
+footer{background:#0d1b2a;border-top:1px solid rgba(212,175,55,0.2);padding:4rem 0 2rem}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:3rem;margin-bottom:3rem}
+.footer-col h4{font-size:1.125rem;color:#d4af37;margin-bottom:1.25rem}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.75rem}
+.footer-col ul li a{color:#e8f1f5;font-size:0.9375rem;transition:color 0.3s ease}
+.footer-col ul li a:hover{color:#d4af37}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid rgba(212,175,55,0.15);color:rgba(232,241,245,0.7);font-size:0.9375rem}
+[data-claim-modal]{display:none;position:fixed;inset:0;z-index:10000;align-items:center;justify-content:center;padding:1.5rem}
+[data-claim-modal].is-visible{display:flex}
+.claim-modal-panel{background:#1a3a52;border:2px solid #d4af37;border-radius:8px;padding:3rem;max-width:540px;width:100%;position:relative;box-shadow:0 24px 80px rgba(0,0,0,0.6)}
+[data-claim-close]{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#e8f1f5;font-size:2rem;cursor:pointer;line-height:1;padding:0.5rem;transition:color 0.3s ease}
+[data-claim-close]:hover{color:#d4af37}
+.claim-modal-panel h2{color:#d4af37;margin-bottom:1.5rem;font-size:1.875rem}
+.claim-modal-panel ul{list-style:none;margin:2rem 0}
+.claim-modal-panel ul li{padding:0.75rem 0;padding-left:2rem;position:relative;color:#e8f1f5;font-size:1.0625rem}
+.claim-modal-panel ul li::before{content:'✓';position:absolute;left:0;color:#d4af37;font-weight:700}
+.claim-modal-panel .btn{width:100%;margin-top:1.5rem}
+@media(max-width:1023px){
+.about-grid{grid-template-columns:1fr;gap:3rem}
+.footer-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:767px){
+[data-menu-toggle]{display:block}
+nav{position:absolute;top:100%;left:0;right:0;background:rgba(13,27,42,0.98);flex-direction:column;align-items:stretch;gap:0;padding:1.5rem;border-top:1px solid rgba(212,175,55,0.2);display:none}
+nav.menu-open{display:flex}
+nav a{padding:0.875rem 0;font-size:1.0625rem}
+nav a::after{display:none}
+nav .btn{margin-top:1rem}
+h1{font-size:clamp(2rem,8vw,2.5rem)}
+h2{font-size:clamp(1.75rem,6vw,2rem)}
+.services-grid{grid-template-columns:1fr}
+.footer-grid{grid-template-columns:1fr}
+.claim-modal-panel{padding:2rem}
+}
+</style>
+</head>
+<body>
+<div data-progress></div>
+
+<header>
+<div class="container">
+<div class="logo">Gulf Shield Board-up</div>
+<button data-menu-toggle aria-label="Toggle menu">
+<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+<nav data-menu-target>
+<a href="#hero">Home</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#contact">Contact</a>
+<a href="#contact" class="btn" data-claim-trigger>Call for Emergency Service</a>
+</nav>
+</div>
+</header>
+
+<section data-hero id="hero">
+<video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419650/scene1.png">
+<source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419650/hero.mp4" type="video/mp4">
+</video>
+<div class="hero-scrim"></div>
+<div class="hero-content">
+<h1 data-split-text>Fast, Reliable Board-Up Services in Milton, FL</h1>
+<p>Protecting your property from storm damage, break-ins, and emergencies with prompt, professional board-up and securing services across the Gulf Coast.</p>
+<a href="#contact" class="btn" data-claim-trigger>Call for Emergency Service</a>
+</div>
+</section>
+
+<section id="about">
+<div class="container">
+<div class="about-grid">
+<div class="about-text" data-reveal>
+<h2 data-split-text>Your Property Protection Specialists</h2>
+<p>Gulf Shield Board-up specializes in emergency property securing services for homes and businesses throughout Milton and surrounding areas. We understand that property damage requires immediate attention, which is why we provide rapid response board-up services to protect your building from further harm, weather exposure, and unauthorized entry.</p>
+</div>
+<div class="about-image" data-reveal data-parallax-img="0.15">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419650/scene2.png" alt="Professional board-up installation in progress" loading="lazy">
+</div>
+</div>
+</div>
+</section>
+
+<section data-media-sequence>
+<div class="ms-track">
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419650/scene2.png" alt="Board installation action" loading="lazy">
+<div class="ms-caption">
+<h3>Expert Storm Preparation</h3>
+<p>Our team provides rapid window and door securing before hurricanes and severe weather, protecting your property from wind and water damage with professional-grade materials and techniques.</p>
+</div>
+</div>
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419650/scene3.png" alt="Secured property detail" loading="lazy">
+<div class="ms-caption">
+<h3>Immediate Post-Damage Response</h3>
+<p>When disaster strikes, we deliver immediate board-up services after storms, fires, or break-ins to prevent additional damage and secure your property until permanent repairs can be completed.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<h2 data-reveal>Emergency Property Protection Services</h2>
+<div class="services-grid">
+<div class="service-card" data-reveal>
+<h3>Emergency Storm Board-Up</h3>
+<p>Rapid window and door securing before hurricanes and severe weather to protect your property from wind and water damage.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Post-Damage Property Securing</h3>
+<p>Immediate board-up services after storms, fires, or accidents to prevent additional damage and secure your property.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Break-In & Vandalism Protection</h3>
+<p>Quick response boarding services to secure broken windows and doors after break-ins or vandalism incidents.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Vacant Property Securing</h3>
+<p>Long-term board-up solutions for vacant or foreclosed properties to deter trespassing and weather damage.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="why-choose">
+<div class="container">
+<h2 data-reveal>Why Choose Gulf Shield Board-up</h2>
+<div class="why-list">
+<div class="why-item" data-reveal>
+<p>Rapid emergency response when time matters most</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Professional securing methods that protect without causing additional damage</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Serving Milton and the surrounding Gulf Coast communities</p>
+</div>
+<div class="why-item" data-reveal>
+<p>Available for both residential and commercial properties</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<h2 data-reveal>Need Emergency Board-Up Service?</h2>
+<p data-reveal>Contact Gulf Shield Board-up now for fast, professional property protection services in Milton and surrounding areas.</p>
+<a href="#contact" class="btn" data-claim-trigger data-reveal>Get Immediate Help</a>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-col">
+<h4>Navigation</h4>
+<ul>
+<li><a href="#hero">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Our Services</h4>
+<ul>
+<li><a href="#services">Emergency Storm Board-Up</a></li>
+<li><a href="#services">Post-Damage Property Securing</a></li>
+<li><a href="#services">Break-In & Vandalism Protection</a></li>
+<li><a href="#services">Vacant Property Securing</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Gulf Shield Board-up, LLC.</h4>
+<p>Milton, Florida<br>Emergency Property Protection When You Need It</p>
+</div>
+</div>
+<div class="footer-bottom">
+&copy; <span data-current-year></span> Gulf Shield Board-up, LLC. All rights reserved.
+</div>
+</div>
+</footer>
+
+<div data-claim-modal>
+<div class="claim-modal-panel">
+<button data-claim-close aria-label="Close">&times;</button>
+<h2>Protect Your Property Today</h2>
+<p>Gulf Shield Board-up provides immediate emergency response for property protection across the Gulf Coast.</p>
+<ul>
+<li>24/7 emergency response availability</li>
+<li>Professional-grade securing materials</li>
+<li>Experienced property protection specialists</li>
+<li>Serving residential and commercial properties</li>
+</ul>
+<a href="#contact" class="btn">Contact Us Now</a>
+</div>
+</div>
+
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloodline Entertainment LLC | Bold Storytelling for Brands That Refuse to Blend In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{font-family:'Inter',sans-serif;background:#0A0A0B;color:#F8F9FA;line-height:1.7;overflow-x:hidden;position:relative}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.045;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+h1,h2,h3,h4,h5,h6{font-family:'Space Grotesk',sans-serif;font-weight:700;line-height:1.15;letter-spacing:-0.03em}
+h1{font-size:clamp(2.5rem,6vw,5rem);margin-bottom:1.5rem}
+h2{font-size:clamp(2rem,4.5vw,3.75rem);margin-bottom:1.25rem}
+h3{font-size:clamp(1.5rem,3vw,2.25rem);margin-bottom:1rem}
+p{margin-bottom:1.25rem;font-weight:300}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+section{position:relative;z-index:2}
+.container{max-width:1280px;margin:0 auto;padding:0 1.5rem}
+.btn,.btn-secondary{display:inline-block;padding:1rem 2.5rem;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:1rem;letter-spacing:0.02em;border-radius:2px;transition:all .3s ease;cursor:pointer;border:none;text-align:center}
+.btn{background:#E63946;color:#F8F9FA}
+.btn:hover{background:#d32735;transform:translateY(-2px);box-shadow:0 8px 24px rgba(230,57,70,.35)}
+.btn-secondary{background:transparent;color:#F8F9FA;border:2px solid #F8F9FA}
+.btn-secondary:hover{background:#F8F9FA;color:#1D1D1F;transform:translateY(-2px)}
+[data-progress]{position:fixed;top:0;left:0;width:0;height:3px;background:#E63946;z-index:9999;transition:width .1s linear}
+header{position:sticky;top:0;z-index:1000;background:rgba(10,10,11,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(248,249,250,.08)}
+header .container{display:flex;align-items:center;justify-content:space-between;padding-top:1.25rem;padding-bottom:1.25rem}
+.logo{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700;letter-spacing:-0.02em;color:#E63946}
+nav{display:flex;align-items:center;gap:2.5rem}
+nav a{font-size:0.95rem;font-weight:500;letter-spacing:0.01em;transition:color .3s ease;position:relative}
+nav a:not(.btn):hover{color:#E63946}
+nav a:not(.btn)::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:2px;background:#E63946;transition:width .3s ease}
+nav a:not(.btn):hover::after{width:100%}
+[data-menu-toggle]{display:none;background:transparent;border:none;cursor:pointer;padding:0.5rem;color:#F8F9FA}
+[data-menu-toggle] span{display:block;width:26px;height:2px;background:currentColor;margin:5px 0;transition:all .3s ease}
+@media(max-width:767px){
+nav{position:fixed;top:70px;left:0;right:0;background:rgba(10,10,11,.98);backdrop-filter:blur(16px);flex-direction:column;align-items:stretch;padding:2rem 1.5rem;gap:0;display:none;border-bottom:1px solid rgba(248,249,250,.08)}
+nav.menu-open{display:flex}
+nav a{padding:1rem 0;border-bottom:1px solid rgba(248,249,250,.06)}
+nav a.btn{margin-top:1rem;text-align:center}
+[data-menu-toggle]{display:block}
+}
+[data-hero]{position:relative;min-height:88vh;display:flex;align-items:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(to bottom,rgba(29,29,31,.85),rgba(29,29,31,.62))}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:960px;margin:0 auto;padding:0 1.5rem}
+.hero-content h1,.hero-content p{text-shadow:0 2px 16px rgba(0,0,0,.5),0 1px 3px rgba(0,0,0,.4)}
+.hero-content p{font-size:clamp(1.1rem,2vw,1.35rem);margin-bottom:2.5rem;font-weight:400;max-width:720px;margin-left:auto;margin-right:auto}
+[data-reveal]{opacity:0}
+#about{padding:8rem 0;background:linear-gradient(to bottom,#0A0A0B,#12121a)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.about-text h2{margin-bottom:2rem}
+.about-text p{font-size:1.15rem;line-height:1.8;color:rgba(248,249,250,.88)}
+.about-image{position:relative;overflow:hidden;border-radius:4px}
+.about-image img{width:100%;height:auto;display:block}
+@media(max-width:1023px){
+.about-grid{grid-template-columns:1fr;gap:3rem}
+}
+[data-media-sequence]{position:relative;height:250vh}
+[data-media-sequence] .ms-track{position:sticky;top:0;height:100vh;overflow:hidden}
+[data-media-sequence] .ms-item{position:absolute;inset:0;opacity:0;transition:opacity .8s ease}
+[data-media-sequence] .ms-item.ms-active{opacity:1;z-index:2}
+[data-media-sequence] .ms-item img{width:100%;height:100%;object-fit:cover}
+.ms-caption{position:absolute;bottom:0;left:0;right:0;padding:4rem 1.5rem 3rem;z-index:3;color:#fff;background:linear-gradient(to top,rgba(0,0,0,.85),rgba(0,0,0,.6) 60%,transparent)}
+.ms-caption h3{font-size:clamp(1.75rem,3.5vw,2.5rem);margin-bottom:0.75rem}
+.ms-caption p{font-size:1.1rem;margin:0;max-width:720px}
+#services{padding:8rem 0;background:#0A0A0B}
+#services .container{text-align:center}
+#services h2{margin-bottom:3.5rem;color:#E63946}
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:2.5rem;margin-top:4rem}
+.service-card{background:rgba(29,29,31,.6);border:1px solid rgba(248,249,250,.08);padding:2.5rem;border-radius:4px;transition:all .4s ease}
+.service-card:hover{background:rgba(29,29,31,.85);border-color:rgba(230,57,70,.4);transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,.4)}
+.service-card h3{color:#F4A261;margin-bottom:1rem;font-size:1.5rem}
+.service-card p{font-size:1rem;line-height:1.7;color:rgba(248,249,250,.82);margin:0}
+#why-choose{padding:8rem 0;background:linear-gradient(to bottom,#0A0A0B,#1D1D1F)}
+#why-choose .container{max-width:960px;text-align:center}
+#why-choose h2{margin-bottom:3rem;color:#E63946}
+.why-list{display:grid;gap:2rem;margin-top:3rem;text-align:left}
+.why-item{background:rgba(10,10,11,.5);border-left:4px solid #E63946;padding:1.75rem 2rem;border-radius:2px;font-size:1.1rem;line-height:1.75;color:rgba(248,249,250,.9)}
+#contact{padding:8rem 0;background:#0A0A0B;text-align:center}
+#contact .container{max-width:800px}
+#contact h2{margin-bottom:1.5rem;color:#F4A261}
+#contact p{font-size:1.2rem;margin-bottom:2.5rem;color:rgba(248,249,250,.88)}
+footer{background:#1D1D1F;padding:4rem 0 2rem;border-top:1px solid rgba(248,249,250,.08)}
+.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:3rem;margin-bottom:3rem}
+.footer-col h4{font-size:1.1rem;margin-bottom:1.25rem;color:#E63946;letter-spacing:0.02em}
+.footer-col ul{list-style:none}
+.footer-col ul li{margin-bottom:0.75rem}
+.footer-col ul li a{color:rgba(248,249,250,.75);font-size:0.95rem;transition:color .3s ease}
+.footer-col ul li a:hover{color:#F4A261}
+.footer-bottom{text-align:center;padding-top:2rem;border-top:1px solid rgba(248,249,250,.08);color:rgba(248,249,250,.6);font-size:0.9rem}
+[data-claim-modal]{display:none}
+[data-claim-modal].modal-open{display:flex;position:fixed;inset:0;z-index:10000;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);padding:1.5rem}
+.claim-modal-panel{background:#1D1D1F;border:1px solid rgba(230,57,70,.3);border-radius:4px;max-width:560px;width:100%;padding:3rem;position:relative;box-shadow:0 24px 64px rgba(0,0,0,.6)}
+[data-claim-close]{position:absolute;top:1.25rem;right:1.25rem;background:transparent;border:none;color:rgba(248,249,250,.7);font-size:1.75rem;cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;transition:color .3s ease}
+[data-claim-close]:hover{color:#E63946}
+.claim-modal-panel h3{color:#E63946;margin-bottom:1.5rem;font-size:1.75rem}
+.claim-modal-panel ul{list-style:none;margin:2rem 0}
+.claim-modal-panel ul li{padding:0.75rem 0;padding-left:2rem;position:relative;color:rgba(248,249,250,.88);line-height:1.6}
+.claim-modal-panel ul li::before{content:'✓';position:absolute;left:0;color:#F4A261;font-weight:700}
+.claim-modal-panel .btn{margin-top:1.5rem;width:100%}
+@media(max-width:767px){
+h1{font-size:2.5rem}
+h2{font-size:2rem}
+section{padding:5rem 0!important}
+#about,#services,#why-choose,#contact{padding:5rem 0!important}
+}
+</style>
+</head>
+<body>
+<div data-progress></div>
+
+<header>
+<div class="container">
+<div class="logo">Bloodline Entertainment</div>
+<button data-menu-toggle aria-label="Toggle menu">
+<span></span>
+<span></span>
+<span></span>
+</button>
+<nav data-menu-target>
+<a href="#hero">Home</a>
+<a href="#about">About</a>
+<a href="#services">Services</a>
+<a href="#contact">Contact</a>
+<a href="#contact" class="btn" data-claim-trigger>Start Your Project</a>
+</nav>
+</div>
+</header>
+
+<section data-hero id="hero">
+<video class="hero-bg" muted loop playsinline poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419616/scene1.png">
+<source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419616/hero.mp4" type="video/mp4">
+</video>
+<div class="hero-scrim"></div>
+<div class="hero-content">
+<h1>Bold Storytelling for Brands That Refuse to Blend In</h1>
+<p>Bradenton's creative studio for video production, brand identity, and content that cuts through the noise and connects with your audience.</p>
+<a href="#contact" class="btn" data-claim-trigger>Start Your Project</a>
+</div>
+</section>
+
+<section id="about">
+<div class="container">
+<div class="about-grid">
+<div class="about-text" data-reveal>
+<h2 data-split-text>We Create Work That Moves People</h2>
+<p>Bloodline Entertainment is a creative studio built on the belief that great content doesn't just look good—it performs. From concept to final cut, we craft visual stories and brand experiences that resonate, engage, and drive results for businesses ready to stand out.</p>
+</div>
+<div class="about-image" data-reveal>
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419616/scene2.png" alt="Studio Command Center" data-parallax-img="0.15">
+</div>
+</div>
+</div>
+</section>
+
+<section data-media-sequence>
+<div class="ms-track">
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419616/scene2.png" alt="Craft in Motion">
+<div class="ms-caption">
+<h3>Video Production That Performs</h3>
+<p>From commercials to branded content, we create video that captures attention and drives measurable action across every platform your audience lives on.</p>
+</div>
+</div>
+<div class="ms-item">
+<img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000419616/scene3.png" alt="Final Frame Detail">
+<div class="ms-caption">
+<h3>Brand Identity That Commands Presence</h3>
+<p>We design visual systems and brand guidelines that establish a distinct identity and ensure consistency across every touchpoint your business occupies.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<h2 data-reveal>Creative Vision That Commands Attention</h2>
+<div class="services-grid">
+<div class="service-card" data-reveal>
+<h3>Video Production & Editing</h3>
+<p>Commercials, branded content, and social video designed to capture attention and drive action across every platform.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Brand Identity & Design</h3>
+<p>Logos, visual systems, and brand guidelines that establish a distinct presence and ensure consistency across all touchpoints.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Content Strategy & Creation</h3>
+<p>On-brand photography, graphics, and social content tailored to your audience and optimized for engagement.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Motion Graphics & Animation</h3>
+<p>Dynamic motion design and animated explainers that simplify complex ideas and amplify your message.</p>
+</div>
+<div class="service-card" data-reveal>
+<h3>Campaign Development</h3>
+<p>End-to-end creative campaigns from concept through execution, built to achieve measurable business outcomes.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="why-choose">
+<div class="container">
+<h2 data-reveal>Why Bloodline Entertainment</h2>
+<div class="why-list">
+<div class="why-item" data-reveal>Creative-first approach that prioritizes originality and strategic thinking over templates and trends</div>
+<div class="why-item" data-reveal>Collaborative process that keeps you involved from concept to final delivery</div>
+<div class="why-item" data-reveal>Fast turnaround without compromising craft or attention to detail</div>
+<div class="why-item" data-reveal>Local Bradenton roots with a portfolio that competes on a national level</div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<h2 data-reveal>Let's Build Something Unforgettable</h2>
+<p data-reveal>Whether you're launching something new or elevating what already exists, we're ready to bring your vision to life.</p>
+<a href="#contact" class="btn" data-claim-trigger data-reveal>Book a Creative Call</a>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<div class="footer-grid">
+<div class="footer-col">
+<h4>Navigation</h4>
+<ul>
+<li><a href="#hero">Home</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#services">Services</a></li>
+<li><a href="#contact">Contact</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Services</h4>
+<ul>
+<li><a href="#services">Video Production & Editing</a></li>
+<li><a href="#services">Brand Identity & Design</a></li>
+<li><a href="#services">Content Strategy & Creation</a></li>
+<li><a href="#services">Motion Graphics & Animation</a></li>
+<li><a href="#services">Campaign Development</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Bloodline Entertainment LLC</h4>
+<p>Bradenton, Florida</p>
+</div>
+</div>
+<div class="footer-bottom">
+&copy; <span data-current-year></span> Bloodline Entertainment LLC. All rights reserved.
+</div>
+</div>
+</footer>
+
+<div data-claim-modal>
+<div class="claim-modal-panel">
+<button data-claim-close aria-label="Close">&times;</button>
+<h3>Ready to Elevate Your Brand?</h3>
+<p>Partner with Bloodline Entertainment and unlock:</p>
+<ul>
+<li>Creative storytelling that sets you apart from the competition</li>
+<li>Professional video production and brand design expertise</li>
+<li>Fast turnaround with uncompromising attention to detail</li>
+<li>A collaborative process that brings your vision to life</li>
+</ul>
+<a href="#contact" class="btn">Book a Creative Call</a>
+</div>
+</div>
+
+<script>// motion_runtime.js v2.6 -- adds yearInit (self-updating copyright year,
+// data-current-year hook) on top of v2.5's deterministic smooth-scroll CSS.
+// Everything else identical to v2.4/v2.5.
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    if (bg && bg.tagName === "VIDEO") {
+      bg.play().catch(function () {});
+    }
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) + ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(stage.querySelectorAll(".ms-item:not(.ms-ui)"));
+      if (!items.length) return;
+      if (prefersReduced) { items[0].classList.add("ms-active"); return; }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) { it.classList.toggle("ms-active", i === idx); });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) { activeVid.play().catch(function () {}); }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  function splitInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) { c.style.transitionDelay = (30 + i * 18) + "ms"; });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .ms-word{display:inline-block;white-space:nowrap}' +
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  function revealInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.add("mrv2-cursor-hover"); }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) { ring.classList.remove("mrv2-cursor-hover"); }
+    });
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#1B4332;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:10000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(27,67,50,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:10000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+    });
+  }
+
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("active");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) { t.addEventListener("click", openModal); });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) { c.addEventListener("click", closeModal); });
+    modal.addEventListener("click", function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("active")) closeModal();
+    });
+  }
+
+  function yearInit() {
+    var els = document.querySelectorAll("[data-current-year]");
+    var y = new Date().getFullYear();
+    els.forEach(function (el) { el.textContent = y; });
+  }
+
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) { existing.textContent += css; return; }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+    yearInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
