@@ -7,6 +7,8 @@ import { getEmailSettings } from "@/lib/email";
 export const dynamic = "force-dynamic";
 export const maxDuration = 120;
 
+const SITE = process.env.NEXT_PUBLIC_URL ?? "https://www.buildittoday.ai";
+
 /**
  * The morning report.
  *
@@ -47,6 +49,37 @@ async function build() {
     count(supabase.from("email_sends").select("*", head).gte("sent_at", midnight)),
     count(supabase.from("customers").select("*", head)),
   ]);
+
+  // The sites the builder produced, by name and link.
+  //
+  // Everything else here is a count, which tells you the total moved but never
+  // which businesses or where to look — so checking meant opening the admin
+  // panel. Keyed on created_at rather than updated_at: the quality gate and the
+  // tracker both touch these rows, and a site you were shown yesterday
+  // reappearing as "new" today is worse than not listing it.
+  const { data: freshSites } = await supabase
+    .from("demo_sites")
+    .select("business_name, public_slug, review_status, demo_slug")
+    .eq("status", "ready")
+    .gte("created_at", yStart)
+    .order("created_at", { ascending: false })
+    .limit(15);
+
+  const freshSlugs = (freshSites ?? []).map((s) => s.demo_slug);
+  const { data: freshLeads } = freshSlugs.length
+    ? await supabase.from("leads").select("demo_slug, contact_email").in("demo_slug", freshSlugs)
+    : { data: [] as { demo_slug: string; contact_email: string | null }[] };
+
+  const emailBySlug = new Map(
+    (freshLeads ?? []).map((l) => [l.demo_slug, Boolean(l.contact_email)]),
+  );
+
+  const newSites = (freshSites ?? []).map((s) => ({
+    name: s.business_name ?? "Unnamed",
+    url: s.public_slug ? `${SITE}/${s.public_slug}` : null,
+    approved: s.review_status === "approved",
+    hasEmail: emailBySlug.get(s.demo_slug) ?? false,
+  }));
 
   // Engagement over the last seven days — a single day is too noisy to read.
   const weekAgo = new Date(Date.now() - 7 * 864e5).toISOString();
@@ -129,6 +162,7 @@ async function build() {
     date: now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" }),
     leads: { total: leadsTotal, newToday: leadsNew, qualified, reachable },
     sites: { built: sitesBuilt, approved, pendingReview },
+    newSites,
     email: {
       sentYesterday, sentToday, dueNow,
       dailyCap: settings.daily_cap,

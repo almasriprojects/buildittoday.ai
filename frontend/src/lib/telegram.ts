@@ -118,6 +118,21 @@ export function formatDigest(d: {
   date: string;
   leads: { total: number; newToday: number; qualified: number; reachable: number };
   sites: { built: number; approved: number; pendingReview: number };
+  /**
+   * The sites the builder actually produced since yesterday, with their links.
+   *
+   * The counts above say the total moved; they never said which businesses, or
+   * where to look. Checking meant opening the admin panel or asking, which is
+   * the opposite of what a daily report is for. Each one carries whether it is
+   * approved and whether the lead is reachable, because a site nobody can be
+   * emailed about is not yet worth celebrating.
+   */
+  newSites: {
+    name: string;
+    url: string | null;
+    approved: boolean;
+    hasEmail: boolean;
+  }[];
   email: {
     sentYesterday: number;
     sentToday: number;
@@ -150,6 +165,26 @@ export function formatDigest(d: {
   L.push(`  ${d.leads.total.toLocaleString()} leads (+${d.leads.newToday} today)`);
   L.push(`  ${d.leads.qualified.toLocaleString()} qualified · ${d.leads.reachable.toLocaleString()} reachable`);
   L.push(`  ${d.sites.built} sites · ${d.sites.approved} approved · ${d.sites.pendingReview} awaiting review`);
+  L.push("");
+
+  // Named and linked, not counted. This is the part you would otherwise have
+  // opened the admin panel to find.
+  L.push(`<b>Built since yesterday</b>`);
+  if (d.newSites.length === 0) {
+    // Said out loud rather than omitted. A quiet day and a stalled builder look
+    // identical from the outside, and this pipeline has stopped twice without
+    // announcing it.
+    L.push(`  Nothing new — the builder produced no sites.`);
+  } else {
+    for (const s of d.newSites) {
+      const mark = !s.approved ? "⏳" : s.hasEmail ? "✅" : "📭";
+      const line = s.url
+        ? `  ${mark} <a href="${esc(s.url)}">${esc(s.name)}</a>`
+        : `  ${mark} ${esc(s.name)} (no address yet)`;
+      L.push(line);
+    }
+    L.push(`  <i>✅ ready to email · ⏳ awaiting review · 📭 no email address</i>`);
+  }
   L.push("");
 
   L.push(`<b>Email</b>`);
