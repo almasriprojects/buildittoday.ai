@@ -36,6 +36,50 @@ type Health = {
   verdict: string;
 };
 
+/**
+ * How much OpenRouter credit is left, in days of building.
+ *
+ * An agent that is running perfectly and getting 402 back from every model
+ * call is not healthy, but nothing here could see that: pg_cron reports the
+ * request as sent, the endpoint returns 200 having handled the error, and the
+ * only trace is an error column on seven rows nobody reads. Running out has
+ * stopped this pipeline twice, and both times it was found days later.
+ *
+ * Warned at three days rather than at zero, because topping up is a manual
+ * step and a warning that arrives after everything has stopped is a report,
+ * not a warning.
+ *
+ * The key lives only in Supabase's function secrets, so the balance is read
+ * through the edge function that holds it. A failure to reach it is not
+ * treated as low credit — a false alarm here trains you to ignore the channel.
+ */
+const LOW_CREDIT_DAYS = 3;
+
+async function openRouterCredit(): Promise<
+  { remaining: number; days: number; leads: number } | null
+> {
+  const base = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!base) return null;
+  try {
+    const res = await fetch(`${base}/functions/v1/openrouter-balance`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: "{}",
+      signal: AbortSignal.timeout(15000),
+    });
+    if (!res.ok) return null;
+    const d = await res.json();
+    if (!d?.ok) return null;
+    return {
+      remaining: Number(d.remaining ?? 0),
+      days: Number(d.daysAtTenADay ?? 0),
+      leads: Number(d.leadsRemaining ?? 0),
+    };
+  } catch {
+    return null;
+  }
+}
+
 function authorised(request: NextRequest): boolean {
   const secret = process.env.CRON_SECRET;
   if (!secret) return false;
@@ -56,6 +100,7 @@ export async function POST(request: NextRequest) {
   }
 
   const rows = (data ?? []) as Health[];
+  const credit = await openRouterCredit();
 
   // never_run is excluded on purpose, and excluding it correctly took two
   // attempts: the first version treated "has not run recently" and "has never
@@ -69,16 +114,31 @@ export async function POST(request: NextRequest) {
   );
   const newlyScheduled = rows.filter((r) => r.never_run && r.active);
 
-  if (broken.length === 0) {
+  const creditLow = credit !== null && credit.days < LOW_CREDIT_DAYS;
+
+  if (broken.length === 0 && !creditLow) {
     return NextResponse.json({
       ok: true,
       checked: rows.length,
       broken: 0,
+      credit,
       // Reported, not alerted: these are visible on the Agents page and will
       // resolve themselves the first time each job comes round.
       awaitingFirstRun: newlyScheduled.map((r) => r.jobname),
       note: "All agents healthy — no alert sent.",
     });
+  }
+
+  if (creditLow && broken.length === 0) {
+    await alert(
+      "agent_down",
+      `OpenRouter credit is down to $${credit!.remaining.toFixed(2)}`,
+      `About ${credit!.leads} more sites — roughly ${credit!.days} day${credit!.days === 1 ? "" : "s"} at 10 a day.\n\n` +
+        `Every agent is healthy. When this hits zero they keep running and quietly fail: ` +
+        `no copy, no photographs, no sites, and leads landing in failed.\n\n` +
+        `openrouter.ai/credits`,
+    );
+    return NextResponse.json({ ok: true, checked: rows.length, broken: 0, credit, alerted: "low_credit" });
   }
 
   const lines = broken.map((r) => {
@@ -87,6 +147,15 @@ export async function POST(request: NextRequest) {
       : `last ran ${r.hours_since}h ago`;
     return `• ${r.jobname} — ${r.verdict} (${when})`;
   });
+
+  // Credit rides along on the same message rather than firing a second one.
+  // If the agents are failing because the balance is gone, those two facts
+  // belong in one alert, not two that have to be read together.
+  if (creditLow) {
+    lines.push(
+      `• OpenRouter credit — $${credit!.remaining.toFixed(2)} left, about ${credit!.leads} more sites`,
+    );
+  }
 
   await alert(
     "agent_down",
@@ -98,6 +167,7 @@ export async function POST(request: NextRequest) {
     ok: true,
     checked: rows.length,
     broken: broken.length,
+    credit,
     alerted: broken.map((b) => ({ job: b.jobname, verdict: b.verdict })),
   });
 }
