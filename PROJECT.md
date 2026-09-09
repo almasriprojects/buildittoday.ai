@@ -154,7 +154,7 @@ retire the HTML generator. None of it blocks revenue.
 
 | Problem | Where | Severity |
 |---|---|---|
-| **Nothing automated has ever built a site.** `generate-site` writes copy onto the lead and sets `site_generated = true`, but produces no HTML, no storage object and no `demo_sites` row — so the lead cannot be served, gated, enrolled or emailed, while being marked done. All 43 live sites were made by the local Python pipeline on one Mac, by hand, between 18 and 20 August. The scheduled "Site builder" was unscheduled on 8 Sep after it stranded 20 leads, which were restored. | Both | **High — the funnel has no automated supply** |
+| **Cost per site is now real money.** Three photographs and a clip cost about $0.27 per lead, on top of the HTML model. At the cap of 10 a day that is roughly $3/day, and it is spent before anyone has replied. Worth watching against reply rate rather than assumed. | Supabase | Medium |
 | **Cron secret in plaintext** inside `cron.job` command text — anyone with database read access can see it | Supabase | **High — rotate it** |
 | 30 engine sites carry invented statistics and are frozen (they fail the new content gate) — includes two law firms publishing "98% On-time delivery" | Engine | Medium |
 | 195 leads have filing dates in the future | Database | Medium |
@@ -203,10 +203,16 @@ Single source of truth: `src/lib/pricing.ts`. Never hardcode a price anywhere el
 
 ### Scheduled jobs
 
-Seven, all in Supabase `pg_cron`, all visible at `/admin/agents`:
+Nine, all in Supabase `pg_cron`, all visible at `/admin/agents`:
 lead scraper (weekdays 10:00 UTC), classifier (every 15 min, only when work is
-pending), map placer (weekdays 10:40), quality gate (11:40), outreach sequencer
-(hourly 13:00–23:00), renewal reminders (14:05), Telegram digest (12:00).
+pending), map placer (weekdays 10:40), site builder (11:00), hero-clip collector
+(every 15 min), quality gate (11:40), outreach sequencer (hourly 13:00–23:00),
+renewal reminders (14:05), Telegram digest (12:00).
+
+The site builder runs the whole chain in order: copy → photography and hero clip
+→ HTML → gate → email. Media is ordered one day and the HTML built the next,
+because a clip takes about eighty seconds to render and the builder does not
+wait for it. The collector picks up finished clips every quarter hour.
 
 `pg_cron` reports "succeeded" when a request is *queued*, not when it is
 answered. The Agents page shows the real response bodies — trust those.
@@ -215,6 +221,9 @@ answered. The Agents page shows the real response bodies — trust those.
 
 | Item | Figure | Confidence |
 |---|---|---|
+| Three photographs per site | $0.13 | measured, 9 Sep |
+| Hero clip per site | $0.14 | measured, 9 Sep |
+| Media per site, total | $0.27 | measured, 9 Sep |
 | Engine build, no video | $0.09 | documented, **not measured** |
 | Engine build with video | $0.25 | documented, **not measured** |
 | All 818 email-reachable leads | ~$205 | follows from the above |

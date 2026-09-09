@@ -57,11 +57,22 @@ begin
   --    would be skipped here for having media and rejected there for not
   --    having enough of it, which is a lead stuck forever rather than a lead
   --    waiting. Ready means three photographs and a clip.
+  --
+  --    But the photo count only decides between leads that still NEED a site.
+  --    Without the demo_sites condition below, the 43 sites built by hand in
+  --    August — which have three photographs and a twelve-second hero, but
+  --    predate the scenes_json field this counts — look identical to a lead
+  --    with no photography at all. This function ordered a fresh set for ten
+  --    of them before the condition was added, and because the filenames are
+  --    the same the new files overwrote the old ones underneath live,
+  --    human-approved pages. A lead whose site is ready is not waiting.
   for target in
     select l.id
     from public.leads l
     left join public.demo_media m on m.demo_slug = l.demo_slug
+    left join public.demo_sites d on d.demo_slug = l.demo_slug
     where l.generated_content is not null
+      and (d.demo_slug is null or d.status = 'failed')
       and (
         m.demo_slug is null
         or m.status = 'failed'
