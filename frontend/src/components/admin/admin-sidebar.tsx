@@ -20,12 +20,14 @@ import {
   Plug,
   Bot,
   Building2,
+  Phone,
 } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/leads", label: "Leads", icon: Target },
   { href: "/admin/sites", label: "Generated Sites", icon: Globe },
+  { href: "/admin/calls", label: "Calls", icon: Phone },
   { href: "/admin/bookings", label: "Call Requests", icon: CalendarClock },
   { href: "/admin/potential-customers", label: "Sign-ups", icon: UserPlus },
   { href: "/admin/customers", label: "Customers", icon: Users },
