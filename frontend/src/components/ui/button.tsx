@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -34,10 +35,22 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+/**
+ * `asChild` renders the child element with the button's styling instead of
+ * wrapping it in a <button>. Use it for links that should look like buttons.
+ *
+ * It was declared in ButtonProps but never implemented: the prop fell through
+ * into ...props and was spread onto the DOM, so <Button asChild><a/></Button>
+ * produced an anchor nested inside a button — invalid HTML, a stray asChild
+ * attribute in the markup, and the child laid out as inline content rather
+ * than picking up the button's own flex, which is what stacked the icon above
+ * the label on the calls page.
+ */
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
     return (
-      <button
+      <Comp
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
