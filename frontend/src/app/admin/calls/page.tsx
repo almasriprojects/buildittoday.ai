@@ -17,13 +17,12 @@ export const metadata = {
  */
 export default function CallsPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 pb-24">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Calls</h1>
-        <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
-          Every business with an approved site and a phone number. Open one to get a script
-          written from that business&rsquo;s own copy, ring them, then record what they said.
-          The notes are the point — they are the only record of why someone said no.
+        <h1 className="text-3xl font-bold tracking-tight">Calls</h1>
+        <p className="text-muted-foreground mt-1">
+          Every business with an approved site and a phone number. Open one for a script written
+          from their own copy, then record what they said.
         </p>
       </div>
       <CallsClient />
