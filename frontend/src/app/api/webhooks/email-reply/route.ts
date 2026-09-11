@@ -101,11 +101,17 @@ export async function POST(request: NextRequest) {
   // lead_email_state.status is CHECK-constrained and does not permit the
   // latter — writing it would be silently rejected, which is a mistake this
   // project has made twice.
+  //
+  // Every live status, not just 'active'. A lead who had clicked sits at
+  // 'clicked' and is still in the sequence — branched to the warm template —
+  // so matching only 'active' left the most engaged people still being chased
+  // after they had answered. Testing this on a real lead is the only reason it
+  // was caught.
   await supabase
     .from("lead_email_state")
     .update({ status: "stopped", last_event_at: now, updated_at: now })
     .eq("lead_id", lead.id)
-    .eq("status", "active");
+    .in("status", ["active", "clicked"]);
 
   try {
     const { alert } = await import("@/lib/telegram");
