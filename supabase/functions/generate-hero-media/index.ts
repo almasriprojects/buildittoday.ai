@@ -342,7 +342,22 @@ async function collect(limit = 10) {
     const pollingUrl = (row.scenes_json as Record<string, unknown> | null)
       ?.polling_url as string | undefined;
     if (!pollingUrl) {
-      failed.push({ slug, error: "no polling url recorded" });
+      // Mark it, do not just skip it.
+      //
+      // This used to report the problem and leave the row untouched at
+      // "videos", so the collector picked the same row up every fifteen
+      // minutes forever and it could never recover. Writing "failed" is what
+      // makes the build chain eligible to order fresh media for it, because
+      // trigger_build_sites re-selects on exactly that status.
+      must(
+        "mark media failed (no polling url)",
+        (await db.from("demo_media").update({
+          status: STATUS.failed,
+          error: "submitted without a polling url — media will be re-ordered",
+          updated_at: new Date().toISOString(),
+        }).eq("demo_slug", slug)).error,
+      );
+      failed.push({ slug, error: "no polling url recorded — marked for retry" });
       continue;
     }
 
