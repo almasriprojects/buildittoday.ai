@@ -125,6 +125,21 @@ export function buildVars(
     demo_url: lead.public_slug
       ? `${SITE_URL}/${lead.public_slug}?src=email`
       : `${SITE_URL}/api/track/click?lead=${lead.id}&src=email`,
+    /**
+     * Where to book a call, carrying the business's identity.
+     *
+     * The calendar has existed for weeks at /#book and had taken zero
+     * bookings — because not one of the five outreach templates ever mentioned
+     * it. Every email asked a stranger for $750; none offered a conversation,
+     * which is the far easier thing to say yes to.
+     *
+     * The ?demo= parameter is what ties a booking back to this lead, so a
+     * request arrives attached to the business rather than as an anonymous
+     * name and a time.
+     */
+    booking_url: lead.public_slug
+      ? `${SITE_URL}/?demo=${lead.public_slug}&src=email#book`
+      : `${SITE_URL}/#book`,
     from_name: settings.from_name,
     reply_to: settings.reply_to,
     expiry_date: opts.expiryDate ?? "",

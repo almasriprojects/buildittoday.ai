@@ -78,5 +78,29 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Somebody asked to talk. Nothing else in this project matters more.
+  //
+  // Before this, a booking was written to the table and that was the end of
+  // it: no notification, nothing on a phone, and the only way to find out was
+  // to remember to open /admin/bookings. The calendar has existed for weeks
+  // and taken zero bookings, so that silence has never been tested — but the
+  // first real one must not sit unseen for a day.
+  try {
+    const { alert } = await import("@/lib/telegram");
+    await alert(
+      "payment",
+      `${(body.businessName ? String(body.businessName).trim() : "") || name} wants to talk`,
+      [
+        `${date} at ${slot}`,
+        body.phone ? `Call them on ${String(body.phone).trim()}` : `No phone given — reply to ${email}`,
+        email,
+        body.notes ? `\n"${String(body.notes).trim().slice(0, 300)}"` : "",
+        `\nbuildittoday.ai/admin/bookings`,
+      ].filter(Boolean).join("\n"),
+    );
+  } catch {
+    // A failed notification must never lose the booking itself.
+  }
+
   return NextResponse.json({ ok: true });
 }

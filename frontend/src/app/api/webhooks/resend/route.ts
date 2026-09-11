@@ -54,18 +54,52 @@ type ResendEvent = {
   data?: { email_id?: string; to?: string[] | string; [k: string]: unknown };
 };
 
+/**
+ * Record that a request arrived, before deciding whether to trust it.
+ *
+ * Across 49 real sends this route had never written a row anywhere, and two
+ * very different causes produce that same silence: Resend never calling the
+ * URL, or Resend calling and failing signature verification, which answers 401
+ * and leaves no trace. Until that is distinguishable, "no bounces" cannot be
+ * read as good news — it may only mean nothing is listening.
+ *
+ * Deliberately never stores the body. It carries recipient addresses and there
+ * is no reason to hold a second copy of those.
+ */
+async function note(accepted: boolean, eventType: string | null, reason?: string) {
+  try {
+    await createServiceRoleClient().from("webhook_attempts").insert({
+      source: "resend", event_type: eventType, accepted, reason: reason ?? null,
+    });
+  } catch {
+    // Bookkeeping must never be the reason a delivery event is lost.
+  }
+}
+
 export async function POST(request: NextRequest) {
   const raw = await request.text();
 
+  // Read the type for the audit line only. Nothing is trusted or acted on
+  // until the signature has been verified below.
+  let claimedType: string | null = null;
+  try {
+    claimedType = (JSON.parse(raw)?.type as string) ?? null;
+  } catch { /* unparseable bodies are still worth counting */ }
+
   const { resendWebhookSecret: secret } = await getSecrets();
   if (!secret) {
+    await note(false, claimedType, "no signing secret configured");
     // Refuse rather than trust. An unauthenticated endpoint that can suppress
     // addresses is a way for anyone to switch off your outreach.
     return NextResponse.json({ error: "Webhook secret not configured" }, { status: 503 });
   }
   if (!verify(secret, request.headers, raw)) {
+    await note(false, claimedType, request.headers.get("svix-id")
+      ? "signature did not verify — check the signing secret matches this endpoint in Resend"
+      : "not a signed Svix request — no svix-id header");
     return NextResponse.json({ error: "Bad signature" }, { status: 401 });
   }
+  await note(true, claimedType);
 
   let event: ResendEvent;
   try {

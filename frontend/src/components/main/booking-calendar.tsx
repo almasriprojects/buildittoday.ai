@@ -39,6 +39,13 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
   async function submitBooking(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedDay || !selectedSlot) return;
+    // Read at submit time rather than through useSearchParams: this component
+    // sits on the statically rendered homepage, and that hook would force the
+    // whole page behind a Suspense boundary for one optional parameter.
+    const demoSlug =
+      typeof window === "undefined"
+        ? ""
+        : new URLSearchParams(window.location.search).get("demo") ?? "";
     setSaving(true);
     setError(null);
     const iso = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
@@ -46,7 +53,14 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, phone, date: iso, slot: selectedSlot }),
+        // demoSlug is what attaches this booking to the business whose site
+        // the invitation was sent about. The API has always accepted it; the
+        // form never sent it, so a booking would have arrived as an anonymous
+        // name and a time with no way to tell which of 63 sites it concerned.
+        body: JSON.stringify({
+          name, email, phone, date: iso, slot: selectedSlot,
+          demoSlug: demoSlug || undefined,
+        }),
       });
       const d = await res.json();
       if (!res.ok) throw new Error(d.error || "Could not save your request.");
