@@ -26,7 +26,22 @@ const BATCH_SIZE = 20;
  * Sixty leads a run, ninety-six runs a day, against a scraper bringing in
  * roughly 2,450 — comfortably ahead, which it was not before.
  */
-const TIME_BUDGET_MS = 75_000;
+const TIME_BUDGET_MS = 60_000;
+
+/**
+ * Ceiling on a single model call.
+ *
+ * The loop budget is checked BEFORE a batch starts, never during one, so the
+ * true worst case has always been the budget plus however long one call
+ * decides to take. With no cap on the call itself that produced repeated
+ * IDLE_TIMEOUTs at the platform's 150s wall, which kills the worker and throws
+ * away the work already done.
+ *
+ * Bounding the call is what actually makes the arithmetic safe: 60s of budget
+ * plus at most 45s of call lands at 105s, comfortably inside 150s, however
+ * slow the provider OpenRouter routes to happens to be.
+ */
+const MODEL_TIMEOUT_MS = 45_000;
 
 /**
  * Output budget, and why it is this large.
@@ -149,6 +164,9 @@ Deno.serve(async (req: Request) => {
   let totalClassified = 0;
   let batches = 0;
   let truncatedBatches = 0;
+  // Set when the run stopped early for a reason worth reporting, rather than
+  // because the work ran out.
+  let interrupted: string | null = null;
   // In reclassify mode, a lead that gets re-confirmed (same category/target_fit)
   // still matches the filter on the next fetch, so plain re-querying can loop
   // over the same already-processed rows forever without covering the rest.
@@ -167,8 +185,19 @@ Deno.serve(async (req: Request) => {
     }
     const { data: leads, error: fetchError } = await query.limit(BATCH_SIZE);
     if (fetchError) {
-      console.error(`[${runId}] fetch failed: ${fetchError.message}`);
-      throw fetchError;
+      // Stop, do not throw.
+      //
+      // This used to `throw fetchError`, which escaped the handler and became a
+      // bare 500 — discarding everything the run had already done. A real run
+      // classified nineteen leads, hit a transient "Gateway Timeout" on the
+      // NEXT fetch, and reported itself as a total failure with no counts at
+      // all. The watchdog then saw a broken agent that was in fact working.
+      //
+      // Supabase times out occasionally under load. That is a reason to stop
+      // early and report what was finished, not to throw the batch away.
+      console.error(`[${runId}] fetch failed after ${batches} batches: ${fetchError.message}`);
+      interrupted = fetchError.message;
+      break;
     }
     if (!leads || leads.length === 0) {
       console.log(`[${runId}] no more matching leads, stopping after ${batches} batches`);
@@ -207,7 +236,17 @@ Deno.serve(async (req: Request) => {
           { role: "user", content: nameList },
         ],
       }),
+      signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
+    }).catch((e) => {
+      // An aborted call is not a crash. Stop the run and report what is done.
+      console.error(`[${runId}] model call aborted after ${MODEL_TIMEOUT_MS}ms: ${e instanceof Error ? e.message : e}`);
+      return null;
     });
+
+    if (!resp) {
+      interrupted = `model call exceeded ${MODEL_TIMEOUT_MS}ms`;
+      break;
+    }
 
     if (!resp.ok) {
       const errText = await resp.text();
@@ -281,17 +320,24 @@ Deno.serve(async (req: Request) => {
     batches++;
   }
 
-  console.log(`[${runId}] done: batches=${batches} classified=${totalClassified} truncated=${truncatedBatches} elapsedMs=${Date.now() - startedAt} lastId=${cursor}`);
+  console.log(`[${runId}] done: batches=${batches} classified=${totalClassified} truncated=${truncatedBatches} interrupted=${interrupted ?? "no"} elapsedMs=${Date.now() - startedAt} lastId=${cursor}`);
   return new Response(
     JSON.stringify({
-      ok: true,
+      // A run that classified leads succeeded, even if it stopped early. Only
+      // a run that achieved nothing AND was interrupted is a failure worth
+      // alerting on — otherwise the watchdog reports a working agent as broken.
+      ok: totalClassified > 0 || interrupted === null,
       mode: reclassifyMode ? "reclassify" : "default",
       batchesCompleted: batches,
       leadsClassified: totalClassified,
       truncatedBatches,
+      interrupted,
       elapsedMs: Date.now() - startedAt,
       lastId: cursor,
     }),
-    { headers: { "Content-Type": "application/json" } },
+    {
+      status: totalClassified > 0 || interrupted === null ? 200 : 502,
+      headers: { "Content-Type": "application/json" },
+    },
   );
 });
