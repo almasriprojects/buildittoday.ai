@@ -76,6 +76,18 @@ export async function POST(request: NextRequest) {
     .ilike("contact_email", from)
     .maybeSingle();
 
+  // Record that the poller reached us, matched or not.
+  //
+  // A script that has stopped running and a script running over an empty inbox
+  // produce the same silence. That ambiguity is what let the Resend webhook sit
+  // dead for nineteen days, so this one is visible from its first request.
+  await supabase.from("webhook_attempts").insert({
+    source: "gmail-reply",
+    event_type: lead ? "reply" : "not-a-lead",
+    accepted: true,
+    reason: lead ? null : from,
+  }).then(() => {}, () => {});
+
   if (!lead) {
     return NextResponse.json({ ok: true, matched: false, note: "sender is not a lead" });
   }
