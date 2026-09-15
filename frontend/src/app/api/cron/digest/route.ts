@@ -26,10 +26,28 @@ async function build() {
   const yesterday = new Date(Date.now() - 864e5);
   const yStart = new Date(yesterday.toDateString()).toISOString();
 
-  // Written out rather than abstracted. A helper here needed enough type
-  // gymnastics to obscure what was being counted, which is the opposite of
-  // useful in the one place that reports the state of the business.
-  const count = async (q: PromiseLike<{ count: number | null }>) => (await q).count ?? 0;
+  // Every figure that could not be read, by name.
+  //
+  // This helper used to be `(await q).count ?? 0`, which reported a failed
+  // query as zero. On 13 Sep the digest announced "0 qualified" while the
+  // database held 35,494, and "0 clicks · 0 site views" against 215 real
+  // events — because a query had errored and the ?? turned that into a
+  // number. A report that cannot tell "none" from "I could not find out" is
+  // worse than no report: it is the one place the state of the business is
+  // read from, and it was quietly inventing zeros.
+  const unreadable: string[] = [];
+  const count = async (
+    label: string,
+    q: PromiseLike<{ count: number | null; error: { message: string } | null }>,
+  ): Promise<number | null> => {
+    const res = await q;
+    if (res.error) {
+      console.error(`[digest] could not count ${label}: ${res.error.message}`);
+      unreadable.push(label);
+      return null;
+    }
+    return res.count ?? 0;
+  };
   const head = { count: "exact" as const, head: true };
 
   const [
@@ -38,16 +56,16 @@ async function build() {
     sentYesterday, sentToday,
     customers,
   ] = await Promise.all([
-    count(supabase.from("leads").select("*", head)),
-    count(supabase.from("leads").select("*", head).gte("created_at", midnight)),
-    count(supabase.from("leads").select("*", head).eq("target_fit", "yes")),
-    count(supabase.from("leads").select("*", head).not("contact_email", "is", null)),
-    count(supabase.from("demo_sites").select("*", head).eq("status", "ready")),
-    count(supabase.from("demo_sites").select("*", head).eq("review_status", "approved")),
-    count(supabase.from("demo_sites").select("*", head).eq("review_status", "pending")),
-    count(supabase.from("email_sends").select("*", head).gte("sent_at", yStart).lt("sent_at", midnight)),
-    count(supabase.from("email_sends").select("*", head).gte("sent_at", midnight)),
-    count(supabase.from("customers").select("*", head)),
+    count("leads", supabase.from("leads").select("*", head)),
+    count("new leads", supabase.from("leads").select("*", head).gte("created_at", midnight)),
+    count("qualified", supabase.from("leads").select("*", head).eq("target_fit", "yes")),
+    count("reachable", supabase.from("leads").select("*", head).not("contact_email", "is", null)),
+    count("sites built", supabase.from("demo_sites").select("*", head).eq("status", "ready")),
+    count("approved", supabase.from("demo_sites").select("*", head).eq("review_status", "approved")),
+    count("awaiting review", supabase.from("demo_sites").select("*", head).eq("review_status", "pending")),
+    count("sent yesterday", supabase.from("email_sends").select("*", head).gte("sent_at", yStart).lt("sent_at", midnight)),
+    count("sent today", supabase.from("email_sends").select("*", head).gte("sent_at", midnight)),
+    count("customers", supabase.from("customers").select("*", head)),
   ]);
 
   // The sites the builder produced, by name and link.
@@ -83,10 +101,14 @@ async function build() {
 
   // Engagement over the last seven days — a single day is too noisy to read.
   const weekAgo = new Date(Date.now() - 7 * 864e5).toISOString();
-  const { data: events } = await supabase
+  const { data: events, error: eventsError } = await supabase
     .from("outreach_events")
     .select("event_type")
     .gte("occurred_at", weekAgo);
+  if (eventsError) {
+    console.error(`[digest] could not read engagement: ${eventsError.message}`);
+    unreadable.push("engagement");
+  }
 
   const ev = events ?? [];
   const countOf = (p: string) => ev.filter((e) => e.event_type.startsWith(p)).length;
@@ -137,13 +159,18 @@ async function build() {
   if (!process.env.RESEND_WEBHOOK_SECRET) blockers.push("Resend webhook unset — bounces go unrecorded");
 
   // Forecast, kept honest about small numbers rather than inventing precision.
-  const remaining = Math.max(0, settings.daily_cap - sentToday);
+  //
+  // Where a figure could not be read the forecast says so rather than
+  // arithmetic-ing around a null: a sending plan built on a number nobody
+  // could fetch is a guess wearing a decimal point.
+  const remaining = Math.max(0, settings.daily_cap - (sentToday ?? 0));
   const willSend = settings.sending_enabled && !blockers.length ? Math.min(remaining, dueNow) : 0;
   const clicks7 = countOf("clicked");
   const sends7 = await count(
-    supabase.from("email_sends").select("*", head).gte("sent_at", weekAgo)
+    "sends this week",
+    supabase.from("email_sends").select("*", head).gte("sent_at", weekAgo),
   );
-  const rate = sends7 > 0 ? clicks7 / sends7 : 0;
+  const rate = sends7 && sends7 > 0 ? clicks7 / sends7 : 0;
 
   let forecast: string;
   if (willSend === 0) {
@@ -152,6 +179,8 @@ async function build() {
       : dueNow === 0
       ? "Nothing due in the queue."
       : "Daily cap already reached.";
+  } else if (sends7 === null) {
+    forecast = `${willSend} email${willSend > 1 ? "s" : ""} will send. No click forecast — this week's send count could not be read.`;
   } else if (sends7 < 20) {
     forecast = `${willSend} email${willSend > 1 ? "s" : ""} will send. Too early to forecast clicks from ${sends7} sends.`;
   } else {
@@ -179,6 +208,7 @@ async function build() {
     waiting: { onYou: waitingOnYou, neverContacted },
     blockers,
     forecast,
+    unreadable,
   });
 }
 

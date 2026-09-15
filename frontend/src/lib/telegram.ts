@@ -114,10 +114,21 @@ export async function alert(kind: AlertKind, title: string, detail?: string) {
 }
 
 /** Formats a plain, readable digest. Numbers first; prose only where it helps. */
+/**
+ * A figure that may not have been readable.
+ *
+ * The digest used to coerce a failed query to 0, so "0 qualified" and "35,494
+ * qualified" looked identical on the phone. Null now means "not read" and is
+ * rendered as "?", which is the honest answer.
+ */
+type N = number | null;
+
+const fig = (n: N) => (n === null ? "?" : n.toLocaleString());
+
 export function formatDigest(d: {
   date: string;
-  leads: { total: number; newToday: number; qualified: number; reachable: number };
-  sites: { built: number; approved: number; pendingReview: number };
+  leads: { total: N; newToday: N; qualified: N; reachable: N };
+  sites: { built: N; approved: N; pendingReview: N };
   /**
    * The sites the builder actually produced since yesterday, with their links.
    *
@@ -134,18 +145,20 @@ export function formatDigest(d: {
     hasEmail: boolean;
   }[];
   email: {
-    sentYesterday: number;
-    sentToday: number;
+    sentYesterday: N;
+    sentToday: N;
     dueNow: number;
     dailyCap: number;
     sendingOn: boolean;
     testMode: boolean;
   };
   funnel: { clicks: number; views: number; offersShown: number; offersClicked: number };
-  money: { customers: number; mrrCents: number; setupCents: number };
+  money: { customers: N; mrrCents: number; setupCents: number };
   waiting: { onYou: number; neverContacted: number };
   blockers: string[];
   forecast: string;
+  /** Figures the database refused to give up. Named, never silently zeroed. */
+  unreadable: string[];
 }): string {
   const money = (c: number) => `$${(c / 100).toLocaleString("en-US")}`;
   const L: string[] = [];
@@ -153,18 +166,25 @@ export function formatDigest(d: {
   L.push(`<b>BuildItToday — ${esc(d.date)}</b>`);
   L.push("");
 
+  // Loudly, and first. A wrong number read as fact is worse than a gap.
+  if (d.unreadable.length) {
+    L.push(`⚠️ <b>${d.unreadable.length} figure${d.unreadable.length === 1 ? "" : "s"} could not be read</b>`);
+    L.push(`  ${esc(d.unreadable.join(", "))} — shown as ? below, not as zero.`);
+    L.push("");
+  }
+
   // The number that matters most, first.
-  if (d.money.customers > 0) {
-    L.push(`💰 <b>${d.money.customers} customer${d.money.customers > 1 ? "s" : ""}</b> · ${money(d.money.mrrCents)}/mo · ${money(d.money.setupCents)} collected`);
+  if ((d.money.customers ?? 0) > 0) {
+    L.push(`💰 <b>${fig(d.money.customers)} customer${(d.money.customers ?? 0) > 1 ? "s" : ""}</b> · ${money(d.money.mrrCents)}/mo · ${money(d.money.setupCents)} collected`);
   } else {
     L.push(`💰 No customers yet`);
   }
   L.push("");
 
   L.push(`<b>Pipeline</b>`);
-  L.push(`  ${d.leads.total.toLocaleString()} leads (+${d.leads.newToday} today)`);
-  L.push(`  ${d.leads.qualified.toLocaleString()} qualified · ${d.leads.reachable.toLocaleString()} reachable`);
-  L.push(`  ${d.sites.built} sites · ${d.sites.approved} approved · ${d.sites.pendingReview} awaiting review`);
+  L.push(`  ${fig(d.leads.total)} leads (+${fig(d.leads.newToday)} today)`);
+  L.push(`  ${fig(d.leads.qualified)} qualified · ${fig(d.leads.reachable)} reachable`);
+  L.push(`  ${fig(d.sites.built)} sites · ${fig(d.sites.approved)} approved · ${fig(d.sites.pendingReview)} awaiting review`);
   L.push("");
 
   // Named and linked, not counted. This is the part you would otherwise have
@@ -195,7 +215,7 @@ export function formatDigest(d: {
   } else {
     L.push(`  ✅ Live`);
   }
-  L.push(`  ${d.email.sentYesterday} sent yesterday · ${d.email.sentToday}/${d.email.dailyCap} today`);
+  L.push(`  ${fig(d.email.sentYesterday)} sent yesterday · ${fig(d.email.sentToday)}/${d.email.dailyCap} today`);
   L.push(`  ${d.email.dueNow} due in the queue`);
   L.push("");
 
