@@ -69,6 +69,11 @@ HARD RULES:
   and subject — three versions of the same shot is a failure.
 - Scene 1 is also the first frame of the hero video, so it must hold still
   well: a clear subject, room around it, nothing that needs to move to read.
+  It must NOT contain a recognisable human face. The video model runs a privacy
+  check on this frame and refuses anything that looks like a real person, which
+  leaves the business with no hero at all. Hands at work, a figure seen from
+  behind, a silhouette or someone small in a wide shot are all fine — a face
+  looking at camera is not.
 - image_prompt: one photorealistic, editorial-quality still. Cinematic lighting,
   shallow depth of field where it suits, no text/logos/watermarks/signage, 16:9.
   Be specific about subject, lighting, time of day and mood.
@@ -281,18 +286,62 @@ async function submit(leadId: string) {
     const posterUrl = photos[0].url;
     const shape = { width: photos[0].width, height: photos[0].height };
 
-    // 3. The clip, from the establishing shot as its first frame.
-    const job = await openrouter("videos", {
-      model: VIDEO_MODEL,
-      prompt: scenes[0].video_motion_prompt,
-      duration: 4,
-      resolution: "480p",
-      aspect_ratio: "16:9",
-      generate_audio: false,
-      frame_images: [
-        { type: "image_url", image_url: { url: posterUrl }, frame_type: "first_frame" },
-      ],
-    });
+    // 3. The clip, from the establishing shot as its first frame — and from a
+    //    different photograph if that one is refused.
+    //
+    // The video provider runs its own safety check on the first frame and
+    // rejects anything that "may contain real person":
+    //
+    //   InputImageSensitiveContentDetected.PrivacyInformation
+    //
+    // Our own art direction asks scene two for "people or craft in action", so
+    // photorealistic figures are not an accident — they are the brief. Besh
+    // Cleaning Solution was stuck on exactly this, retried every fifteen
+    // minutes and refused every time, because one rejected frame left the lead
+    // with no route to a video at all.
+    //
+    // Each photograph is tried in turn. A detail or result shot rarely
+    // contains a face, so the later scenes are the natural fallback.
+    let job: { polling_url?: string; id?: string } | null = null;
+    let videoFrom = 0;
+    const frameErrors: string[] = [];
+
+    for (let i = 0; i < photos.length; i++) {
+      try {
+        job = await openrouter("videos", {
+          model: VIDEO_MODEL,
+          prompt: scenes[0].video_motion_prompt,
+          duration: 4,
+          resolution: "480p",
+          aspect_ratio: "16:9",
+          generate_audio: false,
+          frame_images: [
+            { type: "image_url", image_url: { url: photos[i].url }, frame_type: "first_frame" },
+          ],
+        });
+        videoFrom = i;
+        break;
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        frameErrors.push(`scene${i + 1}: ${msg.slice(0, 120)}`);
+        // Only a rejected frame is worth trying another photograph for. Any
+        // other failure — no credit, a bad gateway — will refuse every frame
+        // identically, and walking all three just spends three times as long
+        // arriving at the same place.
+        const rejectedFrame = /SensitiveContent|real person|PrivacyInformation/i.test(msg);
+        if (!rejectedFrame) throw e;
+        console.warn(`[hero-media] ${slug}: scene${i + 1} refused as a video frame, trying the next photograph`);
+      }
+    }
+
+    if (!job) {
+      throw new Error(
+        `every photograph was refused as a video first frame — ${frameErrors.join(" | ")}`,
+      );
+    }
+    if (videoFrom > 0) {
+      console.warn(`[hero-media] ${slug}: hero clip built from scene${videoFrom + 1} rather than scene1`);
+    }
 
     const pollingUrl = job.polling_url ?? `https://openrouter.ai/api/v1/videos/${job.id}`;
 
@@ -301,7 +350,7 @@ async function submit(leadId: string) {
       (await db.from("demo_media").update({
         status: STATUS.awaitingVideo,
         scenes_json: {
-          scenes, photos, polling_url: pollingUrl,
+          scenes, photos, polling_url: pollingUrl, videoFromScene: videoFrom + 1,
           submitted_at: new Date().toISOString(),
         },
         hero_poster_url: posterUrl,

@@ -41,7 +41,7 @@ const TIME_BUDGET_MS = 60_000;
  * plus at most 45s of call lands at 105s, comfortably inside 150s, however
  * slow the provider OpenRouter routes to happens to be.
  */
-const MODEL_TIMEOUT_MS = 45_000;
+const MODEL_TIMEOUT_MS = 60_000;
 
 /**
  * Output budget, and why it is this large.
@@ -237,25 +237,42 @@ Deno.serve(async (req: Request) => {
         ],
       }),
       signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
-    }).catch((e) => {
-      // An aborted call is not a crash. Stop the run and report what is done.
-      console.error(`[${runId}] model call aborted after ${MODEL_TIMEOUT_MS}ms: ${e instanceof Error ? e.message : e}`);
-      return null;
-    });
+    }).catch(() => null);
 
-    if (!resp) {
-      interrupted = `model call exceeded ${MODEL_TIMEOUT_MS}ms`;
+    // The fetch promise and the body read have to be guarded TOGETHER.
+    //
+    // A .catch on the fetch alone covers only the handshake. AbortSignal
+    // applies to the whole request, so a timeout usually lands inside
+    // resp.json() — outside that catch, where it escaped as an unhandled 500.
+    // On 15 Sep a run classified 80 leads across four batches, hit a slow
+    // fifth, and threw all eighty away. The identical shape was fixed in
+    // generate-design-html the same day; this is the other copy of it.
+    let json: unknown = null;
+    let httpStatus = resp?.status ?? 0;
+    let readError: string | null = null;
+    try {
+      if (!resp) {
+        readError = `no response within ${MODEL_TIMEOUT_MS}ms`;
+      } else if (!resp.ok) {
+        const errText = await resp.text();
+        readError = `OpenRouter ${resp.status}: ${errText.slice(0, 200)}`;
+      } else {
+        json = await resp.json();
+      }
+    } catch (e) {
+      readError = e instanceof Error ? e.message : String(e);
+    }
+
+    if (readError !== null) {
+      console.error(`[${runId}] batch ${batches + 1} could not be read after ${batches} completed batches (${totalClassified} leads): ${readError}`);
+      // Work already done is kept. An interrupted run that classified leads is
+      // a partial success, and the next scheduled run picks up the remainder.
+      interrupted = readError;
       break;
     }
 
-    if (!resp.ok) {
-      const errText = await resp.text();
-      console.error(`[${runId}] OpenRouter ${resp.status}: ${errText.slice(0, 300)}`);
-      return new Response(JSON.stringify({ ok: false, error: `OpenRouter ${resp.status}: ${errText}`, batchesCompleted: batches }), { status: 502 });
-    }
-
-    const json = await resp.json();
-    const choice = json?.choices?.[0];
+    const choice = (json as { choices?: { finish_reason?: string; message?: { content?: string } }[] })?.choices?.[0];
+    void httpStatus;
     const finishReason: string | undefined = choice?.finish_reason;
     const content: string = choice?.message?.content ?? "";
 
@@ -274,10 +291,12 @@ Deno.serve(async (req: Request) => {
         : `could not parse a classification array (finish_reason=${finishReason ?? "unknown"}, ` +
           `content length ${content.length})`;
       console.error(`[${runId}] ${why}: ${JSON.stringify(json).slice(0, 600)}`);
-      return new Response(
-        JSON.stringify({ ok: false, error: why, finishReason, batchesCompleted: batches, leadsClassified: totalClassified }),
-        { status: 502 },
-      );
+      // Break rather than return, for the same reason as the read guard above:
+      // a batch that cannot be parsed should not throw away the batches that
+      // already succeeded. The run reports what it managed and the schedule
+      // picks the rest up fifteen minutes later.
+      interrupted = why;
+      break;
     }
 
     if (salvaged || finishReason === "length") {
