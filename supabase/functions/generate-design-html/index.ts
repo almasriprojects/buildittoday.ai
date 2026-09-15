@@ -76,6 +76,30 @@ const MOTION_RUNTIME = `// motion_runtime.js v2.4 — clean premium scroll-motio
     raf(frame);
   }
 
+  // ---------- HERO VIDEO AUTOPLAY RESCUE ----------
+  // A browser attempts autoplay exactly once, when the element is created. On
+  // a site's first ever load the clip has not buffered yet — preload is only
+  // "metadata" and the file is coming cold from storage — so that single
+  // attempt fails and is never retried. Proved on Omegashirts Logistic: first
+  // load paused at readyState 4, second load played from the start.
+  //
+  // The first visitor to a new site is almost always the owner who was just
+  // emailed about it, so that one failure lands on precisely the person the
+  // page exists to impress, and it shows them a still instead of a hero.
+  function heroVideoInit() {
+    var v = document.querySelector("video.hero-bg");
+    if (!v) return;
+    function nudge() {
+      if (!v.paused) return;
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    v.addEventListener("loadeddata", nudge);
+    v.addEventListener("canplay", nudge);
+    v.addEventListener("canplaythrough", nudge);
+    nudge();
+  }
+
   // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
   function mediaInit() {
     var stages = document.querySelectorAll("[data-media-sequence]");
@@ -377,6 +401,7 @@ const MOTION_RUNTIME = `// motion_runtime.js v2.4 — clean premium scroll-motio
   function init() {
     kenBurnsCssInit();
     heroInit();
+    heroVideoInit();
     mediaInit();
     splitInit();
     revealInit();
@@ -472,8 +497,8 @@ STRICT REQUIREMENTS:
 5. Semantic HTML5: header, nav, main, section, footer, in that structural order.
 6. MOTION — this page will run against motion runtime v2.4 (shown below for context ONLY — see requirement #10, you must NOT output this script yourself). It ONLY understands these exact hooks. Do NOT use any other motion hooks (no ".reveal" class, no "data-parallax" attribute — note this is different from "data-parallax-img", see below —, no "header[data-sticky]", no ".counter", no ".marquee" — those belonged to an older runtime and do nothing in v2.4; using them produces dead, static markup). Build the page using exactly these v2.4 hooks:
    - data-hero: put this attribute on the hero <section>. The full-bleed background MUST be the business's own hero video, written EXACTLY like this — not an <img>, not a CSS background-image, not a poster on its own:
-     <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="${opts.heroPosterUrl}"><source src="${opts.heroVideoUrl}" type="video/mp4"></video>
-     Every attribute there is load-bearing: muted is what allows autoplay at all in Chrome and Safari, playsinline stops iOS taking the video fullscreen, loop is what makes four seconds enough, and the poster is what fills the hero during the moment before the clip is decoded — so a visitor on a slow phone still sees the photograph immediately rather than a black rectangle. Do not drop or reorder them, and do not add controls.
+     <video class="hero-bg" autoplay muted loop playsinline preload="auto" poster="${opts.heroPosterUrl}"><source src="${opts.heroVideoUrl}" type="video/mp4"></video>
+     Every attribute there is load-bearing: muted is what allows autoplay at all in Chrome and Safari, playsinline stops iOS taking the video fullscreen, loop is what makes four seconds enough, preload="auto" buffers the clip so autoplay has data to start on (with "metadata" the first ever load of a new site fails to autoplay and no browser retries), and the poster is what fills the hero during the moment before the clip is decoded — so a visitor on a slow phone still sees the photograph immediately rather than a black rectangle. Do not drop or reorder them, and do not add controls.
      The main heading goes in the same section as an <h1> (or class="hero-title"). The runtime will scale/fade the heading and parallax the .hero-bg automatically as the user scrolls past — you must give .hero-bg the CSS (position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0) and give the hero section position:relative;overflow:hidden so the parallax doesn't break layout. Put a scrim over the video (a gradient or tinted overlay between it and the text, e.g. .hero-bg::after or a dedicated overlay div at z-index:1) so the heading stays legible over moving footage — text that is readable over a still frame can become unreadable four seconds later.
    - data-media-sequence: build ONE pinned scroll-scrubbed section using all three of this business's photographs, in the order given. Each item MUST pair its image with its caption — do NOT ship bare images with no text. Structure exactly:
      <section data-media-sequence><div class="ms-track">

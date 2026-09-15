@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omegashirts Logistic LLC - Custom Shirts, Delivered Right</title>
+<meta name="description" content="Omegashirts Logistics is a Miami-based retail and e-commerce apparel company focused on quality shirts and smooth delivery. We help businesses and groups get custom branding on comfortable, well-made shirts — backed by reliable logistics so your order arrives on time.">
+<style>
+:root {
+  --color-text: #000000;
+  --color-background: #FFFFFF;
+  --color-text-muted: #4A4A4A;
+  --color-accent-primary: #000000;
+  --color-accent-secondary: #8C7A6B;
+  --color-block-1: #B7C4C2;
+  --color-block-2: #B49A82;
+  --color-block-3: #D9B8B0;
+  --color-block-4: #A8B89A;
+  --font-body: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 48px;
+  --spacing-xl: 64px;
+  --spacing-2xl: 96px;
+  --radius-card: 24px;
+  --radius-btn: 9999px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text);
+  background: var(--color-background);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- HEADER ---------- */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--color-background);
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+}
+
+[data-menu-target] {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+[data-menu-target] a {
+  transition: opacity 0.2s ease;
+}
+
+[data-menu-target] a:hover {
+  opacity: 0.6;
+}
+
+[data-menu-toggle] {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+@media (max-width: 767px) {
+  [data-menu-toggle] {
+    display: block;
+  }
+  [data-menu-target] {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--color-background);
+    padding: var(--spacing-md);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    gap: var(--spacing-sm);
+  }
+  [data-menu-target].menu-open {
+    display: flex;
+  }
+  [data-menu-target] .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  display: inline-block;
+  padding: 12px 32px;
+  border-radius: var(--radius-btn);
+  font-weight: 500;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 16px;
+}
+
+.btn-primary {
+  background: var(--color-accent-primary);
+  color: var(--color-background);
+}
+
+.btn-primary:hover {
+  opacity: 0.85;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
+}
+
+.btn-secondary:hover {
+  background: var(--color-text);
+  color: var(--color-background);
+}
+
+/* ---------- PROGRESS BAR ---------- */
+[data-progress] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--color-accent-primary);
+  z-index: 9999;
+  transition: width 0.1s linear;
+}
+
+/* ---------- HERO ---------- */
+[data-hero] {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--color-background);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: var(--spacing-md);
+}
+
+.hero-content h1 {
+  font-size: 48px;
+  margin-bottom: var(--spacing-md);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.hero-content p {
+  font-size: 20px;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.95;
+  line-height: 1.5;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+}
+
+.hero-cta {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .hero-content h1 {
+    font-size: 36px;
+  }
+  .hero-content p {
+    font-size: 18px;
+  }
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--spacing-lg);
+}
+
+.section-header h2 {
+  font-size: 42px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.section-header p {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+@media (max-width: 767px) {
+  section {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  .section-header h2 {
+    font-size: 32px;
+  }
+}
+
+/* ---------- ABOUT ---------- */
+#about {
+  background: var(--color-block-1);
+}
+
+.about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+.about-text h2 {
+  font-size: 42px;
+  margin-bottom: var(--spacing-md);
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+.about-image {
+  position: relative;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  height: 500px;
+}
+
+.about-image img {
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+}
+
+@media (max-width: 991px) {
+  .about-content {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+  .about-image {
+    height: 400px;
+  }
+}
+
+/* ---------- SERVICES ---------- */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.service-card {
+  background: var(--color-background);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-card);
+  transition: transform 0.3s ease;
+}
+
+.service-card:nth-child(1) {
+  background: var(--color-block-2);
+}
+
+.service-card:nth-child(2) {
+  background: var(--color-block-3);
+}
+
+.service-card:nth-child(3) {
+  background: var(--color-block-4);
+}
+
+.service-card:nth-child(4) {
+  background: var(--color-block-1);
+}
+
+.service-card h3 {
+  font-size: 24px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.service-card p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ---------- MEDIA SEQUENCE ---------- */
+[data-media-sequence] {
+  position: relative;
+  height: 300vh;
+}
+
+[data-media-sequence] .ms-track {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+[data-media-sequence] .ms-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+[data-media-sequence] .ms-item.ms-active {
+  opacity: 1;
+  z-index: 2;
+}
+
+[data-media-sequence] .ms-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ms-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  color: var(--color-background);
+  z-index: 3;
+}
+
+.ms-caption h3 {
+  font-size: 32px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.ms-caption p {
+  font-size: 18px;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
+@media (max-width: 767px) {
+  .ms-caption {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+  .ms-caption h3 {
+    font-size: 24px;
+  }
+  .ms-caption p {
+    font-size: 16px;
+  }
+}
+
+/* ---------- WHY CHOOSE US ---------- */
+#why-choose {
+  background: var(--color-block-3);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.why-item {
+  text-align: center;
+  padding: var(--spacing-md);
+}
+
+.why-item::before {
+  content: '✓';
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto var(--spacing-md);
+  background: var(--color-accent-primary);
+  color: var(--color-background);
+  border-radius: 50%;
+  font-size: 32px;
+  line-height: 60px;
+  font-weight: 600;
+}
+
+.why-item p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-text);
+}
+
+/* ---------- CONTACT CTA ---------- */
+#contact {
+  background: var(--color-block-4);
+  text-align: center;
+}
+
+#contact h2 {
+  font-size: 42px;
+  margin-bottom: var(--spacing-md);
+}
+
+#contact p {
+  font-size: 20px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 767px) {
+  #contact h2 {
+    font-size: 32px;
+  }
+  #contact p {
+    font-size: 18px;
+  }
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  background: var(--color-text);
+  color: var(--color-background);
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+}
+
+.footer-section h4 {
+  font-size: 18px;
+  margin-bottom: var(--spacing-sm);
+  opacity: 0.9;
+}
+
+.footer-section p,
+.footer-section a {
+  font-size: 14px;
+  line-height: 2;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+  display: block;
+}
+
+.footer-section a:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-top: var(--spacing-md);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.6;
+}
+
+/* ---------- CLAIM MODAL (structural CSS written by page, runtime adds positioning) ---------- */
+.claim-modal-panel {
+  background: var(--color-background);
+  padding: var(--spacing-xl);
+  border-radius: var(--radius-card);
+  position: relative;
+}
+
+[data-claim-close] {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: none;
+  border: none;
+  font-size: 32px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+[data-claim-close]:hover {
+  color: var(--color-text);
+}
+
+.claim-modal-panel h2 {
+  font-size: 32px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.claim-modal-panel > p {
+  font-size: 18px;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+  line-height: 1.6;
+}
+
+.claim-features {
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--color-block-1);
+  border-radius: 12px;
+}
+
+.claim-features p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: var(--spacing-xs);
+}
+
+.claim-features p::before {
+  content: '✓ ';
+  font-weight: 600;
+}
+
+.claim-features p:last-child {
+  margin-bottom: 0;
+}
+
+.claim-modal-panel .btn {
+  width: 100%;
+  font-size: 18px;
+  padding: 16px 32px;
+}
+</style>
+</head>
+<body>
+
+<div data-progress></div>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Omegashirts Logistic</div>
+    <button data-menu-toggle aria-label="Menu" aria-expanded="false">☰</button>
+    <nav data-menu-target>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Get a Free Quote</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section data-hero>
+    <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/scene1.png">
+      <source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <h1>Bold Shirts for Miami, Delivered with Precision</h1>
+      <p>Omegashirts Logistics makes custom apparel for teams, events, and businesses — with smooth ordering and dependable shipping.</p>
+      <div class="hero-cta">
+        <a href="#services" class="btn btn-primary" data-claim-trigger>Browse Shirts</a>
+        <a href="#contact" class="btn btn-secondary" data-claim-trigger>Get a Free Quote</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text" data-reveal>
+          <h2 data-split-text>Miami Apparel with a Logistics Edge</h2>
+          <p>Omegashirts Logistics is a Miami-based retail and e-commerce apparel company focused on quality shirts and smooth delivery. We help businesses and groups get custom branding on comfortable, well-made shirts — backed by reliable logistics so your order arrives on time.</p>
+        </div>
+        <div class="about-image">
+          <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/scene2.png" alt="Quality Meets Logistics" data-parallax-img="0.2" class="ken-burns">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="services">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2 data-split-text>Our Services</h2>
+        <p>From custom printing to dependable delivery, we handle every step so your order arrives on time.</p>
+      </div>
+      <div class="services-grid">
+        <div class="service-card" data-reveal>
+          <h3>Custom Shirt Printing</h3>
+          <p>Put your own design or logo on quality tees with our simple customizing process.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Bulk & Wholesale Orders</h3>
+          <p>We handle large orders for businesses, teams, and events while keeping the process easy.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Fast Local Delivery</h3>
+          <p>Count on dependable Miami-area delivery and nationwide shipping to get shirts where they belong.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Fulfillment Support</h3>
+          <p>We pack and ship your apparel efficiently so you can focus on running your business or event.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-media-sequence>
+    <div class="ms-track">
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/scene1.png" alt="Bold Shirts for Miami">
+        <div class="ms-caption">
+          <h3>Bold Shirts for Miami</h3>
+          <p>Omegashirts Logistics makes custom apparel for teams, events, and businesses — with smooth ordering and dependable shipping.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/scene2.png" alt="Quality Meets Logistics">
+        <div class="ms-caption">
+          <h3>Quality Meets Logistics</h3>
+          <p>We pack and ship your apparel efficiently so you can focus on running your business or event.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420064/scene3.png" alt="Custom Shirts, Delivered Right">
+        <div class="ms-caption">
+          <h3>Custom Shirts, Delivered Right</h3>
+          <p>Put your own design or logo on quality tees with our simple customizing process.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="why-choose">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2 data-split-text>Why Choose Us</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-item" data-reveal>
+          <p>Miami-based team that knows the local market and delivery needs</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Clear communication from design to drop-off</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Reliable turnaround for events and business orders</p>
+        </div>
+        <div class="why-item" data-reveal>
+          <p>Easy process for ordering and reordering custom shirts</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="container" data-reveal>
+      <h2>Ready to Create Your Custom Shirts?</h2>
+      <p>Tell us more about your design and delivery needs — we'll make it stress-free.</p>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Get a Free Quote</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h4>Omegashirts Logistic LLC</h4>
+      <p>Miami, FL</p>
+      <p>Custom Shirts, Delivered Right</p>
+    </div>
+    <div class="footer-section">
+      <h4>Navigation</h4>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-section">
+      <h4>Services</h4>
+      <p>Custom Shirt Printing</p>
+      <p>Bulk & Wholesale Orders</p>
+      <p>Fast Local Delivery</p>
+      <p>Fulfillment Support</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2024 Omegashirts Logistic LLC. All rights reserved.</p>
+  </div>
+</footer>
+
+<div data-claim-modal>
+  <div class="claim-modal-panel">
+    <button data-claim-close aria-label="Close">&times;</button>
+    <h2>Claim This Website</h2>
+    <p>This professionally designed website was created specifically for Omegashirts Logistic LLC. If you are the business owner, claim this site today.</p>
+    <div class="claim-features">
+      <p>Award-winning design crafted for your industry</p>
+      <p>Fully responsive across all devices</p>
+      <p>Optimized for conversions and lead capture</p>
+      <p>Professional motion and scroll effects</p>
+    </div>
+    <a href="/pricing" class="btn btn-primary" data-bit-open>Claim This Website Now</a>
+  </div>
+</div>
+
+
+<script>// motion_runtime.js v2.4 — clean premium scroll-motion for cloned sites.
+// Zero fighting with native scroll. Adds: smooth native parallax/hero,
+// split-text reveals, magnetic feel, media sequences (img->video->img),
+// scroll progress, generalized image parallax, Ken-Burns idle motion.
+// v2.2: fixes reduced-motion coverage (was hero-only), adds
+// data-parallax-img + .ken-burns as opt-in single-image motion hooks.
+// v2.3: adds custom cursor + magnetic buttons (desktop, pointer:fine only,
+// no new HTML hooks needed -- works automatically off the existing .btn
+// class every generated page already uses).
+// v2.4: heroInit rewritten to combine continuous idle zoom with the
+// existing scroll parallax in one loop (hero now moves even with zero
+// scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
+// and claimModalInit (popup claim mechanism replacing the old embedded
+// claim section).
+// v2.4a: the custom cursor is raised above the claim modal (it was painted
+// underneath it, leaving no visible pointer at all inside the popup) and the
+// native cursor is restored on form fields, where a dot and ring cannot say
+// "you can type here".
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  // ---------- HERO (continuous idle zoom + scroll parallax, unified) ----------
+  // Previously this only updated on scroll, so a hero with zero scroll was
+  // completely static. Now runs its own rAF loop that combines a slow
+  // continuous idle zoom (time-driven) with the existing scroll-driven
+  // parallax into ONE transform, from one function -- no separate CSS
+  // animation, so there is no collision risk with the scroll transform.
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) +
+          ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".ms-item:not(.ms-ui)")
+      );
+      if (!items.length) return;
+      if (prefersReduced) {
+        // No scroll-scrubbing for reduced-motion users — just show the
+        // first item statically instead of leaving everything at opacity:0.
+        items[0].classList.add("ms-active");
+        return;
+      }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) {
+          it.classList.toggle("ms-active", i === idx);
+        });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) {
+          activeVid.play().catch(function () {});
+        }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  // ---------- SPLIT-TEXT ----------
+  function splitInit() {
+    if (prefersReduced) return; // leave headings as plain, fully visible text
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) {
+          c.style.transitionDelay = (30 + i * 18) + "ms";
+        });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  // ---------- DIAGONAL/CLIP REVEAL ----------
+  function revealInit() {
+    if (prefersReduced) return; // elements stay at natural full visibility —
+    // the [data-reveal] CSS below (which starts them at opacity:0) is only
+    // injected inside this function, so skipping it entirely is the fix.
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  // ---------- SCROLL PROGRESS ----------
+  // Not gated behind prefersReduced: a slim width-indicator bar is not the
+  // kind of parallax/scaling motion prefers-reduced-motion is meant to
+  // suppress, and leaving it un-animated would look like a rendering bug
+  // (permanently 0-width) rather than a graceful degradation.
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  // ---------- GENERALIZED IMAGE PARALLAX (any image, not just the hero) ----------
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  // ---------- KEN-BURNS (idle zoom/pan on a single static image) ----------
+  // Pure CSS animation, gated by its own prefers-reduced-motion media query
+  // rather than a JS check, so it degrades correctly even without JS.
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  // ---------- CUSTOM CURSOR (desktop, pointer:fine only) ----------
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.add("mrv2-cursor-hover");
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.remove("mrv2-cursor-hover");
+      }
+    });
+    // The cursor must sit above everything it replaces.
+    //
+    // At z-index 10000 it was painted UNDER the claim modal, which is at
+    // 20000 — and the real cursor is hidden by cursor:none. So the moment the
+    // popup opened, the visitor had no pointer at all: not the drawn one,
+    // which was behind the panel, and not the system one. On the one screen
+    // where a lead is asked to type their details, they could not see where
+    // they were pointing.
+    //
+    // Form fields keep the native cursor deliberately. A dot and a ring say
+    // "you can click here"; they cannot say "you can type here". The I-beam
+    // is the only thing that does, and hiding it inside a form the business
+    // owner is meant to fill in costs more than the effect is worth.
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-custom-cursor input,.mrv2-custom-cursor textarea," +
+      ".mrv2-custom-cursor select,.mrv2-custom-cursor [contenteditable]{cursor:auto}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:30000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:30000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  // ---------- MAGNETIC BUTTONS ----------
+  // Targets the .btn class every generated page already uses (enforced by
+  // the build prompt's button-system requirement) -- no new HTML hook
+  // needed. Does not touch any element heroInit/mediaInit/parallaxImgInit
+  // already animate, so there is no transform-collision risk with Phase A1.
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ---------- MOBILE MENU TOGGLE ----------
+  // Real hamburger toggle for multi-link nav -- this is the piece that was
+  // deliberately deferred earlier (nav was simplified away instead of
+  // building this) because nav links then became unreachable on mobile.
+  // Not gated by prefersReduced: opening/closing a menu is a UI state
+  // change, not the kind of motion that preference is meant to suppress.
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // ---------- CLAIM MODAL ----------
+  // Replaces the old embedded "Claim This Website" page section. Every
+  // [data-claim-trigger] (the page's real CTA buttons) opens this modal
+  // instead of just scrolling to a section. Structural/positioning CSS is
+  // injected here (like reveal/split-text) so it is guaranteed correct;
+  // the page's own CSS only needs to style the modal's inner content.
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("modal-open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", openModal);
+    });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) {
+      c.addEventListener("click", closeModal);
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("modal-open")) closeModal();
+    });
+    injectCss(
+      "[data-claim-modal]{position:fixed;inset:0;z-index:20000;display:flex;" +
+      "align-items:center;justify-content:center;padding:24px;" +
+      "background:rgba(0,0,0,.6);opacity:0;visibility:hidden;" +
+      "transition:opacity .3s ease}" +
+      "[data-claim-modal].modal-open{opacity:1;visibility:visible}" +
+      "[data-claim-modal] .claim-modal-panel{max-width:560px;width:100%;" +
+      "max-height:85vh;overflow-y:auto;transform:translateY(20px);" +
+      "transition:transform .3s ease}" +
+      "[data-claim-modal].modal-open .claim-modal-panel{transform:translateY(0)}"
+    );
+  }
+
+  // ---------- HELPERS ----------
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) {
+      existing.textContent += css;
+      return;
+    }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();</script>
+</body>
+</html>

@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bioenergetic Healing LLC | Restore balance, energize your life.</title>
+<meta name="description" content="Bioenergetic healing works with your body's subtle energy systems to identify and release imbalances that may affect your health and vitality in Sunrise, FL.">
+<style>
+:root {
+  --color-text: #1A1A1A;
+  --color-background: #D9CFC1;
+  --color-text-muted: #4A4A4A;
+  --color-accent-primary: #1A1A1A;
+  --color-background-alt: #FFFFFF;
+  --color-accent-secondary: #C4975F;
+  --font-body: system-ui, -apple-system, sans-serif;
+  --font-heading: system-ui, -apple-system, sans-serif;
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 48px;
+  --spacing-xl: 64px;
+  --spacing-xxl: 96px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--color-text);
+  background: var(--color-background);
+  overflow-x: hidden;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--color-background-alt);
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-accent-primary);
+  text-decoration: none;
+}
+
+[data-menu-target] {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+[data-menu-target] a {
+  color: var(--color-text);
+  text-decoration: none;
+  font-size: 15px;
+  transition: color 0.2s ease;
+}
+
+[data-menu-target] a:not(.btn):hover {
+  color: var(--color-accent-secondary);
+}
+
+[data-menu-toggle] {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--color-accent-primary);
+}
+
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+}
+
+.btn-primary {
+  background: var(--color-accent-primary);
+  color: var(--color-background-alt);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-secondary);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-accent-primary);
+  border: 2px solid var(--color-accent-primary);
+}
+
+.btn-secondary:hover {
+  background: var(--color-accent-primary);
+  color: var(--color-background-alt);
+}
+
+[data-hero] {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: var(--color-background-alt);
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.5));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 900px;
+  padding: var(--spacing-md);
+}
+
+.hero-content h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 5vw, 54px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  letter-spacing: -0.02em;
+}
+
+.hero-content p {
+  font-size: clamp(16px, 2vw, 20px);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.95;
+}
+
+[data-progress] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: var(--color-accent-secondary);
+  z-index: 9999;
+  transition: width 0.1s ease-out;
+}
+
+section {
+  position: relative;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+}
+
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto var(--spacing-xl);
+}
+
+.section-header h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 4vw, 44px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent-primary);
+}
+
+.section-header p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.about-section {
+  background: var(--color-background-alt);
+}
+
+[data-media-sequence] {
+  position: relative;
+  height: 300vh;
+}
+
+[data-media-sequence] .ms-track {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+[data-media-sequence] .ms-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+[data-media-sequence] .ms-item.ms-active {
+  opacity: 1;
+  z-index: 2;
+}
+
+[data-media-sequence] .ms-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ms-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--spacing-xl) var(--spacing-md) var(--spacing-lg);
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+  color: var(--color-background-alt);
+}
+
+.ms-caption h3 {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 400;
+  margin-bottom: var(--spacing-sm);
+  line-height: 1.2;
+}
+
+.ms-caption p {
+  font-size: 16px;
+  line-height: 1.6;
+  opacity: 0.9;
+  max-width: 600px;
+}
+
+.services-section {
+  background: var(--color-background);
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.service-card {
+  background: var(--color-background-alt);
+  padding: var(--spacing-lg);
+  border-radius: var(--radius-lg);
+}
+
+.service-card h3 {
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-accent-primary);
+}
+
+.service-card p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.why-section {
+  background: var(--color-background-alt);
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.why-item {
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+}
+
+.why-item::before {
+  content: '✓';
+  display: inline-block;
+  margin-right: var(--spacing-sm);
+  color: var(--color-accent-secondary);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.split-feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+  align-items: center;
+  padding: var(--spacing-xxl) var(--spacing-md);
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.split-feature-img-wrap {
+  position: relative;
+  height: 500px;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+
+.split-feature-img-wrap img {
+  width: 100%;
+  height: 130%;
+  object-fit: cover;
+}
+
+.split-feature-content h2 {
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.2;
+}
+
+.split-feature-content p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-md);
+}
+
+.contact-section {
+  background: var(--color-accent-primary);
+  color: var(--color-background-alt);
+  text-align: center;
+}
+
+.contact-section h2 {
+  color: var(--color-background-alt);
+}
+
+.contact-section p {
+  color: rgba(255,255,255,0.85);
+}
+
+footer {
+  background: var(--color-accent-primary);
+  color: var(--color-background-alt);
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.footer-section h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: var(--spacing-sm);
+  color: var(--color-background-alt);
+}
+
+.footer-section p,
+.footer-section a {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+}
+
+.footer-section a:hover {
+  color: var(--color-accent-secondary);
+}
+
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+[data-claim-modal] .claim-modal-panel {
+  background: var(--color-background-alt);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  position: relative;
+}
+
+[data-claim-modal] [data-claim-close] {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  background: none;
+  border: none;
+  font-size: 32px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+[data-claim-modal] [data-claim-close]:hover {
+  color: var(--color-accent-primary);
+}
+
+[data-claim-modal] h2 {
+  font-size: 32px;
+  font-weight: 400;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-accent-primary);
+}
+
+[data-claim-modal] p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.claim-features {
+  margin: var(--spacing-lg) 0;
+  padding: var(--spacing-md);
+  background: var(--color-background);
+  border-radius: var(--radius-md);
+}
+
+.claim-features p {
+  margin-bottom: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  position: relative;
+}
+
+.claim-features p::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent-secondary);
+  font-weight: 600;
+}
+
+.claim-features p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  [data-menu-toggle] {
+    display: block;
+  }
+  
+  [data-menu-target] {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    background: var(--color-background-alt);
+    padding: var(--spacing-md);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  
+  [data-menu-target].menu-open {
+    display: flex;
+  }
+
+  [data-menu-target] a {
+    padding: var(--spacing-sm) 0;
+    width: 100%;
+    text-align: center;
+  }
+
+  .split-feature {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .split-feature-img-wrap {
+    height: 350px;
+  }
+
+  .ms-caption {
+    padding: var(--spacing-lg) var(--spacing-md) var(--spacing-md);
+  }
+
+  .footer-content {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .container {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+</head>
+<body>
+
+<div data-progress></div>
+
+<header>
+  <div class="header-inner">
+    <a href="#" class="logo">Bioenergetic Healing LLC</a>
+    <button data-menu-toggle aria-label="Menu" aria-expanded="false">☰</button>
+    <nav data-menu-target>
+      <a href="#">Home</a>
+      <a href="#about">About</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Book a Session</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section data-hero>
+    <video class="hero-bg" autoplay muted loop playsinline preload="metadata" poster="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/scene1.png">
+      <source src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/hero.mp4" type="video/mp4">
+    </video>
+    <div class="hero-content">
+      <h1 data-split-text>Harmonize Your Body's Natural Energy in Sunrise</h1>
+      <p>Support emotional, mental, and physical well-being through gentle, personalized bioenergetic healing.</p>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Book a Session</a>
+    </div>
+  </section>
+
+  <section class="about-section" id="about">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2>About Our Practice</h2>
+        <p>Bioenergetic healing works with your body's subtle energy systems to identify and release imbalances that may affect your health and vitality. Our approach is holistic, gentle, and personalized to support your unique journey toward wellness.</p>
+      </div>
+    </div>
+  </section>
+
+  <section data-media-sequence>
+    <div class="ms-track">
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/scene1.png" alt="Your Sanctuary for Healing">
+        <div class="ms-caption">
+          <h3>Your Sanctuary for Healing</h3>
+          <p>We offer a peaceful, nurturing environment designed for deep relaxation and energetic restoration.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/scene2.png" alt="Personalized Energy Healing Sessions">
+        <div class="ms-caption">
+          <h3>Personalized Energy Healing Sessions</h3>
+          <p>Our practice identifies and clears energetic blockages to support your physical, emotional, and spiritual well-being.</p>
+        </div>
+      </div>
+      <div class="ms-item">
+        <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/scene3.png" alt="Reclaim Your Vitality">
+        <div class="ms-caption">
+          <h3>Reclaim Your Vitality</h3>
+          <p>Experience the restoration of natural energy flow and sustained well-being through our holistic healing approach.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="services-section" id="services">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2 data-split-text>Our Services</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card" data-reveal>
+          <h3>Energy Clearing</h3>
+          <p>Hands-on and distance techniques to remove energetic blockages and promote free flow.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Chakra Balancing</h3>
+          <p>Align your seven main energy centers to enhance emotional stability and physical harmony.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Holistic Wellness Consultation</h3>
+          <p>A one-on-one session to assess your energy and develop a custom plan for your well-being.</p>
+        </div>
+        <div class="service-card" data-reveal>
+          <h3>Guided Meditation & Breathwork</h3>
+          <p>Learn practices to connect with your inner energy and cultivate lasting calm.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split-feature">
+    <div class="split-feature-img-wrap">
+      <img src="https://tftlysimqcrwjyncjvvf.supabase.co/storage/v1/object/public/demo-media/L26000420210/scene2.png" alt="Peaceful healing environment" data-parallax-img="0.2" class="ken-burns">
+    </div>
+    <div class="split-feature-content" data-reveal>
+      <h2>Restore Balance, Energize Your Life</h2>
+      <p>Every session is tailored to your unique energy needs, offering a gentle, non-invasive approach that complements other treatments. We create a peaceful, supportive space for deep relaxation and healing, and provide guidance to help you maintain balance between sessions.</p>
+      <a href="#contact" class="btn btn-primary" data-claim-trigger>Begin Your Journey</a>
+    </div>
+  </section>
+
+  <section class="why-section">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2>Why Choose Us</h2>
+      </div>
+      <div class="why-grid">
+        <div class="why-item" data-reveal>Personalized sessions tailored to your unique energy needs</div>
+        <div class="why-item" data-reveal>A gentle, non-invasive approach that complements other treatments</div>
+        <div class="why-item" data-reveal>A peaceful, supportive space for deep relaxation and healing</div>
+        <div class="why-item" data-reveal>Guidance to help you maintain balance between sessions</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <h2>Begin Your Healing Journey</h2>
+        <p>Reach out today to ask questions or schedule your first bioenergetic healing session.</p>
+        <a href="#contact" class="btn btn-secondary" data-claim-trigger>Contact Us</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-section">
+      <h3>Bioenergetic Healing LLC</h3>
+      <p>Sunrise, FL</p>
+    </div>
+    <div class="footer-section">
+      <h3>Navigation</h3>
+      <nav class="footer-nav">
+        <a href="#">Home</a>
+        <a href="#about">About</a>
+        <a href="#services">Services</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+    <div class="footer-section">
+      <h3>Our Mission</h3>
+      <p>Restore balance, energize your life.</p>
+    </div>
+  </div>
+</footer>
+
+<div data-claim-modal>
+  <div class="claim-modal-panel">
+    <button data-claim-close aria-label="Close">×</button>
+    <h2>Claim This Website</h2>
+    <p>This professionally designed website was created specifically for Bioenergetic Healing LLC. If you are the business owner, claim this site today.</p>
+    <div class="claim-features">
+      <p>Award-winning design crafted for your business</p>
+      <p>Fully responsive across all devices</p>
+      <p>Optimized for conversions and client engagement</p>
+      <p>Premium scroll-driven motion and animations</p>
+    </div>
+    <a href="/pricing" class="btn btn-primary" data-bit-open>Claim This Website Now</a>
+  </div>
+</div>
+
+
+<script>// motion_runtime.js v2.4 — clean premium scroll-motion for cloned sites.
+// Zero fighting with native scroll. Adds: smooth native parallax/hero,
+// split-text reveals, magnetic feel, media sequences (img->video->img),
+// scroll progress, generalized image parallax, Ken-Burns idle motion.
+// v2.2: fixes reduced-motion coverage (was hero-only), adds
+// data-parallax-img + .ken-burns as opt-in single-image motion hooks.
+// v2.3: adds custom cursor + magnetic buttons (desktop, pointer:fine only,
+// no new HTML hooks needed -- works automatically off the existing .btn
+// class every generated page already uses).
+// v2.4: heroInit rewritten to combine continuous idle zoom with the
+// existing scroll parallax in one loop (hero now moves even with zero
+// scroll). Adds mobileMenuInit (real hamburger toggle for multi-link nav)
+// and claimModalInit (popup claim mechanism replacing the old embedded
+// claim section).
+// v2.4a: the custom cursor is raised above the claim modal (it was painted
+// underneath it, leaving no visible pointer at all inside the popup) and the
+// native cursor is restored on form fields, where a dot and ring cannot say
+// "you can type here".
+
+(function () {
+  if (window.__motionRuntimeV2) return;
+  window.__motionRuntimeV2 = true;
+
+  var prefersReduced =
+    window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var raf = window.requestAnimationFrame || function (fn) { setTimeout(fn, 16); };
+
+  function onScrollRegister(fn) {
+    var last = 0;
+    function loop() {
+      var y = window.scrollY;
+      if (Math.abs(y - last) > 0.5) { last = y; fn(y); }
+      raf(loop);
+    }
+    raf(loop);
+  }
+
+  // ---------- HERO (continuous idle zoom + scroll parallax, unified) ----------
+  // Previously this only updated on scroll, so a hero with zero scroll was
+  // completely static. Now runs its own rAF loop that combines a slow
+  // continuous idle zoom (time-driven) with the existing scroll-driven
+  // parallax into ONE transform, from one function -- no separate CSS
+  // animation, so there is no collision risk with the scroll transform.
+  function heroInit() {
+    var hero = document.querySelector("[data-hero]");
+    if (!hero || prefersReduced) return;
+    var title = hero.querySelector("h1") || hero.querySelector(".hero-title");
+    var bg = hero.querySelector(".hero-bg");
+    var startTime = (window.performance && performance.now) ? performance.now() : Date.now();
+    hero.style.willChange = "transform";
+    function frame() {
+      var r = hero.getBoundingClientRect();
+      var pct;
+      if (r.bottom < 0 || r.top > window.innerHeight * 2) { pct = r.bottom < 0 ? 1 : 0; }
+      else pct = Math.min(1, Math.max(0, -r.top / window.innerHeight));
+      var now = (window.performance && performance.now) ? performance.now() : Date.now();
+      var elapsed = (now - startTime) / 1000;
+      var idleZoom = 1 + Math.min(elapsed / 25, 1) * 0.06;
+      if (title) {
+        title.style.transform = "scale(" + (1 + pct * 0.15) +
+          ") translateY(" + pct * 40 + "px)";
+        title.style.opacity = String(Math.max(0, 1 - pct * 1.1));
+      }
+      if (bg && bg !== hero) {
+        bg.style.transform = "translateY(" + pct * 60 + "px) scale(" + (idleZoom + pct * 0.08) + ")";
+      }
+      raf(frame);
+    }
+    raf(frame);
+  }
+
+  // ---------- MEDIA SEQUENCE (scroll scrubs img -> video -> img) ----------
+  function mediaInit() {
+    var stages = document.querySelectorAll("[data-media-sequence]");
+    if (!stages.length) return;
+    stages.forEach(function (stage) {
+      var items = Array.prototype.slice.call(
+        stage.querySelectorAll(".ms-item:not(.ms-ui)")
+      );
+      if (!items.length) return;
+      if (prefersReduced) {
+        // No scroll-scrubbing for reduced-motion users — just show the
+        // first item statically instead of leaving everything at opacity:0.
+        items[0].classList.add("ms-active");
+        return;
+      }
+      var scrollLen = Math.min(items.length * 0.8, 4) * window.innerHeight;
+      var progressBar = stage.querySelector(".ms-progress");
+      function update(y) {
+        var r = stage.getBoundingClientRect();
+        var p = Math.min(1, Math.max(0, -r.top / scrollLen));
+        var idx = Math.min(items.length - 1, Math.floor(p * items.length));
+        items.forEach(function (it, i) {
+          it.classList.toggle("ms-active", i === idx);
+        });
+        var activeVid = items[idx] && items[idx].querySelector("video");
+        items.forEach(function (it) {
+          var v = it.querySelector("video");
+          if (v && v !== activeVid) v.pause();
+        });
+        if (activeVid && activeVid.paused) {
+          activeVid.play().catch(function () {});
+        }
+        if (progressBar) progressBar.style.width = (p * 100).toFixed(1) + "%";
+      }
+      onScrollRegister(update);
+      update(0);
+    });
+  }
+
+  // ---------- SPLIT-TEXT ----------
+  function splitInit() {
+    if (prefersReduced) return; // leave headings as plain, fully visible text
+    var els = document.querySelectorAll("[data-split-text]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        io.unobserve(el);
+        el.classList.add("split-ready");
+        var chars = el.querySelectorAll(".char");
+        chars.forEach(function (c, i) {
+          c.style.transitionDelay = (30 + i * 18) + "ms";
+        });
+      });
+    }, { threshold: 0.5 });
+    els.forEach(function (el) {
+      var words = el.textContent.trim().split(" ");
+      el.innerHTML = words.map(function (word) {
+        return '<span class="ms-word">' + word.split("").map(function (c) {
+          return '<span class="char">' + (c === " " ? "&nbsp;" : c) + "</span>";
+        }).join("") + "</span>";
+      }).join(" ");
+      io.observe(el);
+    });
+    injectCss(
+      '[data-split-text] .char{display:inline-block;overflow:hidden;' +
+      'transform:translateY(115%);transition:transform .6s cubic-bezier(.2,.7,.25,1)}' +
+      '[data-split-text].split-ready .char{transform:translateY(0)}'
+    );
+  }
+
+  // ---------- DIAGONAL/CLIP REVEAL ----------
+  function revealInit() {
+    if (prefersReduced) return; // elements stay at natural full visibility —
+    // the [data-reveal] CSS below (which starts them at opacity:0) is only
+    // injected inside this function, so skipping it entirely is the fix.
+    var els = document.querySelectorAll("[data-reveal]");
+    if (!els.length) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("reveal-done");
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    els.forEach(function (el) { io.observe(el); });
+    injectCss(
+      "[data-reveal]{opacity:0;transform:translateY(26px);" +
+      "transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.25,1)}" +
+      "[data-reveal].reveal-done{opacity:1;transform:none}"
+    );
+  }
+
+  // ---------- SCROLL PROGRESS ----------
+  // Not gated behind prefersReduced: a slim width-indicator bar is not the
+  // kind of parallax/scaling motion prefers-reduced-motion is meant to
+  // suppress, and leaving it un-animated would look like a rendering bug
+  // (permanently 0-width) rather than a graceful degradation.
+  function progressInit() {
+    var bar = document.querySelector("[data-progress]");
+    if (!bar) return;
+    onScrollRegister(function (y) {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = (max > 0 ? (y / max) * 100 : 0).toFixed(2) + "%";
+    });
+  }
+
+  // ---------- GENERALIZED IMAGE PARALLAX (any image, not just the hero) ----------
+  function parallaxImgInit() {
+    if (prefersReduced) return;
+    var els = document.querySelectorAll("[data-parallax-img]");
+    if (!els.length) return;
+    els.forEach(function (el) {
+      var speed = parseFloat(el.getAttribute("data-parallax-img")) || 0.15;
+      onScrollRegister(function () {
+        var r = el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        var offset = (r.top - window.innerHeight / 2) * speed;
+        el.style.transform = "translateY(" + offset + "px)";
+      });
+    });
+  }
+
+  // ---------- KEN-BURNS (idle zoom/pan on a single static image) ----------
+  // Pure CSS animation, gated by its own prefers-reduced-motion media query
+  // rather than a JS check, so it degrades correctly even without JS.
+  function kenBurnsCssInit() {
+    injectCss(
+      "@media (prefers-reduced-motion: no-preference){" +
+      ".ken-burns{animation:mrv2-kenburns 14s ease-in-out infinite alternate;" +
+      "will-change:transform}" +
+      "@keyframes mrv2-kenburns{0%{transform:scale(1)}100%{transform:scale(1.08)}}" +
+      "}"
+    );
+  }
+
+  // ---------- CUSTOM CURSOR (desktop, pointer:fine only) ----------
+  function customCursorInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var dot = document.createElement("div");
+    var ring = document.createElement("div");
+    dot.className = "mrv2-cursor-dot";
+    ring.className = "mrv2-cursor-ring";
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+    document.documentElement.classList.add("mrv2-custom-cursor");
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, started = false;
+    document.addEventListener("mousemove", function (e) {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      dot.style.transform = "translate(" + mouseX + "px," + mouseY + "px)";
+      if (!started) { ringX = mouseX; ringY = mouseY; started = true; }
+    });
+    function loop() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      ring.style.transform = "translate(" + ringX + "px," + ringY + "px)";
+      raf(loop);
+    }
+    raf(loop);
+    document.addEventListener("mouseover", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.add("mrv2-cursor-hover");
+      }
+    });
+    document.addEventListener("mouseout", function (e) {
+      if (e.target.closest && e.target.closest("a, button, .btn")) {
+        ring.classList.remove("mrv2-cursor-hover");
+      }
+    });
+    // The cursor must sit above everything it replaces.
+    //
+    // At z-index 10000 it was painted UNDER the claim modal, which is at
+    // 20000 — and the real cursor is hidden by cursor:none. So the moment the
+    // popup opened, the visitor had no pointer at all: not the drawn one,
+    // which was behind the panel, and not the system one. On the one screen
+    // where a lead is asked to type their details, they could not see where
+    // they were pointing.
+    //
+    // Form fields keep the native cursor deliberately. A dot and a ring say
+    // "you can click here"; they cannot say "you can type here". The I-beam
+    // is the only thing that does, and hiding it inside a form the business
+    // owner is meant to fill in costs more than the effect is worth.
+    injectCss(
+      ".mrv2-custom-cursor,.mrv2-custom-cursor a,.mrv2-custom-cursor button{cursor:none}" +
+      ".mrv2-custom-cursor input,.mrv2-custom-cursor textarea," +
+      ".mrv2-custom-cursor select,.mrv2-custom-cursor [contenteditable]{cursor:auto}" +
+      ".mrv2-cursor-dot{position:fixed;top:0;left:0;width:6px;height:6px;margin:-3px;" +
+      "border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;" +
+      "z-index:30000;transition:transform .05s linear}" +
+      ".mrv2-cursor-ring{position:fixed;top:0;left:0;width:32px;height:32px;margin:-16px;" +
+      "border-radius:50%;border:1.5px solid rgba(255,255,255,.8);mix-blend-mode:difference;" +
+      "pointer-events:none;z-index:30000;" +
+      "transition:width .2s ease,height .2s ease,margin .2s ease}" +
+      ".mrv2-cursor-ring.mrv2-cursor-hover{width:52px;height:52px;margin:-26px}"
+    );
+  }
+
+  // ---------- MAGNETIC BUTTONS ----------
+  // Targets the .btn class every generated page already uses (enforced by
+  // the build prompt's button-system requirement) -- no new HTML hook
+  // needed. Does not touch any element heroInit/mediaInit/parallaxImgInit
+  // already animate, so there is no transform-collision risk with Phase A1.
+  function magneticButtonsInit() {
+    if (prefersReduced) return;
+    if (!window.matchMedia || !window.matchMedia("(pointer: fine)").matches) return;
+    var btns = document.querySelectorAll(".btn");
+    if (!btns.length) return;
+    btns.forEach(function (btn) {
+      btn.addEventListener("mousemove", function (e) {
+        var r = btn.getBoundingClientRect();
+        var x = e.clientX - r.left - r.width / 2;
+        var y = e.clientY - r.top - r.height / 2;
+        btn.style.transform = "translate(" + (x * 0.25) + "px," + (y * 0.25) + "px)";
+      });
+      btn.addEventListener("mouseleave", function () {
+        btn.style.transform = "";
+      });
+    });
+  }
+
+  // ---------- MOBILE MENU TOGGLE ----------
+  // Real hamburger toggle for multi-link nav -- this is the piece that was
+  // deliberately deferred earlier (nav was simplified away instead of
+  // building this) because nav links then became unreachable on mobile.
+  // Not gated by prefersReduced: opening/closing a menu is a UI state
+  // change, not the kind of motion that preference is meant to suppress.
+  function mobileMenuInit() {
+    var toggle = document.querySelector("[data-menu-toggle]");
+    var target = document.querySelector("[data-menu-target]");
+    if (!toggle || !target) return;
+    toggle.addEventListener("click", function () {
+      var isOpen = target.classList.toggle("menu-open");
+      toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    });
+  }
+
+  // ---------- CLAIM MODAL ----------
+  // Replaces the old embedded "Claim This Website" page section. Every
+  // [data-claim-trigger] (the page's real CTA buttons) opens this modal
+  // instead of just scrolling to a section. Structural/positioning CSS is
+  // injected here (like reveal/split-text) so it is guaranteed correct;
+  // the page's own CSS only needs to style the modal's inner content.
+  function claimModalInit() {
+    var modal = document.querySelector("[data-claim-modal]");
+    if (!modal) return;
+    var triggers = document.querySelectorAll("[data-claim-trigger]");
+    function openModal(e) {
+      if (e) e.preventDefault();
+      modal.classList.add("modal-open");
+      document.body.style.overflow = "hidden";
+    }
+    function closeModal() {
+      modal.classList.remove("modal-open");
+      document.body.style.overflow = "";
+    }
+    triggers.forEach(function (t) {
+      t.addEventListener("click", openModal);
+    });
+    var closeEls = modal.querySelectorAll("[data-claim-close]");
+    closeEls.forEach(function (c) {
+      c.addEventListener("click", closeModal);
+    });
+    modal.addEventListener("click", function (e) {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && modal.classList.contains("modal-open")) closeModal();
+    });
+    injectCss(
+      "[data-claim-modal]{position:fixed;inset:0;z-index:20000;display:flex;" +
+      "align-items:center;justify-content:center;padding:24px;" +
+      "background:rgba(0,0,0,.6);opacity:0;visibility:hidden;" +
+      "transition:opacity .3s ease}" +
+      "[data-claim-modal].modal-open{opacity:1;visibility:visible}" +
+      "[data-claim-modal] .claim-modal-panel{max-width:560px;width:100%;" +
+      "max-height:85vh;overflow-y:auto;transform:translateY(20px);" +
+      "transition:transform .3s ease}" +
+      "[data-claim-modal].modal-open .claim-modal-panel{transform:translateY(0)}"
+    );
+  }
+
+  // ---------- HELPERS ----------
+  function injectCss(css) {
+    var existing = document.getElementById("mrv2-css");
+    if (existing) {
+      existing.textContent += css;
+      return;
+    }
+    var s = document.createElement("style");
+    s.id = "mrv2-css";
+    s.textContent = css;
+    document.head.appendChild(s);
+  }
+
+  function init() {
+    kenBurnsCssInit();
+    heroInit();
+    mediaInit();
+    splitInit();
+    revealInit();
+    progressInit();
+    parallaxImgInit();
+    customCursorInit();
+    magneticButtonsInit();
+    mobileMenuInit();
+    claimModalInit();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();</script>
+</body>
+</html>

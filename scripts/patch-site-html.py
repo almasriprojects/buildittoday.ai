@@ -75,6 +75,42 @@ def fix_claim_cta(html):
     return html.replace(block, block.replace(tag, new, 1), 1)
 
 
+def fix_hero_autoplay(html):
+    """Give the hero video a second chance to start.
+
+    A browser attempts autoplay once, when the element is created. On a site's
+    first ever load the clip has not buffered — preload was "metadata" and the
+    file comes cold from storage — so that attempt fails and is never retried.
+    Proved on Omegashirts Logistic: first load paused at readyState 4, second
+    load played from the start.
+
+    The first visitor to a new site is almost always the owner who was just
+    emailed about it, so that single failure lands on exactly the person the
+    page exists to impress.
+
+    Two changes: buffer the clip rather than only its metadata, and retry play
+    once there is data. Patched into pages already built so they do not have to
+    be regenerated.
+    """
+    if "heroVideoInit" in html:
+        return html
+
+    out = html.replace('preload="metadata"', 'preload="auto"')
+
+    rescue = (
+        "function heroVideoInit(){var v=document.querySelector('video.hero-bg');"
+        "if(!v)return;function n(){if(!v.paused)return;var p=v.play();"
+        "if(p&&p.catch)p.catch(function(){});}"
+        "v.addEventListener('loadeddata',n);v.addEventListener('canplay',n);"
+        "v.addEventListener('canplaythrough',n);n();}"
+    )
+    # Define it next to heroInit, then call it where heroInit is called.
+    if "function heroInit()" in out and "heroInit();" in out:
+        out = out.replace("function heroInit()", rescue + "function heroInit()", 1)
+        out = out.replace("heroInit();", "heroInit();heroVideoInit();", 1)
+    return out
+
+
 def key():
     for line in open(ENV):
         if line.startswith("SUPABASE_SERVICE_ROLE_KEY="):
@@ -132,6 +168,7 @@ def main():
             if old in new and repl not in new:
                 new = new.replace(old, repl)
         new = fix_claim_cta(new)
+        new = fix_hero_autoplay(new)
 
         if new == html:
             skipped += 1
