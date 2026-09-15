@@ -19,7 +19,7 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
  * on a business whose details have not changed, and the balance is $4.49.
  */
 
-const MODEL = "anthropic/claude-sonnet-4.5";
+const MODEL = "deepseek/deepseek-v4-flash-0731";
 
 /**
  * Who is calling. Written into the script rather than left as "[Name]",

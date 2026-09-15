@@ -752,8 +752,14 @@ async function callBuildModel(
 ): Promise<{ resp: Response; elapsedMs: number }> {
   const startedAt = Date.now();
   const body: Record<string, unknown> = {
-    model: "anthropic/claude-sonnet-4.5",
+    model: "deepseek/deepseek-v4-flash-0731",
     max_tokens: 10000,
+    // No thinking. This model reasons by default and charges the reasoning
+    // against the same max_tokens budget as the answer — which is what
+    // truncated every classifier response on 11 Sep. A page that has to come
+    // back complete inside a 10000-token ceiling cannot spend half of it
+    // thinking out loud.
+    reasoning: { enabled: false },
     messages,
   };
   if (temperature !== undefined) body.temperature = temperature;

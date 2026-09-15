@@ -60,7 +60,7 @@ field (0) -- never invent a different business type, industry, or offering. Outp
 
 def call():
     payload = {
-        "model": "anthropic/claude-sonnet-4.5",
+        "model": "deepseek/deepseek-v4-flash-0731",
         "messages": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": json.dumps({"ground_truth_business_content": LEAD_CONTENT, "stage1_style_analysis": STAGE1, "stage2_competitor_signals": stage2}, indent=2)}

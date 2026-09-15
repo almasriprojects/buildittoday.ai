@@ -62,7 +62,7 @@ view on restraint vs. boldness. Output strict JSON only, no prose outside the JS
 
 def call():
     payload = {
-        "model": "anthropic/claude-sonnet-4.5",
+        "model": "deepseek/deepseek-v4-flash-0731",
         "messages": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": json.dumps(LEAD, indent=2)}

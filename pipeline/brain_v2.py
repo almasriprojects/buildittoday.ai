@@ -39,7 +39,7 @@ _fe = load_env(FE_ENV, {"NEXT_PUBLIC_SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY"}
 SUPABASE_URL = _fe["NEXT_PUBLIC_SUPABASE_URL"]
 SERVICE_KEY = _fe["SUPABASE_SERVICE_ROLE_KEY"]
 
-TEXT_MODEL = "anthropic/claude-sonnet-4.5"
+TEXT_MODEL = "deepseek/deepseek-v4-flash-0731"
 IMAGE_MODEL = "google/gemini-2.5-flash-image"
 VIDEO_MODEL = "bytedance/seedance-2.0-mini"
 

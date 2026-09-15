@@ -68,7 +68,7 @@ Output ONLY the complete HTML file, no explanation, no markdown code fence."""
 
 def call():
     payload = {
-        "model": "anthropic/claude-sonnet-4.5",
+        "model": "deepseek/deepseek-v4-flash-0731",
         "messages": [
             {"role": "system", "content": SYSTEM},
             {"role": "user", "content": json.dumps({"design_brief": BRIEF, "lead_data": LEAD}, indent=2)}

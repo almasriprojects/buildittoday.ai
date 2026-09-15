@@ -27,7 +27,11 @@ import { createClient } from "jsr:@supabase/supabase-js@2";
  * State lives in demo_media, which already had columns for exactly this.
  */
 
-const TEXT_MODEL = "anthropic/claude-sonnet-4.5";
+// The art direction runs on the cheap model like everything else. What it
+// produces is three short prompts and three captions — a page of JSON, not an
+// essay — and the expensive part of this function is the images and the clip,
+// which cost about $0.13 a business regardless of who writes the brief.
+const TEXT_MODEL = "deepseek/deepseek-v4-flash-0731";
 const IMAGE_MODEL = "google/gemini-2.5-flash-image";
 const VIDEO_MODEL = "bytedance/seedance-2.0-mini";
 
