@@ -1,0 +1,16 @@
+-- Twenty sites a day instead of ten.
+--
+-- The cap governs all three stages, so each daily run now asks for copy for
+-- twenty leads, media for twenty and HTML for twenty. At roughly $0.50 a lead
+-- all in — $0.27 of measured media plus the build — that is about $10 a day.
+-- The cap is the throttle on spend; doubling it halves the runway, and it can
+-- be moved back by changing one number.
+--
+-- Throughput now supports it. The HTML builder was hitting the platform's 150s
+-- wall and producing one to three pages a day whatever the cap said, because
+-- AbortSignal.timeout covers body streaming and a 34KB page streams for about
+-- seventy seconds. With that fixed a build completes in roughly 78 seconds, so
+-- twenty is a cap the machine can actually reach rather than an aspiration.
+--
+-- The full function body is applied directly; this file records the decision
+-- and the reasoning. See 20260911 migrations for the selector logic it keeps.
