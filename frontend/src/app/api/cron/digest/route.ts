@@ -109,9 +109,14 @@ async function build() {
 
   // Engagement over the last seven days — a single day is too noisy to read.
   const weekAgo = new Date(Date.now() - 7 * 864e5).toISOString();
+  // Only events from actual prospects. A demo opened from the admin panel
+  // writes the same 'viewed' row a business owner would, and for weeks the
+  // funnel here was mostly us: 71 of 88 views, and every single offer click,
+  // happened on a lead that had not been emailed yet.
   const { data: events, error: eventsError } = await supabase
     .from("outreach_events")
     .select("event_type")
+    .eq("is_internal", false)
     .gte("occurred_at", weekAgo);
   if (eventsError) {
     console.error(`[digest] could not read engagement: ${eventsError.message}`);

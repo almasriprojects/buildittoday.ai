@@ -29,7 +29,9 @@ export async function GET() {
       .select("id, lead_id, demo_slug, email, full_name, source, status, converted_at, created_at")
       .order("created_at", { ascending: false })
       .limit(200),
-    supabase.from("outreach_events").select("channel, event_type").limit(10000),
+    // Prospects only — our own visits to a demo write the same rows.
+    supabase.from("outreach_events").select("channel, event_type")
+      .eq("is_internal", false).limit(10000),
     supabase
       .from("leads")
       .select("outreach_sent_at, postcard_sent, demo_viewed_at, signup_completed_at, converted_at, acquisition_channel")

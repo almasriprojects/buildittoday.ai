@@ -68,10 +68,14 @@ async function getCounts(): Promise<{ error: string | null; c: Counts }> {
     db.from("demo_sites").select("*", { count: "exact", head: true }).eq("review_status", "pending"),
     db.from("lead_email_state").select("*", { count: "exact", head: true }).eq("status", "active"),
     // Rehearsals reached the operator, not a business. Counting them here
-    // would show outreach that never happened.
+    // would show outreach that never happened. Same reason the two engagement
+    // counts below exclude internal events — our own visits to a demo are
+    // indistinguishable from a prospect's except by is_internal.
     db.from("email_sends").select("*", { count: "exact", head: true }).eq("was_test", false),
-    db.from("outreach_events").select("*", { count: "exact", head: true }).eq("event_type", "viewed"),
-    db.from("outreach_events").select("*", { count: "exact", head: true }).eq("event_type", "clicked"),
+    db.from("outreach_events").select("*", { count: "exact", head: true })
+      .eq("event_type", "viewed").eq("is_internal", false),
+    db.from("outreach_events").select("*", { count: "exact", head: true })
+      .eq("event_type", "clicked").eq("is_internal", false),
     db.from("customers").select("*", { count: "exact", head: true }),
     db.from("customers").select("*", { count: "exact", head: true }).eq("subscription_status", "active"),
     db.from("email_settings").select("sending_enabled, test_mode").maybeSingle(),

@@ -30,6 +30,17 @@ export async function GET() {
     return n ?? 0;
   };
 
+  // Engagement counted from prospects only. Opening a demo ourselves writes
+  // the same row a business owner's visit does; see the is_internal column.
+  const realEvents = async (eventType: string) => {
+    const { count: n } = await supabase
+      .from("outreach_events")
+      .select("*", { count: "exact", head: true })
+      .eq("event_type", eventType)
+      .eq("is_internal", false);
+    return n ?? 0;
+  };
+
   const [
     customersTotal,
     customersActive,
@@ -57,11 +68,11 @@ export async function GET() {
     count("demo_sites", "status", "ready"),
     count("demo_sites", "review_status", "approved"),
     count("outreach_events", "event_type", "sent"),
-    count("outreach_events", "event_type", "opened"),
-    count("outreach_events", "event_type", "clicked"),
-    count("outreach_events", "event_type", "scanned"),
-    count("outreach_events", "event_type", "viewed"),
-    count("outreach_events", "event_type", "paid"),
+    realEvents("opened"),
+    realEvents("clicked"),
+    realEvents("scanned"),
+    realEvents("viewed"),
+    realEvents("paid"),
   ]);
 
   const { data: recentCustomers } = await supabase
