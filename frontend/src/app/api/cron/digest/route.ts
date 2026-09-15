@@ -75,13 +75,21 @@ async function build() {
   // panel. Keyed on created_at rather than updated_at: the quality gate and the
   // tracker both touch these rows, and a site you were shown yesterday
   // reappearing as "new" today is worse than not listing it.
-  const { data: freshSites } = await supabase
+  const { data: freshSites, error: freshErr } = await supabase
     .from("demo_sites")
     .select("business_name, public_slug, review_status, demo_slug")
     .eq("status", "ready")
     .gte("created_at", yStart)
     .order("created_at", { ascending: false })
     .limit(15);
+  // Same trap as the counts above. Without this check a failed read renders as
+  // "Nothing new — the builder produced no sites", which is precisely the
+  // sentence that would send someone hunting a broken builder. Sites were
+  // built on the 12th, 13th and 14th while the report said none were.
+  if (freshErr) {
+    console.error(`[digest] could not read new sites: ${freshErr.message}`);
+    unreadable.push("sites built since yesterday");
+  }
 
   const freshSlugs = (freshSites ?? []).map((s) => s.demo_slug);
   const { data: freshLeads } = freshSlugs.length
@@ -114,18 +122,29 @@ async function build() {
   const countOf = (p: string) => ev.filter((e) => e.event_type.startsWith(p)).length;
 
   // Money, read from what was actually recorded rather than assumed.
-  const { data: paying } = await supabase
+  const { data: paying, error: payingErr } = await supabase
     .from("customers")
     .select("monthly_cents, setup_paid_cents, onboarding_state")
     .in("subscription_status", ["active", "trialing", "past_due"]);
+  // The worst one to get wrong. A failed read here renders as "No customers
+  // yet" and as $0 of revenue — a sentence that would be believed instantly
+  // and is the single most consequential line in the message.
+  if (payingErr) {
+    console.error(`[digest] could not read customers: ${payingErr.message}`);
+    unreadable.push("revenue");
+  }
 
   const mrrCents = (paying ?? []).reduce((s, c) => s + (c.monthly_cents ?? 0), 0);
   const setupCents = (paying ?? []).reduce((s, c) => s + (c.setup_paid_cents ?? 0), 0);
 
-  const { data: queue } = await supabase
+  const { data: queue, error: queueErr } = await supabase
     .from("lead_email_state")
     .select("next_send_at, status")
     .in("status", ["active", "clicked"]);
+  if (queueErr) {
+    console.error(`[digest] could not read the send queue: ${queueErr.message}`);
+    unreadable.push("send queue");
+  }
   const dueNow = (queue ?? []).filter(
     (q) => q.next_send_at && q.next_send_at <= now.toISOString()
   ).length;
