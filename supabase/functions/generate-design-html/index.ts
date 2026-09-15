@@ -693,6 +693,33 @@ function injectRuntime(html: string): string {
   return cleaned + script;
 }
 
+/**
+ * How long one invocation may run, and how long one model call may take.
+ *
+ * Building a page is a single ~75-second model call, and a failed validation
+ * triggers a second one. Two of those cross the platform's 150s wall, and on
+ * 15 Sep this function returned IDLE_TIMEOUT and WORKER_RESOURCE_LIMIT in the
+ * same run — the worker killed with the page already generated but never
+ * saved. That is why the builder produced one to three sites a day against a
+ * cap of ten.
+ *
+ * Bounding the call is what makes it safe; a deadline alone would not, because
+ * the check happens between calls and never during one.
+ */
+/**
+ * AbortSignal.timeout covers the WHOLE request, body included — and the body
+ * is the slow part. The logs are unambiguous: OpenRouter returns headers in
+ * about 1.8 seconds and then streams a 34KB page for another seventy. A 70s
+ * ceiling therefore killed builds that were working, mid-stream, and the abort
+ * surfaced inside resp.json() rather than the fetch, escaping the try/catch as
+ * a bare 500.
+ *
+ * 115s leaves roughly 35s of headroom under the platform's 150s wall, which is
+ * enough for the database writes and the storage upload that follow.
+ */
+const MODEL_TIMEOUT_MS = 115_000;
+const HARD_DEADLINE_MS = 130_000;
+
 async function callBuildModel(
   openrouterKey: string,
   messages: Array<{ role: string; content: string }>,
@@ -714,6 +741,7 @@ async function callBuildModel(
       "X-Title": "AutoSite Design HTML Generation",
     },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(MODEL_TIMEOUT_MS),
   });
   return { resp, elapsedMs: Date.now() - startedAt };
 }
@@ -901,7 +929,26 @@ Deno.serve(async (req: Request) => {
     return new Response(JSON.stringify({ ok: false, error: `OpenRouter ${resp.status}: ${errText}` }), { status: 502 });
   }
 
-  const json = await resp.json();
+  // Reading the body is where the time actually goes, and where an abort
+  // lands. Unguarded, a timeout here escaped as an unhandled 500 with the
+  // demo_sites row left saying "generating" forever — invisible to the retry
+  // logic, which only re-selects rows marked failed.
+  let json: unknown;
+  try {
+    json = await resp.json();
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`[${runId}] reading the model response failed after ${Date.now() - fnStart}ms: ${msg}`);
+    await supabase.from("demo_sites").update({
+      status: "failed",
+      error: `Model response could not be read (${msg}). Will retry on the next run.`,
+    }).eq("demo_slug", demoSlug);
+    return new Response(
+      JSON.stringify({ ok: false, error: `Model response could not be read: ${msg}` }),
+      { status: 502, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
   let html: string;
   try {
     html = extractHtml(json);
@@ -920,8 +967,29 @@ Deno.serve(async (req: Request) => {
   let validation = validateMotionHooks(html);
   let retried = false;
 
+  // A retry is a second full-length model call. Starting one with less than a
+  // call's worth of budget left guarantees the worker is killed mid-flight and
+  // the page already in hand is thrown away — worse than shipping the
+  // validation failure, which the builder re-selects and retries tomorrow.
+  const timeLeft = HARD_DEADLINE_MS - (Date.now() - fnStart);
+  if (!validation.ok && timeLeft < MODEL_TIMEOUT_MS) {
+    console.error(`[${runId}] validation failed but only ${Math.round(timeLeft / 1000)}s left — not starting a retry that cannot finish`);
+    await supabase.from("demo_sites").update({
+      status: "failed",
+      error: `Validation failed (${validation.failures.join("; ")}) and there was no time left to retry`,
+    }).eq("demo_slug", demoSlug);
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: "Validation failed and the retry would have exceeded the time budget",
+        validationFailures: validation.failures,
+      }),
+      { status: 502, headers: { "Content-Type": "application/json" } },
+    );
+  }
+
   if (!validation.ok) {
-    console.warn(`[${runId}] validation failed on first attempt: ${validation.failures.join("; ")} — retrying once`);
+    console.warn(`[${runId}] validation failed on first attempt: ${validation.failures.join("; ")} — retrying once (${Math.round(timeLeft / 1000)}s left)`);
     retried = true;
     const correction = `Your previous HTML response was missing/incorrect on these specific points:\n- ${validation.failures.join("\n- ")}\n\nReturn the COMPLETE corrected HTML document again (same content and design, just fix these specific issues). Return ONLY raw HTML, no markdown fences, no prose.`;
     let retryResp: Response;
