@@ -1,0 +1,516 @@
+<title>The $5,000 Question</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --paper:#F7F6F3; --surface:#FFFFFF; --sunk:#EFEDE8;
+    --ink:#15171C; --muted:#6E6E73; --faint:#9B9A96;
+    --rule:#E1DFD9; --rule-strong:#C9C6BE;
+    --accent:#0E6B5C; --accent-soft:#D9EAE5;
+    --good:#1C7A4F; --bad:#A63D24; --bad-soft:#F3DFD8;
+    --shadow:0 1px 2px rgba(20,22,26,.06), 0 8px 24px rgba(20,22,26,.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0F1114; --surface:#171A1F; --sunk:#1E2228;
+      --ink:#E9E8E4; --muted:#9A9A9E; --faint:#6E6E73;
+      --rule:#272B31; --rule-strong:#3A3F46;
+      --accent:#4FBFA6; --accent-soft:#12312B;
+      --good:#56C48C; --bad:#E08265; --bad-soft:#3A241D;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0F1114; --surface:#171A1F; --sunk:#1E2228;
+    --ink:#E9E8E4; --muted:#9A9A9E; --faint:#6E6E73;
+    --rule:#272B31; --rule-strong:#3A3F46;
+    --accent:#4FBFA6; --accent-soft:#12312B;
+    --good:#56C48C; --bad:#E08265; --bad-soft:#3A241D;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--paper); color:var(--ink);
+    font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    font-size:15px; line-height:1.55;
+    padding-inline:20px; padding-block:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1000px; margin:0 auto; padding-block:40px 72px}
+
+  h1{
+    font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+    font-size:clamp(34px,6vw,54px); line-height:1.02; letter-spacing:-.01em;
+    margin:0 0 12px; text-wrap:balance;
+  }
+  h2{
+    font-family:"Instrument Serif",Georgia,serif; font-weight:400;
+    font-size:clamp(22px,3.4vw,30px); line-height:1.15; margin:0 0 4px;
+  }
+  .lede{color:var(--muted); max-width:62ch; margin:0 0 8px}
+  .eyebrow{
+    font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--faint); margin:0 0 10px;
+  }
+  .num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums}
+
+  section{margin-top:44px}
+  .card{
+    background:var(--surface); border:1px solid var(--rule); border-radius:10px;
+    padding:22px; box-shadow:var(--shadow);
+  }
+
+  /* ---- controls ---- */
+  .controls{display:grid; grid-template-columns:repeat(auto-fit,minmax(215px,1fr)); gap:22px}
+  .ctl label{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:7px}
+  .ctl .name{font-size:13px; font-weight:500}
+  .ctl .val{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+            font-size:15px; font-weight:600; color:var(--accent)}
+  .ctl .hint{font-size:11.5px; color:var(--faint); margin-top:6px; line-height:1.4}
+  input[type=range]{width:100%; accent-color:var(--accent); height:22px; margin:0; cursor:pointer}
+  input[type=range]:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:4px}
+
+  .presets{display:flex; flex-wrap:wrap; gap:8px; margin-top:20px; padding-top:18px; border-top:1px solid var(--rule)}
+  .presets button{
+    font:inherit; font-size:12.5px; font-weight:500; cursor:pointer;
+    background:var(--sunk); color:var(--ink); border:1px solid var(--rule);
+    border-radius:999px; padding:6px 13px;
+  }
+  .presets button:hover{border-color:var(--rule-strong)}
+  .presets button:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+  /* ---- verdict ---- */
+  .verdict{
+    border-radius:10px; padding:24px; border:1px solid var(--rule);
+    background:var(--surface); box-shadow:var(--shadow);
+    display:grid; grid-template-columns:1fr auto; gap:20px; align-items:center;
+  }
+  .verdict.hit{border-color:var(--good); background:linear-gradient(0deg,var(--accent-soft),var(--accent-soft)),var(--surface)}
+  .verdict.miss{border-color:var(--bad); background:linear-gradient(0deg,var(--bad-soft),var(--bad-soft)),var(--surface)}
+  .verdict .big{
+    font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+    font-size:clamp(30px,5.5vw,46px); font-weight:600; line-height:1; letter-spacing:-.02em;
+  }
+  .verdict .say{margin:0; font-size:14.5px; color:var(--ink)}
+  .verdict .say strong{font-weight:600}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:1px;
+         background:var(--rule); border:1px solid var(--rule); border-radius:10px; overflow:hidden; margin-top:18px}
+  .stat{background:var(--surface); padding:15px 17px}
+  .stat .k{font-size:11px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--faint)}
+  .stat .v{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+           font-size:21px; font-weight:600; margin-top:5px; letter-spacing:-.01em}
+  .stat .s{font-size:11.5px; color:var(--muted); margin-top:3px; line-height:1.35}
+
+  /* ---- chart ---- */
+  .chartbox{position:relative; width:100%; aspect-ratio:16/7; max-width:100%; min-height:210px}
+  canvas{width:100%; height:100%; display:block}
+  .legend{display:flex; flex-wrap:wrap; gap:16px; margin-top:14px; font-size:12.5px; color:var(--muted)}
+  .legend i{display:inline-block; width:18px; height:3px; border-radius:2px; margin-right:7px; vertical-align:middle}
+
+  /* ---- table ---- */
+  .scroller{overflow-x:auto; border:1px solid var(--rule); border-radius:10px; background:var(--surface)}
+  table{width:100%; border-collapse:collapse; font-size:13px; min-width:640px}
+  th,td{padding:9px 13px; text-align:right; border-bottom:1px solid var(--rule); white-space:nowrap}
+  th{font-size:10.5px; font-weight:600; letter-spacing:.07em; text-transform:uppercase;
+     color:var(--faint); text-align:right; background:var(--sunk); position:sticky; top:0}
+  th:first-child,td:first-child{text-align:left}
+  td{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+  tbody tr:last-child td{border-bottom:none}
+  tr.crossed td{background:var(--accent-soft)}
+  tr.crossed td:first-child{font-weight:600}
+
+  /* ---- provenance ---- */
+  .costs{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
+  .cost{border:1px solid var(--rule); border-radius:9px; padding:14px 16px; background:var(--surface)}
+  .cost .amt{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;
+             font-size:19px; font-weight:600}
+  .cost .lbl{font-size:13px; font-weight:500; margin-top:2px}
+  .cost .src{font-size:11.5px; color:var(--muted); margin-top:6px; line-height:1.4}
+  .tag{display:inline-block; font-size:9.5px; font-weight:600; letter-spacing:.08em;
+       text-transform:uppercase; padding:2px 6px; border-radius:4px; margin-right:6px; vertical-align:1px}
+  .tag.m{background:var(--accent-soft); color:var(--accent)}
+  .tag.g{background:var(--bad-soft); color:var(--bad)}
+
+  .warn{border-left:3px solid var(--bad); padding:14px 18px; background:var(--surface);
+        border-radius:0 9px 9px 0; margin-top:18px}
+  .warn p{margin:0; font-size:14px}
+  .warn p + p{margin-top:9px}
+
+  .note{font-size:12.5px; color:var(--muted); margin-top:12px; max-width:70ch}
+  footer{margin-top:52px; padding-top:20px; border-top:1px solid var(--rule);
+         font-size:12px; color:var(--faint)}
+  @media (max-width:560px){
+    .verdict{grid-template-columns:1fr}
+  }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">BuildItToday.ai · 15 September 2026</p>
+  <h1>The $5,000 question</h1>
+  <p class="lede">
+    Every cost here was measured from the live system today, after moving the text models to
+    DeepSeek. The only thing nobody knows is the close rate — so that is the dial you should
+    be turning.
+  </p>
+
+  <section>
+    <div class="card">
+      <p class="eyebrow" style="margin-bottom:16px">What you control</p>
+      <div class="controls">
+        <div class="ctl">
+          <label for="setup"><span class="name">Setup fee</span><span class="val" id="setupV">$200</span></label>
+          <input type="range" id="setup" min="0" max="1500" step="25" value="200">
+          <p class="hint">One-off, charged when they say yes.</p>
+        </div>
+        <div class="ctl">
+          <label for="monthly"><span class="name">Monthly fee</span><span class="val" id="monthlyV">$50</span></label>
+          <input type="range" id="monthly" min="0" max="200" step="5" value="50">
+          <p class="hint">Hosting and changes. This is the part that compounds.</p>
+        </div>
+        <div class="ctl">
+          <label for="close"><span class="name">Close rate</span><span class="val" id="closeV">1.00%</span></label>
+          <input type="range" id="close" min="0" max="800" step="5" value="100">
+          <p class="hint">Of everyone emailed. <strong>Unknown</strong> — 0 sales from 54 sends so far.</p>
+        </div>
+        <div class="ctl">
+          <label for="vol"><span class="name">Sites per day</span><span class="val" id="volV">20</span></label>
+          <input type="range" id="vol" min="5" max="150" step="5" value="20">
+          <p class="hint" id="volHint">600 a month. Today's cap is 20.</p>
+        </div>
+      </div>
+      <div class="presets">
+        <button data-p="200,50,100,20">$200 · 1%</button>
+        <button data-p="200,50,200,20">$200 · 2%</button>
+        <button data-p="750,50,100,20">$750 · 1%</button>
+        <button data-p="750,50,50,20">$750 · 0.5%</button>
+        <button data-p="200,50,150,60">$200 · 1.5% · 60/day</button>
+        <button data-p="750,50,100,60">$750 · 1% · 60/day</button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="verdict" id="verdict">
+      <div>
+        <p class="eyebrow" style="margin-bottom:8px">Months until you clear $5,000 in a month</p>
+        <p class="say" id="say"></p>
+      </div>
+      <div class="big num" id="months"></div>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="k">Month 12</div>
+        <div class="v num" id="m12"></div>
+        <div class="s">revenue that month, after Stripe</div>
+      </div>
+      <div class="stat">
+        <div class="k">Month 24</div>
+        <div class="v num" id="m24"></div>
+        <div class="s">revenue that month, after Stripe</div>
+      </div>
+      <div class="stat">
+        <div class="k">Sales a month</div>
+        <div class="v num" id="wins"></div>
+        <div class="s" id="winsSub"></div>
+      </div>
+      <div class="stat">
+        <div class="k">Running cost</div>
+        <div class="v num" id="burn"></div>
+        <div class="s" id="burnSub"></div>
+      </div>
+      <div class="stat">
+        <div class="k">Break-even</div>
+        <div class="v num" id="be"></div>
+        <div class="s">close rate that just covers the outreach</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two years, month by month</h2>
+    <p class="lede">Your price against the alternative, at the same close rate. The dashed line is $5,000.</p>
+    <div class="card">
+      <div class="chartbox"><canvas id="chart"></canvas></div>
+      <div class="legend">
+        <span><i style="background:var(--accent)"></i><span id="legA"></span></span>
+        <span><i style="background:var(--faint)"></i><span id="legB"></span></span>
+        <span><i style="background:var(--bad)"></i>$5,000 target</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The trade, in one number</h2>
+    <div class="card" id="tradeCard">
+      <p style="margin:0; font-size:15.5px" id="trade"></p>
+      <p class="note" id="tradeNote"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where the money goes</h2>
+    <p class="lede">Per business emailed. Everything tagged <span class="tag m">measured</span> is a real number
+      from the database or a real invoice.</p>
+    <div class="costs">
+      <div class="cost">
+        <div class="amt">$0.2696</div>
+        <div class="lbl">Three photographs + hero video</div>
+        <div class="src"><span class="tag m">measured</span>Mean across 50 finished builds, range $0.19–$0.32. Image and video models — these cannot move to DeepSeek, which is text only.</div>
+      </div>
+      <div class="cost">
+        <div class="amt">$0.0515</div>
+        <div class="lbl">DataSkip lookup</div>
+        <div class="src"><span class="tag m">measured</span>$0.04 a check, but only 77.7% return an email, so each usable address costs more than the sticker.</div>
+      </div>
+      <div class="cost">
+        <div class="amt">$0.0100</div>
+        <div class="lbl">Website copy + the HTML build</div>
+        <div class="src"><span class="tag m">measured</span>Was roughly $0.23 on Sonnet. One real 44,958-character site built on DeepSeek today for a penny.</div>
+      </div>
+      <div class="cost">
+        <div class="amt">$0.3311</div>
+        <div class="lbl">Total, per business emailed</div>
+        <div class="src">Down from about $0.55. The saving is real, but look at the proportions: the pictures are now 81% of it.</div>
+      </div>
+    </div>
+    <p class="note">
+      Overheads are not in here. Supabase, Vercel, Resend and the domain are on free or near-free tiers today;
+      if that changes, it is roughly $65 a month and does not alter any conclusion below.
+      Stripe takes 2.9% + 30¢ on every charge and <em>is</em> in every figure above.
+    </p>
+  </section>
+
+  <section>
+    <h2>What the model is guessing</h2>
+    <div class="warn">
+      <p><strong>There have been no sales at any price.</strong> 54 businesses emailed, 8 opened their site,
+        4 reached the pricing, 0 bought. With 0 out of 54, the honest range for the true close rate is
+        anywhere from 0% to about 5.6%. That is too wide to tell you whether $750 is wrong.</p>
+      <p><strong>So this is not a forecast.</strong> It converts a close rate into money. You supply the
+        close rate, and right now nobody — not you, not me — knows what it is. The one way to find out
+        is to send enough emails at one price to get a real number.</p>
+      <p><strong>Churn is assumed at 3% a month</strong>, meaning an average customer stays about
+        33 months. Nothing has been observed, because nothing has been sold.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>The table</h2>
+    <div class="scroller">
+      <table>
+        <thead>
+          <tr>
+            <th>Month</th><th>New</th><th>Active</th><th>Setup</th>
+            <th>Recurring</th><th>Revenue</th><th>Cost</th><th>Profit</th><th>Cash</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <p class="note">Revenue and setup are net of Stripe. Cash is cumulative and starts at zero —
+      it does not carry the money already spent getting here.</p>
+  </section>
+
+  <footer>
+    Costs read from the live database on 15 September 2026 · close rate, churn and the price you charge are yours to set
+  </footer>
+</div>
+
+<script>
+(function(){
+  const COST_PER_LEAD = 0.2696 + 0.0515 + 0.0100;
+  const CHURN = 0.03;
+  const TARGET = 5000;
+  const MONTHS = 24;
+  const FIXED = 0;
+
+  const el = id => document.getElementById(id);
+  const stripe = a => a <= 0 ? 0 : a - (a * 0.029 + 0.30);
+  const money = n => "$" + Math.round(n).toLocaleString("en-US");
+
+  function simulate(setup, monthly, closeRate, perMonth){
+    const rows = [];
+    let active = 0, cash = 0;
+    const netSetup = stripe(setup), netMonthly = stripe(monthly);
+    for (let m = 1; m <= MONTHS; m++){
+      const wins = perMonth * closeRate;
+      active = active * (1 - CHURN) + wins;
+      const setupRev = wins * netSetup;
+      const mrr = active * netMonthly;
+      const revenue = setupRev + mrr;
+      const cost = perMonth * COST_PER_LEAD + FIXED;
+      const profit = revenue - cost;
+      cash += profit;
+      rows.push({m, wins, active, setupRev, mrr, revenue, cost, profit, cash});
+    }
+    return rows;
+  }
+
+  const read = () => ({
+    setup: +el("setup").value,
+    monthly: +el("monthly").value,
+    closeRate: +el("close").value / 10000,
+    perMonth: +el("vol").value * 30,
+  });
+
+  function render(){
+    const s = read();
+    const perDay = +el("vol").value;
+
+    el("setupV").textContent = money(s.setup);
+    el("monthlyV").textContent = money(s.monthly);
+    el("closeV").textContent = (s.closeRate * 100).toFixed(2) + "%";
+    el("volV").textContent = perDay;
+    el("volHint").textContent = s.perMonth.toLocaleString("en-US") +
+      " a month. Today's cap is 20." + (perDay > 20
+        ? " Raising it costs " + money(s.perMonth * COST_PER_LEAD) + " a month in model spend."
+        : "");
+
+    const rows = simulate(s.setup, s.monthly, s.closeRate, s.perMonth);
+    const hitIdx = rows.findIndex(r => r.revenue >= TARGET);
+
+    const v = el("verdict"), say = el("say"), months = el("months");
+    v.classList.toggle("hit", hitIdx !== -1);
+    v.classList.toggle("miss", hitIdx === -1);
+    if (hitIdx === -1){
+      months.textContent = "never";
+      const last = rows[MONTHS - 1];
+      say.innerHTML = "At this price and this close rate you plateau near <strong>" +
+        money(last.revenue) + " a month</strong>. Two years of sending and you never reach $5,000. " +
+        "Raise the price, raise the volume, or find a close rate you can defend.";
+    } else {
+      const r = rows[hitIdx];
+      months.textContent = (hitIdx + 1);
+      say.innerHTML = "You clear $5,000 in <strong>month " + (hitIdx + 1) + "</strong>, on " +
+        Math.round(r.active).toLocaleString("en-US") + " paying customers and " +
+        r.wins.toFixed(1) + " new sales that month.";
+    }
+
+    el("m12").textContent = money(rows[11].revenue);
+    el("m24").textContent = money(rows[23].revenue);
+    el("wins").textContent = (s.perMonth * s.closeRate).toFixed(1);
+    el("winsSub").textContent = "from " + s.perMonth.toLocaleString("en-US") + " emails a month";
+    el("burn").textContent = money(s.perMonth * COST_PER_LEAD);
+    el("burnSub").textContent = "a month, at $" + COST_PER_LEAD.toFixed(4) + " per business";
+
+    const beRate = stripe(s.setup) > 0
+      ? (s.perMonth * COST_PER_LEAD) / stripe(s.setup) / s.perMonth
+      : null;
+    el("be").textContent = beRate === null ? "—" : (beRate * 100).toFixed(3) + "%";
+
+    // ---- the trade ----------------------------------------------------
+    const alt = s.setup >= 475 ? 200 : 750;
+    const mine = stripe(s.setup) + 12 * stripe(s.monthly);
+    const theirs = stripe(alt) + 12 * stripe(s.monthly);
+    const ratio = mine / theirs;
+    const t = el("trade");
+    if (Math.abs(s.setup - alt) < 1 || mine <= 0 || theirs <= 0){
+      t.textContent = "Move the setup fee to compare it against the alternative.";
+      el("tradeNote").textContent = "";
+    } else if (ratio > 1){
+      t.innerHTML = "A customer at <strong>" + money(s.setup) + "</strong> is worth " +
+        money(mine) + " in their first year. At " + money(alt) + " they are worth " + money(theirs) +
+        ". So <strong>" + money(alt) + " has to close " + ratio.toFixed(2) +
+        "× as often</strong> just to make you the same money.";
+      el("tradeNote").textContent = "That multiple is smaller than the price cut looks, because the $" +
+        s.monthly + " a month is identical either way and carries most of the value. Cutting the setup fee by " +
+        Math.round((1 - alt / s.setup) * 100) + "% only costs you " +
+        Math.round((1 - theirs / mine) * 100) + "% of the first year.";
+    } else {
+      t.innerHTML = "A customer at <strong>" + money(s.setup) + "</strong> is worth " +
+        money(mine) + " in their first year, against " + money(theirs) + " at " + money(alt) +
+        ". You need <strong>" + (1 / ratio).toFixed(2) + "× the close rate</strong> to match " + money(alt) + ".";
+      el("tradeNote").textContent = "Whether a cheaper price buys you that much more yes is the whole bet, " +
+        "and no data exists either way yet.";
+    }
+
+    el("legA").textContent = money(s.setup) + " setup (yours)";
+    el("legB").textContent = money(alt) + " setup";
+
+    // ---- table --------------------------------------------------------
+    el("tbody").innerHTML = rows.map((r, i) =>
+      '<tr' + (i === hitIdx ? ' class="crossed"' : '') + '>' +
+        "<td>" + r.m + "</td>" +
+        "<td>" + r.wins.toFixed(1) + "</td>" +
+        "<td>" + r.active.toFixed(1) + "</td>" +
+        "<td>" + money(r.setupRev) + "</td>" +
+        "<td>" + money(r.mrr) + "</td>" +
+        "<td>" + money(r.revenue) + "</td>" +
+        "<td>" + money(r.cost) + "</td>" +
+        "<td>" + money(r.profit) + "</td>" +
+        "<td>" + money(r.cash) + "</td>" +
+      "</tr>").join("");
+
+    drawChart(rows, simulate(alt, s.monthly, s.closeRate, s.perMonth));
+  }
+
+  // ---- chart ----------------------------------------------------------
+  const cv = el("chart");
+  function drawChart(a, b){
+    const dpr = window.devicePixelRatio || 1;
+    const w = cv.clientWidth, h = cv.clientHeight;
+    if (!w || !h) return;
+    cv.width = w * dpr; cv.height = h * dpr;
+    const c = cv.getContext("2d");
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.clearRect(0, 0, w, h);
+
+    const cs = getComputedStyle(document.documentElement);
+    const col = n => cs.getPropertyValue(n).trim();
+    const pad = {l:58, r:12, t:14, b:26};
+    const pw = w - pad.l - pad.r, ph = h - pad.t - pad.b;
+
+    const peak = Math.max(TARGET * 1.25, ...a.map(r => r.revenue), ...b.map(r => r.revenue));
+    const x = i => pad.l + (i / (MONTHS - 1)) * pw;
+    const y = v => pad.t + ph - (v / peak) * ph;
+
+    // grid + y labels
+    c.font = '11px "IBM Plex Mono", monospace';
+    c.textAlign = "right"; c.textBaseline = "middle";
+    for (let i = 0; i <= 4; i++){
+      const v = peak * i / 4, yy = y(v);
+      c.strokeStyle = col("--rule"); c.lineWidth = 1;
+      c.beginPath(); c.moveTo(pad.l, yy); c.lineTo(w - pad.r, yy); c.stroke();
+      c.fillStyle = col("--faint");
+      c.fillText("$" + Math.round(v / 1000) + "k", pad.l - 9, yy);
+    }
+    // x labels
+    c.textAlign = "center"; c.textBaseline = "top"; c.fillStyle = col("--faint");
+    [0, 5, 11, 17, 23].forEach(i => c.fillText("m" + (i + 1), x(i), pad.t + ph + 7));
+
+    // target
+    c.strokeStyle = col("--bad"); c.lineWidth = 1.5; c.setLineDash([5, 4]);
+    c.beginPath(); c.moveTo(pad.l, y(TARGET)); c.lineTo(w - pad.r, y(TARGET)); c.stroke();
+    c.setLineDash([]);
+
+    const line = (rows, colour, width) => {
+      c.strokeStyle = colour; c.lineWidth = width;
+      c.lineJoin = "round"; c.lineCap = "round";
+      c.beginPath();
+      rows.forEach((r, i) => i ? c.lineTo(x(i), y(r.revenue)) : c.moveTo(x(i), y(r.revenue)));
+      c.stroke();
+    };
+    line(b, col("--faint"), 1.75);
+    line(a, col("--accent"), 2.75);
+  }
+
+  ["setup","monthly","close","vol"].forEach(id =>
+    el(id).addEventListener("input", render));
+
+  document.querySelectorAll(".presets button").forEach(btn =>
+    btn.addEventListener("click", () => {
+      const [a, b, c, d] = btn.dataset.p.split(",");
+      el("setup").value = a; el("monthly").value = b;
+      el("close").value = c; el("vol").value = d;
+      render();
+    }));
+
+  addEventListener("resize", render);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", render);
+  document.fonts && document.fonts.ready.then(render);
+  render();
+})();
+</script>
