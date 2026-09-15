@@ -111,6 +111,37 @@ def fix_hero_autoplay(html):
     return out
 
 
+def fix_boxed_hero(html):
+    """Let the hero out of the page's own width limit.
+
+    A rule like
+
+        section { padding: ...; max-width: 1200px; margin: 0 auto }
+
+    is good practice for body copy and catastrophic for the hero, because the
+    hero IS a section. At 1280px it leaves a 40px white margin down each side
+    of the photograph, and the gap grows with the screen. It reads as a broken
+    page, and it is the first thing the business owner sees.
+
+    Only one site had it — the first one built after the models moved to
+    DeepSeek. Eighty-three pages written by the previous model never did,
+    which is the point: a full-bleed hero was an unstated assumption, and a
+    new model had no reason to keep it. The builder now refuses a page with
+    this defect; this repairs the one already published.
+    """
+    if "section[data-hero]" in html:
+        return html
+    blanket = re.search(r'(?<![\w.#\-\[])section\s*\{[^{}]*max-width\s*:\s*\d[^{}]*\}', html, re.I)
+    if not blanket:
+        return html
+    override = ("section[data-hero]{max-width:none;margin-left:0;margin-right:0;"
+                "width:100%}")
+    # Straight after the rule it is undoing, so the cascade order is obvious
+    # to anyone reading the page later.
+    at = blanket.end()
+    return html[:at] + override + html[at:]
+
+
 def key():
     for line in open(ENV):
         if line.startswith("SUPABASE_SERVICE_ROLE_KEY="):
@@ -159,9 +190,6 @@ def main():
             missing += 1
             continue
 
-        if "mrv2-cursor-dot" not in html:
-            skipped += 1
-            continue
 
         new = html
         for old, repl in REPLACEMENTS:
@@ -169,6 +197,7 @@ def main():
                 new = new.replace(old, repl)
         new = fix_claim_cta(new)
         new = fix_hero_autoplay(new)
+        new = fix_boxed_hero(new)
 
         if new == html:
             skipped += 1

@@ -499,7 +499,7 @@ STRICT REQUIREMENTS:
    - data-hero: put this attribute on the hero <section>. The full-bleed background MUST be the business's own hero video, written EXACTLY like this — not an <img>, not a CSS background-image, not a poster on its own:
      <video class="hero-bg" autoplay muted loop playsinline preload="auto" poster="${opts.heroPosterUrl}"><source src="${opts.heroVideoUrl}" type="video/mp4"></video>
      Every attribute there is load-bearing: muted is what allows autoplay at all in Chrome and Safari, playsinline stops iOS taking the video fullscreen, loop is what makes four seconds enough, preload="auto" buffers the clip so autoplay has data to start on (with "metadata" the first ever load of a new site fails to autoplay and no browser retries), and the poster is what fills the hero during the moment before the clip is decoded — so a visitor on a slow phone still sees the photograph immediately rather than a black rectangle. Do not drop or reorder them, and do not add controls.
-     The main heading goes in the same section as an <h1> (or class="hero-title"). The runtime will scale/fade the heading and parallax the .hero-bg automatically as the user scrolls past — you must give .hero-bg the CSS (position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0) and give the hero section position:relative;overflow:hidden so the parallax doesn't break layout. Put a scrim over the video (a gradient or tinted overlay between it and the text, e.g. .hero-bg::after or a dedicated overlay div at z-index:1) so the heading stays legible over moving footage — text that is readable over a still frame can become unreadable four seconds later.
+     The main heading goes in the same section as an <h1> (or class="hero-title"). The runtime will scale/fade the heading and parallax the .hero-bg automatically as the user scrolls past — you must give .hero-bg the CSS (position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0) and give the hero section position:relative;overflow:hidden so the parallax doesn't break layout. THE HERO MUST RUN EDGE TO EDGE. If you write a general rule like "section{max-width:1200px;margin:0 auto}" to keep body copy readable — which is good practice — it will also box in the hero and leave white margins either side of the photograph, which looks broken. Whenever you constrain "section" width, you MUST also write "section[data-hero]{max-width:none;margin-left:0;margin-right:0;width:100%}" to let the hero out of it. Put a scrim over the video (a gradient or tinted overlay between it and the text, e.g. .hero-bg::after or a dedicated overlay div at z-index:1) so the heading stays legible over moving footage — text that is readable over a still frame can become unreadable four seconds later.
    - data-media-sequence: build ONE pinned scroll-scrubbed section using all three of this business's photographs, in the order given. Each item MUST pair its image with its caption — do NOT ship bare images with no text. Structure exactly:
      <section data-media-sequence><div class="ms-track">
        <div class="ms-item"><img src="..." style="width:100%;height:100%;object-fit:cover"><div class="ms-caption"><h3>Short business-specific line (≤6 words)</h3><p>One supporting sentence using only the real content given above</p></div></div>
@@ -608,6 +608,30 @@ function validateMotionHooks(html: string): { ok: boolean; failures: string[] } 
 
   if (!/data-reveal/i.test(html)) {
     failures.push("missing at least one data-reveal element");
+  }
+
+  // The hero must run edge to edge.
+  //
+  // A bare `section { max-width: …; margin: 0 auto }` rule reads as sensible
+  // page furniture and is the standard way to keep body copy readable — but
+  // the hero IS a section, so the rule boxes it too. At 1280px that leaves a
+  // 40px white margin down each side of the photograph, and the gap widens
+  // with the screen. It does not look like a design choice, it looks broken,
+  // and it is the first thing the owner sees.
+  //
+  // Caught on Besh Cleaning Solution, the first site built on the cheap model.
+  // Eighty-three earlier pages never did this, which is exactly why it needs a
+  // check rather than trust: a full-bleed hero was an unstated assumption, and
+  // an unstated assumption is one a new model has no reason to keep.
+  //
+  // An explicit override for the hero is enough to satisfy this, which is what
+  // the prompt now asks for.
+  const blanketSection = /(?<![\w.#\-\[])section\s*\{[^{}]*max-width\s*:\s*\d/i;
+  if (blanketSection.test(html) && !/section\[data-hero\]/i.test(html)) {
+    failures.push(
+      "a bare `section { max-width: … }` rule also constrains the hero, leaving white margins " +
+      "either side of it — add `section[data-hero]{max-width:none;margin-left:0;margin-right:0}`",
+    );
   }
 
   // Transform-collision check: hero-bg must not also carry data-parallax-img or ken-burns.
