@@ -220,6 +220,26 @@ async function enrolNewLeads(
     .in("demo_slug", slugs)
     .or("state_email.not.is.null," +
         "and(contact_email.not.is.null,contact_confidence.in.(owner,household))")
+    // Hold back addresses that are likely already dead.
+    //
+    // Every hard bounce this project has had is a Yahoo mailbox that no longer
+    // exists — "552 mailbox not found". Yahoo deletes accounts dormant for a
+    // year; the others do not. Against DataSkip's data that is 5 dead in 26
+    // Yahoo addresses and 0 in 89 everywhere else, and it took one day's
+    // sending from a 0-5% bounce rate to 29%.
+    //
+    // A bounce is not a wasted email, it is a charge against the domain's
+    // reputation, and at 5.15% lifetime we are at the rate where AWS puts a
+    // sender under review. Suppressed only while the address came from the
+    // lookup: a Yahoo address the business itself filed with Florida is
+    // perfectly good, so state_email overrides this.
+    // Written as De Morgan's equivalent — keep it if we have a state address OR
+    // the looked-up one is not a Yahoo. The direct negation,
+    // .not("and(...)", "is", true), is accepted by PostgREST and silently
+    // filters NOTHING: 1,519 rows before it and 1,519 after. Checked against
+    // the live table, this form returns 1,248, which is 1,519 less the 271
+    // Yahoo addresses exactly.
+    .or("state_email.not.is.null,contact_email.not.ilike.%25@yahoo.com")
     .is("unsubscribed_at", null)
     .is("email_bounced_at", null);
   if (!leads?.length) return 0;
