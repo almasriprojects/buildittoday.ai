@@ -14,6 +14,7 @@ const RESERVED = new Set([
 
 type ReadySite = {
   demo_slug: string;
+  public_slug: string | null;
   business_name: string | null;
   storage_path: string | null;
   generator_version: string | null;
@@ -34,7 +35,7 @@ async function readySite(slug: string): Promise<ReadySite | null> {
   if (!safeSlug) return null;
   const { data } = await createServiceRoleClient()
     .from("demo_sites")
-    .select("demo_slug, business_name, storage_path, generator_version")
+    .select("demo_slug, public_slug, business_name, storage_path, generator_version")
     .eq("public_slug", safeSlug)
     .eq("status", "ready")
     .maybeSingle();
@@ -83,6 +84,9 @@ export async function renderPublicSite(
     const layer = offerLayer({
       businessName: site.business_name ?? "your business",
       demoSlug: site.demo_slug,
+      // Needed so "talk first" can reach /book/<public_slug>, the page that
+      // knows whose business this is.
+      publicSlug: site.public_slug ?? null,
       leadId: lead?.id ?? null,
     });
     html = html.includes("</body>")

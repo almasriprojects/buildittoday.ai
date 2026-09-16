@@ -18,9 +18,13 @@ import { TIERS, money } from "@/lib/pricing";
 export function offerLayer(opts: {
   businessName: string;
   demoSlug: string;
+  publicSlug?: string | null;
   leadId?: string | null;
 }): string {
-  const { businessName, demoSlug, leadId } = opts;
+  const { businessName, demoSlug, publicSlug, leadId } = opts;
+  // Where "talk first" goes. The per-business booking page if we know the
+  // slug, otherwise the homepage anchor.
+  const bookHref = publicSlug ? `/book/${encodeURIComponent(publicSlug)}?src=site` : "/#book";
 
   const cards = TIERS.map((t) => {
     const feats = t.features
@@ -34,7 +38,7 @@ export function offerLayer(opts: {
     const href =
       t.action === "checkout"
         ? `/api/checkout/start?slug=${encodeURIComponent(demoSlug)}&tier=${t.key}`
-        : t.href ?? "/#book";
+        : t.href ?? bookHref;
     const note =
       t.action === "checkout"
         ? "Secure checkout — card details never touch our servers"
@@ -56,6 +60,16 @@ export function offerLayer(opts: {
   return `
 <style>
 .bit-bar,.bit-modal,.bit-modal *{box-sizing:border-box}
+/* Talking is the ask most people can say yes to. Four people reached these
+   prices and none clicked, because the only action offered was handing a
+   stranger $750 on a popup. This sits under the packages, full width, and
+   reads as the easy option — which it is. */
+.bit-talk{margin:22px auto 4px;max-width:520px;text-align:center}
+.bit-talk-btn{display:block;padding:15px 22px;border-radius:999px;
+  background:#0D9488;color:#fff;font-weight:600;font-size:16px;
+  text-decoration:none;line-height:1.3}
+.bit-talk-btn:hover{background:#0F766E}
+.bit-talk-note{display:block;margin-top:9px;font-size:13px;color:#6B7280}
 .bit-bar{position:fixed;left:0;right:0;bottom:0;z-index:2147483000;
   display:flex;align-items:center;gap:14px;justify-content:center;flex-wrap:wrap;
   padding:13px 18px;background:#0F172A;color:#fff;
@@ -131,10 +145,13 @@ export function offerLayer(opts: {
       photography, the video. Pick a package and it goes live on your own domain this week.
     </p>
     <div class="bit-grid">${cards}</div>
+    <div class="bit-talk">
+      <a class="bit-talk-btn" data-bit-tier="talk" href="${bookHref}">Talk to me first — free, 30 minutes</a>
+      <span class="bit-talk-note">No card, no obligation. I&rsquo;ll change anything you don&rsquo;t like.</span>
+    </div>
     <p class="bit-foot">
       You own the code. No contract — cancel the monthly any time and the site stays yours.
-      Prefer to talk first? Call <a href="tel:+15024060382" style="color:#0D9488;font-weight:600">(502) 406-0382</a>
-      or email <a href="mailto:contact@buildittoday.ai" style="color:#0D9488;font-weight:600">contact@buildittoday.ai</a>.
+      Or email <a href="mailto:contact@buildittoday.ai" style="color:#0D9488;font-weight:600">contact@buildittoday.ai</a>.
     </p>
   </div>
 </div>

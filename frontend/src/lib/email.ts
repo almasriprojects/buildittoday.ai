@@ -137,8 +137,15 @@ export function buildVars(
      * request arrives attached to the business rather than as an anonymous
      * name and a time.
      */
+    //
+    // Points at the page built for this one business, not the marketing
+    // homepage. That link used to land on eighteen thousand pixels of agency
+    // pitch with the calendar at 12,930px and the ?demo= parameter read by
+    // nothing — so the promise the email had just made, that this was built
+    // for them specifically, died on the click. Zero bookings in the weeks it
+    // was live.
     booking_url: lead.public_slug
-      ? `${SITE_URL}/?demo=${lead.public_slug}&src=email#book`
+      ? `${SITE_URL}/book/${lead.public_slug}?src=email`
       : `${SITE_URL}/#book`,
     from_name: settings.from_name,
     reply_to: settings.reply_to,

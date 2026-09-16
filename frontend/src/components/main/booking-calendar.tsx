@@ -16,9 +16,24 @@ const TIME_SLOTS = ["1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00
 
 interface BookingCalendarProps {
   colors?: ThemeColors;
+  /**
+   * What we already know about the person, when the calendar is shown on a
+   * page built for one specific business.
+   *
+   * Asking a business owner to type the name and email we used to write to
+   * them is a step that only loses people. On /book/[slug] these arrive
+   * filled in and the request is one button.
+   */
+  prefill?: {
+    name?: string | null;
+    email?: string | null;
+    phone?: string | null;
+    businessName?: string | null;
+    demoSlug?: string | null;
+  };
 }
 
-export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps) {
+export function BookingCalendar({ colors = defaultColors, prefill }: BookingCalendarProps) {
   const c = colors;
   const today = new Date();
   const [viewYear, setViewYear] = useState(today.getFullYear());
@@ -29,9 +44,9 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
   // /auth/register — a booking nobody would ever receive. These drive a real
   // request that lands in booking_requests.
   const [showForm, setShowForm] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState(prefill?.name ?? "");
+  const [email, setEmail] = useState(prefill?.email ?? "");
+  const [phone, setPhone] = useState(prefill?.phone ?? "");
   const [saving, setSaving] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -42,10 +57,13 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
     // Read at submit time rather than through useSearchParams: this component
     // sits on the statically rendered homepage, and that hook would force the
     // whole page behind a Suspense boundary for one optional parameter.
+    // On a per-business booking page the slug is passed in directly; on the
+    // homepage it only ever arrives as ?demo=.
     const demoSlug =
-      typeof window === "undefined"
+      prefill?.demoSlug ??
+      (typeof window === "undefined"
         ? ""
-        : new URLSearchParams(window.location.search).get("demo") ?? "";
+        : new URLSearchParams(window.location.search).get("demo") ?? "");
     setSaving(true);
     setError(null);
     const iso = `${viewYear}-${String(viewMonth + 1).padStart(2, "0")}-${String(selectedDay).padStart(2, "0")}`;
@@ -60,6 +78,9 @@ export function BookingCalendar({ colors = defaultColors }: BookingCalendarProps
         body: JSON.stringify({
           name, email, phone, date: iso, slot: selectedSlot,
           demoSlug: demoSlug || undefined,
+          // Sent so the Telegram alert names the business rather than only the
+          // person, which is what tells you which site they are ringing about.
+          businessName: prefill?.businessName || undefined,
         }),
       });
       const d = await res.json();
