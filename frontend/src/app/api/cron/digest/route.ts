@@ -182,6 +182,36 @@ async function build() {
   }
   if (!process.env.RESEND_WEBHOOK_SECRET) blockers.push("Resend webhook unset — bounces go unrecorded");
 
+  // Florida publishes every business's own email address quarterly, about ten
+  // days after the quarter ends. It is free, it is keyed on the document
+  // number we already hold, and it is the address the owner filed themselves —
+  // unlike the one we buy, which names somebody else 71% of the time.
+  //
+  // It is imported by hand (the file is 387MB, far past what an edge function
+  // can chew), so the only thing standing between us and several thousand
+  // correct addresses is remembering. This is the remembering.
+  const quarterJustEnded = (() => {
+    const m = now.getUTCMonth();            // 0-11
+    const q = Math.floor(m / 3);            // 0-3
+    const lastQuarter = q === 0 ? 4 : q;    // in January the file is Q4 of last year
+    const year = q === 0 ? now.getUTCFullYear() - 1 : now.getUTCFullYear();
+    // Published around the 10th of the month after the quarter closes.
+    const due = now.getUTCDate() >= 10 && m % 3 === 0;
+    return due ? `email_${year}_q${lastQuarter}.zip` : null;
+  })();
+  if (quarterJustEnded) {
+    const { data: imported, error: importErr } = await supabase
+      .from("state_email_imports").select("filename")
+      .eq("filename", quarterJustEnded).maybeSingle();
+    if (importErr) {
+      unreadable.push("state email imports");
+    } else if (!imported) {
+      blockers.push(
+        `${quarterJustEnded} is out — run scripts/import-state-emails.py for free verified emails`,
+      );
+    }
+  }
+
   // Forecast, kept honest about small numbers rather than inventing precision.
   //
   // Where a figure could not be read the forecast says so rather than
