@@ -53,8 +53,15 @@ export async function GET() {
   const [{ data: leads }, { data: scripts }, { data: attempts }] = await Promise.all([
     supabase
       .from("leads")
-      .select("id, demo_slug, business_name, city, business_category, contact_phone, outreach_sent_at, demo_viewed_at")
+      .select("id, demo_slug, business_name, city, business_category, contact_phone, contact_full_name, contact_confidence, phone_type, outreach_sent_at, demo_viewed_at")
       .in("demo_slug", slugs)
+      // Never put a stranger's number in front of somebody about to dial it.
+      // The contact came from an address lookup, and for 675 of 972 traced
+      // leads that address belonged to a landlord, an apartment company, or
+      // once the Postal Service. Calling them wastes the call and startles a
+      // private individual. 'household' stays: the surname matches and the
+      // first name does not, which is almost always a spouse.
+      .in("contact_confidence", ["owner", "household"])
       .not("contact_phone", "is", null),
     supabase.from("call_scripts").select("lead_id"),
     supabase
@@ -98,6 +105,11 @@ export async function GET() {
         city: l.city,
         category: l.business_category,
         phone: (l.contact_phone ?? "").trim(),
+        phone_type: l.phone_type ?? null,
+        // Who the phone actually reaches, checked against the officer Florida
+        // has on file. Shown so nobody has to take it on trust.
+        contact_name: l.contact_full_name ?? null,
+        confidence: l.contact_confidence ?? null,
         url: site?.public_slug ? `${SITE}/${site.public_slug}` : null,
         emailed_at: l.outreach_sent_at,
         viewed_at: l.demo_viewed_at,

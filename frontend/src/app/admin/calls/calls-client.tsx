@@ -12,6 +12,10 @@ type CallRow = {
   city: string | null;
   category: string | null;
   phone: string;
+  phone_type: string | null;
+  /** Who the number reaches, and whether that is the registered owner. */
+  contact_name: string | null;
+  confidence: "owner" | "household" | "mismatch" | null;
   url: string | null;
   emailed_at: string | null;
   viewed_at: string | null;
@@ -172,7 +176,7 @@ export function CallsClient() {
       {counts && (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <StatCard label="Still to Call" value={counts.uncalled} hint="never rung" />
-          <StatCard label="On the List" value={counts.total} hint="approved site + phone" />
+          <StatCard label="On the List" value={counts.total} hint="verified owner + phone" />
           <StatCard label="Calls Made" value={counts.totalAttempts} hint="all attempts" />
           <StatCard
             label="Interested"
@@ -185,7 +189,7 @@ export function CallsClient() {
       {counts?.total === 0 ? (
         <EmptyPanel
           title="Nobody is callable yet"
-          body="A business appears here once its site is approved and the lead has a phone number on file."
+          body="A business appears here once its site is approved and we hold a phone number for a person whose name matches the officer registered with the state."
           hint="Approve sites on the Generated Sites page and they will show up here."
           action={{ href: "/admin/sites", label: "Go to Generated Sites" }}
         />
@@ -202,13 +206,18 @@ export function CallsClient() {
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium">{row.business_name}</p>
                     <p className="truncate text-xs text-muted-foreground">
-                      {[row.city, row.category].filter(Boolean).join(" · ")}
+                      {[row.contact_name, row.city, row.category].filter(Boolean).join(" · ")}
                     </p>
                   </div>
 
                   <span className="font-mono text-sm tabular-nums">{pretty(row.phone)}</span>
 
                   <div className="flex flex-wrap items-center gap-1.5">
+                    {/* Whose number this is. 'owner' means the name on the
+                        phone record matches the officer Florida has on file;
+                        'household' means the surname matches but the first
+                        name does not — almost always a spouse. */}
+                    {row.confidence === "household" && <Pill tone="mid">spouse or relative</Pill>}
                     {row.viewed_at && <Pill tone="good">opened their site</Pill>}
                     {row.emailed_at && !row.viewed_at && <Pill tone="muted">emailed</Pill>}
                     {!row.emailed_at && <Pill tone="mid">never contacted</Pill>}

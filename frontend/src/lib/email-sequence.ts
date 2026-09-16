@@ -193,11 +193,28 @@ async function enrolNewLeads(
   const slugs = (approved ?? []).map((d) => d.demo_slug).filter(Boolean);
   if (!slugs.length) return 0;
 
+  // Only people who actually own the business.
+  //
+  // The contact record comes from an address lookup, which answers "who is
+  // associated with this property" — for a new LLC that is frequently the
+  // landlord, the apartment company, and in one case the United States Postal
+  // Service. Graded against the officer names Florida publishes, 675 of 972
+  // traced leads name somebody else entirely.
+  //
+  // Emailing those is not merely wasted: the message says we built a website
+  // for a business the recipient has never heard of, sent to a private
+  // individual who never asked. That is what a spam complaint is, and sender
+  // reputation is the one asset here that cannot be bought back.
+  //
+  // 'household' is kept — the surname matches and the first name does not,
+  // which is almost always a spouse at the same address, and in a family
+  // business that is a real person to talk to.
   const { data: leads } = await supabase
     .from("leads")
     .select("id")
     .in("demo_slug", slugs)
     .not("contact_email", "is", null)
+    .in("contact_confidence", ["owner", "household"])
     .is("unsubscribed_at", null)
     .is("email_bounced_at", null);
   if (!leads?.length) return 0;
