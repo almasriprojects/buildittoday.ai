@@ -209,12 +209,17 @@ async function enrolNewLeads(
   // 'household' is kept — the surname matches and the first name does not,
   // which is almost always a spouse at the same address, and in a family
   // business that is a real person to talk to.
+  //
+  // A lead also qualifies on state_email alone, whatever the grade. That
+  // address is not a guess about who lives somewhere — it is what the business
+  // wrote on its own filing with Florida, so the question the grade exists to
+  // answer does not arise.
   const { data: leads } = await supabase
     .from("leads")
     .select("id")
     .in("demo_slug", slugs)
-    .not("contact_email", "is", null)
-    .in("contact_confidence", ["owner", "household"])
+    .or("state_email.not.is.null," +
+        "and(contact_email.not.is.null,contact_confidence.in.(owner,household))")
     .is("unsubscribed_at", null)
     .is("email_bounced_at", null);
   if (!leads?.length) return 0;
@@ -253,7 +258,7 @@ async function sendOne(
   const [{ data: lead }, { data: template }] = await Promise.all([
     supabase
       .from("leads")
-      .select("id, business_name, contact_full_name, contact_email, demo_slug, city, unsubscribed_at, email_bounced_at")
+      .select("id, business_name, contact_full_name, contact_email, state_email, demo_slug, city, unsubscribed_at, email_bounced_at")
       .eq("id", leadId).maybeSingle(),
     supabase
       .from("email_templates")
@@ -263,7 +268,11 @@ async function sendOne(
 
   if (!lead) return { ok: false, error: "lead missing", fatal: "lead missing" };
   if (!template?.active) return { ok: false, error: `template ${slug} inactive` };
-  if (!lead.contact_email) return { ok: false, error: "no email", fatal: "no email" };
+  // The state's address first. contact_email comes from a property lookup and
+  // names somebody other than the owner 71% of the time; state_email is what
+  // the business filed itself.
+  const toEmail: string | null = lead.state_email ?? lead.contact_email ?? null;
+  if (!toEmail) return { ok: false, error: "no email", fatal: "no email" };
 
   // Re-checked at send time, not just at selection time: a lead can unsubscribe
   // between the two, and that has to win.
@@ -272,7 +281,7 @@ async function sendOne(
 
   const { data: sup } = await supabase
     .from("email_suppressions").select("reason")
-    .eq("email", lead.contact_email.toLowerCase()).maybeSingle();
+    .eq("email", toEmail.toLowerCase()).maybeSingle();
   if (sup) return { ok: false, error: sup.reason, fatal: sup.reason };
 
   const { data: site } = await supabase
@@ -329,7 +338,7 @@ async function sendOne(
 
   const res = await deliver({
     settings,
-    intendedTo: lead.contact_email,
+    intendedTo: toEmail,
     subject, text,
     leadId: lead.id,
   });
@@ -339,7 +348,7 @@ async function sendOne(
   if (!res.ok) {
     await supabase.from("email_sends").insert({
       lead_id: lead.id, template_slug: slug, sequence_step: step,
-      to_email: lead.contact_email, intended_to: lead.contact_email,
+      to_email: toEmail, intended_to: toEmail,
       was_test: settings.test_mode, subject, error: res.error,
     });
     // Left due on purpose — a provider blip should be retried next run.
@@ -349,7 +358,7 @@ async function sendOne(
   await supabase.from("email_sends").insert({
     lead_id: lead.id, template_slug: slug, sequence_step: step,
     // to_email records where it actually went; intended_to where it was aimed.
-    to_email: res.actualTo, intended_to: lead.contact_email,
+    to_email: res.actualTo, intended_to: toEmail,
     was_test: res.redirected, subject: res.subject, provider_id: res.id,
   });
   // A rehearsal must leave the lead exactly where it found them. The send is
